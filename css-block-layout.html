@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+    }
+
+    * {
+      margin: inherit;
+      padding: inherit;
+    }
+
+    header {
+      background-color: black;
+      color: white;
+    }
+
+    .container {
+      width: 600px;
+    }
+
+    .center {
+      margin: 0 auto;
+    }
+
+    p {
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    .no_center {
+      margin: initial;
+    }
+
+    .f_box>div>div {
+      box-sizing: border-box;
+      border: 3px solid black;
+      background-color: pink;
+      width: 180px;
+      height: 40px;
+      text-align: center;
+      line-height: 34px;
+      margin-bottom: 15px;
+    }
+
+    .table>div:nth-child(n + 5) {
+      margin-left: 210px;
+    }
+
+    .table>div:nth-child(4),
+    .table>div:nth-child(8) {
+      margin-bottom: -205px;
+    }
+
+    .table>div:nth-child(n + 9) {
+      margin-left: 420px;
+    }
+
+    .table>div:hover {
+      background-color: red;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li:not(:last-child) {
+      border-bottom: 1px dotted #333;
+      padding-top: 2px;
+    }
+
+    footer {
+      margin-top: 12px;
+      background-color: rgb(238, 138, 238);
+    }
+
+    footer p {
+      padding: 0;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container center">
+      hello world 请调整浏览器窗口大小查看效果
+    </div>
+  </header>
+  <p class="container center">
+    页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px
+    页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px
+  </p>
+  <div class="container center f_box">
+    <div class="no_center table">
+      <div>宽180高40(包含边框)</div>
+      <div>水平间隙30px</div>
+      <div>垂直间隙15px</div>
+      <div>边框宽度3px</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+      <div>产品</div>
+    </div>
+  </div>
+  <ul class="container center">
+    <li>link</li>
+    <li>link</li>
+    <li>link</li>
+    <li>link</li>
+    <li>link</li>
+  </ul>
+  <footer>
+    <div class="container center">
+      <p>&copy;版权所有</p>
+      <p>本页面布局均使用块元素</p>
+    </div>
+  </footer>
+</body>
+
+</html>
