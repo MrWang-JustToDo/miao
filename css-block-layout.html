@@ -10,11 +10,13 @@
     html {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     * {
       margin: inherit;
       padding: inherit;
+      box-sizing: inherit;
     }
 
     header {
@@ -39,15 +41,18 @@
       margin: initial;
     }
 
-    .f_box>div>div {
-      box-sizing: border-box;
+    .box>* {
       border: 3px solid black;
       background-color: pink;
       width: 180px;
       height: 40px;
       text-align: center;
-      line-height: 34px;
       margin-bottom: 15px;
+      line-height: 34px;
+    }
+
+    .focus>*:hover {
+    background-color: red;
     }
 
     .table>div:nth-child(n + 5) {
@@ -63,8 +68,20 @@
       margin-left: 420px;
     }
 
-    .table>div:hover {
-      background-color: red;
+    .inline {
+      font-size: 0;
+      line-height: 40px;
+    }
+
+    .inline span {
+      font-size: initial;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 30px;
+    }
+
+    .inline span:nth-child(3n) {
+      margin-right: 0;
     }
 
     ul {
@@ -99,7 +116,7 @@
     页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px 页面主体 宽度600px
   </p>
   <div class="container center f_box">
-    <div class="no_center table">
+    <div class="no_center table focus box">
       <div>宽180高40(包含边框)</div>
       <div>水平间隙30px</div>
       <div>垂直间隙15px</div>
@@ -112,6 +129,20 @@
       <div>产品</div>
       <div>产品</div>
       <div>产品</div>
+    </div>
+    <div class="inline focus box">
+      <span>宽180高40(包含边框)</span>
+      <span>产品</span>
+      <span>产品</span>
+      <span>水平间隙30px</span>
+      <span>产品</span>
+      <span>产品</span>
+      <span>垂直间隙15px</span>
+      <span>产品</span>
+      <span>产品</span>
+      <span>边框宽度3px</span>
+      <span>产品</span>
+      <span>产品</span>
     </div>
   </div>
   <ul class="container center">
