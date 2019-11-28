@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用行内块元素绝对居中</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    div {
+      width: 60%;
+      background-color: pink;
+      margin: 9% auto;
+      font-size: 0;
+      line-height: 350px;
+      text-align: center;
+    }
+
+    span {
+      display: inline-block;
+      width: 20%;
+      height: 100px;
+      background-color: red;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>父元素设置font-size为0与text-align为center及固定行高,其中行内块元素设置vertical-align为middle</h2>
+  <div>
+    <span></span>
+  </div>
+</body>
+
+</html>

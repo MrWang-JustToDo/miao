@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用行内块元素布局,无边框</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    div {
+      width: 100%;
+      height: 100%;
+    }
+
+    span {
+      display: inline-block;
+    }
+
+    .header {
+      font-size: 0;
+    }
+
+    .header>span:nth-child(1) {
+      width: 100%;
+      height: 8%;
+      background-color: red;
+      font-size: initial;
+    }
+
+    .content {
+      height: 100%;
+      width: 100%;
+      vertical-align: top;
+    }
+
+    .content>span:nth-child(1) {
+      width: 5%;
+      height: 100%;
+      background-color: yellow;
+      font-size: initial;
+    }
+
+    .content>span:nth-child(2) {
+      width: 95%;
+      height: 100%;
+      background-color: green;
+      font-size: initial;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <span></span>
+    <span class="content">
+      <span></span>
+      <span></span>
+    </span>
+  </div>
+</body>
+
+</html>
