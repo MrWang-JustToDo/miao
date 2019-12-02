@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>vscode菜单栏</title>
+  <style>
+    html,
+    body {
+      font-family: roboto;
+      color: white;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    ul {
+      list-style: none;
+      font-size: 0;
+      background-color: #3b3b3b;
+    }
+
+    li {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 24px;
+      padding: 0 10px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    li:hover {
+      background-color: #414141;
+    }
+
+    .zi {
+      display: none;
+      position: absolute;
+      width: 465px;
+      top: 96%;
+      left: 0;
+      border: 1px solid #333;
+      z-index: 2;
+    }
+
+    .g_zi {
+      left: 100%;
+      top: 0px;
+    }
+
+    .zi>li {
+      width: 100%;
+      padding: 2px 30px;
+    }
+
+    .zi>li:hover {
+      background-color: #42a5f5;
+    }
+
+    .border {
+      margin-bottom: 8px;
+    }
+
+    .border::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      border-top: 1px solid #888;
+      top: 115%;
+      left: 0;
+    }
+
+    .fu:hover>.zi {
+      display: block;
+    }
+
+    hr {
+      margin: 3px auto;
+    }
+
+    li[data-msg]::before {
+      content: attr(data-msg);
+      position: absolute;
+      height: 100%;
+      right: 30px;
+      color: white;
+      z-index: 2;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li class="fu">
+          <span>文件(F)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg="＞"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+        <li class="fu">
+          <span>编辑(E)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg=">"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+        <li class="fu">
+          <span>选择(S)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg=">"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+        <li class="fu">
+          <span>查看(v)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg=">"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+        <li class="fu">
+          <span>转到(G)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg=">"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+        <li class="fu">
+          <span>调试(D)</span>
+          <ul class="zi">
+            <li data-msg="Ctrl+N">新建文件(N)</li>
+            <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+            <li data-msg="Ctrl+O">打开文件(O)</li>
+            <li class="border">打开文件夹(F)</li>
+            <li class="fu" data-msg=">"><span>打开工作区(K)</span>
+              <ul class="zi g_zi">
+                <li data-msg="Ctrl+N">新建文件(N)</li>
+                <li data-msg="Ctrl+Shift+N" class="border">新建窗口(W)</li>
+                <li data-msg="Ctrl+O">打开文件(O)</li>
+                <li class="border">打开文件夹(F)</li>
+                <li>打开工作区(K)</li>
+                <li>打开最近的文件(R)</li>
+              </ul>
+            </li>
+            <li>打开最近的文件(R)</li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用CSS的sprite与transition实现动画</title>
+  <style>
+    div {
+      width: 121px;
+      height: 170px;
+      margin: 30px auto;
+      border: 1px solid red;
+      background: url("./css-sprite-game.jpg") no-repeat;
+      transition-timing-function: steps(5);
+      transition-duration: .2s;
+      background-position: 0 -2px;
+    }
+
+    div:hover {
+      background-position: -607px -2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+
+  </div>
+</body>
+
+</html>

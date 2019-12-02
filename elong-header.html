@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>艺龙导航栏</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    * {
+      margin: inherit;
+      padding: inherit;
+      box-sizing: inherit;
+      color: inherit;
+    }
+
+    header {
+      margin-top: 75px;
+      background-color: #2064c8;
+    }
+
+    nav {
+      width: 88%;
+      margin: auto;
+      min-width: 600px;
+      color: white;
+    }
+
+    ul {
+      list-style: none;
+      font-size: 0;
+    }
+
+    ul>* {
+      font-size: 14px;
+    }
+
+    li {
+      display: inline-block;
+      line-height: 42px;
+    }
+
+    .left>li {
+      padding: 0 12px;
+      border-left: 1px solid #3774ce;
+      position: relative;
+    }
+
+    .left>li:first-child {
+      background-color: #003679;
+    }
+
+    .left>li:last-child {
+      border-right: 1px solid #3774ce;
+    }
+
+    a {
+      padding: initial;
+      margin: initial;
+      text-decoration: none;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .right {
+      right: 0;
+      top: 0;
+      padding: 0 26px;
+      z-index: 2;
+      background-color: #003679;
+    }
+
+    .right > li {
+      padding: initial;
+    }
+
+    .right>li:last-child {
+      margin-left: 10px;
+    }
+
+    .right>li:last-child::before {
+      content: "";
+      position: absolute;
+      border-left: 1.4px solid;
+      height: 12px;
+      left: -5px;
+      top: 14px;
+    }
+
+    li[data-msg]::before {
+      content: attr(data-msg);
+      position: absolute;
+      padding: 0 2px;
+      background-color: #ff8e00;
+      font-size: 12px;
+      line-height: initial;
+      left: 62px;
+      bottom: 36px;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    li[data-msg]::after {
+      content: "";
+      position: absolute;
+      border: 3px solid;
+      border-color: #ff8e00 transparent transparent #ff8e00;
+      top: 5px;
+      left: 64px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="relative">
+      <ul class="left">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">国内商店</a></li>
+        <li data-msg="低价促"><a href="#">海外商店</a></li>
+        <li data-msg="新升级"><a href="#">国内•国际机票</a></li>
+        <li><a href="#">火车票</a></li>
+        <li><a href="#">汽车票</a></li>
+        <li><a href="#">商旅</a></li>
+      </ul>
+      <ul class="right absolute">
+        <li><a href="#">登录</a></li>
+        <li class="relative"><a href="#">注册</a></li>
+      </ul>
+    </nav>
+  </header>
+</body>
+
+</html>
