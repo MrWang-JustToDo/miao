@@ -12,12 +12,12 @@
       padding: 0;
     }
 
-    label {
+    label[class="check"] {
       display: block;
       width: 200px;
       height: 100px;
       margin: 30px auto;
-      border: 2px solid #aaa;
+      border: 3px solid #aaa;
       padding: 3px;
       border-radius: 100px;
       position: relative;
@@ -31,7 +31,7 @@
       display: none;
     }
 
-    input+label::before {
+    input[type="checkbox"]+label[class="check"]::before {
       content: "";
       position: absolute;
       width: 100px;
@@ -47,7 +47,7 @@
       box-shadow: 0 0 6px 4px rgba(0, 0, 0, .2);
     }
 
-    input+label::after {
+    input[type="checkbox"]+label[class="check"]::after {
       content: "";
       position: absolute;
       width: 100px;
@@ -55,23 +55,80 @@
       border-radius: 100px;
       background-color: #49e68c;
       box-sizing: border-box;
-      transition-duration: .3s;
+      transition-duration: .2s;
       transition-timing-function: cubic-bezier(.61, -0.13, .34, 1.19);
     }
 
-    input:checked+label::before {
+    input[type="checkbox"]:checked+label[class="check"]::before {
       left: 100px;
       box-shadow: 0 0 8px 2px rgba(100, 100, 100, .2);
     }
 
-    input:checked+label::after {
+    input[type="checkbox"]:checked+label[class="check"]::after {
       width: 200px;
     }
 
-    input:checked+label {
+    input[type="checkbox"]:checked+label[class="check"] {
       /* transition-delay: .1s; */
       box-shadow: 0 0 0 55px #49e68c inset;
       border-color: #49e68c;
+    }
+
+    div {
+      width: 270px;
+      margin: auto;
+      padding-top: 30px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 20px;
+    }
+
+    label[class="radio"] {
+      display: block;
+      margin: 30px;
+      position: relative;
+      height: 100px;
+      padding-left: 60px;
+    }
+
+    input[type="radio"]+label[class="radio"]::before {
+      content: "";
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 5px solid black;
+      border-radius: 50%;
+      left: 0;
+      top: -10px;
+      box-sizing: border-box;
+      transition: all .3s;
+      z-index: 2;
+    }
+
+    label[class="radio"]:hover::before {
+      box-shadow: 0 0 0 15px #a1ddbc, inset 0 0 0 20px #a2ddbc;
+    }
+
+    input[type="radio"]+label[class="radio"]::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 20px solid white;
+      border-radius: 50%;
+      box-sizing: border-box;
+      left: 10px;
+      top: 0px;
+      background-color: #49e68c;
+      transition: all .3s;
+    }
+
+    input[type="radio"]:checked+label[class="radio"]::before {
+      border-color: #49e68c;
+      box-shadow:0 0 0 0 #a2ddbc;
+    }
+
+    input[type="radio"]:checked+label[class="radio"]::after {
+      border: 0px solid white;
     }
   </style>
 </head>
@@ -79,6 +136,15 @@
 <body>
   <input id="check" type="checkbox">
   <label class="check" for="check"></label>
+  <div>
+    <input id="rad-1" type="radio" name="apple-radio" value="a">
+    <label class="radio" for="rad-1">Radio Button</label>
+    <input id="rad-2" type="radio" name="apple-radio" value="b">
+    <label class="radio" for="rad-2">Radio Button</label>
+    <input id="rad-3" type="radio" name="apple-radio" value="c">
+    <label class="radio" for="rad-3">Radio Button</label>
+  </div>
+
 </body>
 
 </html>

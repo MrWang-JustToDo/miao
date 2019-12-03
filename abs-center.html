@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh_CN">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>使用行内块元素绝对居中</title>
+  <title>元素绝对居中的方式</title>
   <style>
     * {
       margin: 0;
@@ -17,38 +17,97 @@
     body {
       width: 100%;
       height: 100%;
-      overflow: hidden;
+      /* overflow: hidden; */
     }
 
     h2 {
       text-align: center;
+      margin: 9%;
     }
 
     div {
       width: 60%;
       background-color: pink;
-      margin: 9% auto;
+      margin: 0 auto;
+      height: 350px;
+    }
+
+    span {
+      text-align: center;
+      background-color: red;
+    }
+
+    .inline-layout {
       font-size: 0;
       line-height: 350px;
       text-align: center;
     }
 
-    span {
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .inline-block {
       display: inline-block;
       font-size: initial;
       width: 20%;
-      text-align: center;
+
       line-height: 100px;
-      background-color: red;
+
       vertical-align: middle;
+    }
+
+    .position-layout-span {
+      width: 20%;
+      height: 100px;
+      line-height: 100px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    .table-ceil {
+      display: table-cell;
+      vertical-align: middle;
+      margin: auto;
+      font-size: initial;
+    }
+
+    .table-layout {
+      vertical-align: middle;
+      display: table-cell;
+      width: 800px;
+    }
+
+    .table-ceil {
+      display: block;
+      width: 20%;
+      margin: auto;
+      height: 100px;
+      line-height: 100px;
     }
   </style>
 </head>
 
 <body>
-  <h2>父元素设置font-size为0与text-align为center及固定行高,其中行内块元素设置vertical-align为middle</h2>
-  <div>
-    <span>hello</span>
+  <h2>1.父元素设置font-size为0与text-align为center及固定行高,其中行内块元素设置vertical-align为middle</h2>
+  <div class="inline-layout">
+    <span class="inline-block">hello</span>
+  </div>
+  <h2>2.使用绝对定位实现,设置top,right,bottom,left为0以及定位元素margin为auto</h2>
+  <div class="relative">
+    <span class="absolute position-layout-span">hello</span>
+  </div>
+  <h2>3.使用表格布局</h2>
+  <div class="table-layout">
+    <span class="table-ceil">hello</span>
   </div>
 </body>
 
