@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用纯CSS实现轮播图</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: inherit;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 80%;
+      margin: 10px auto;
+      text-align: center;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .outer1 {
+      font-size: 0;
+      box-sizing: content-box;
+      width: 400px;
+      height: 450px;
+      overflow: hidden;
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+      white-space: nowrap;
+      top: 20px;
+      left: 21%;
+      z-index: 2;
+    }
+
+    .outer2 {
+      font-size: 0;
+      box-sizing: content-box;
+      width: 800px;
+      height: 450px;
+      overflow: hidden;
+      border-radius: 8px;
+      white-space: nowrap;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .outer1>.imgs {
+      left: 0;
+      transition: .2s;
+    }
+
+    .outer2>.imgs {
+      left: 0;
+      transition: .4s;
+    }
+
+    img {
+      width: 800px;
+    }
+
+    input:nth-child(1):checked~div>div[pic="two"] {
+      left: 0;
+    }
+
+    input:nth-child(3):checked~div>div[pic="two"] {
+      left: -100%;
+    }
+
+    input:nth-child(5):checked~div>div[pic="two"] {
+      left: -200%;
+    }
+
+    input:nth-child(7):checked~div>div[pic="two"] {
+      left: -300%;
+    }
+
+    input:nth-child(1):checked~div>div[pic="one"] {
+      left: 0;
+    }
+
+    input:nth-child(3):checked~div>div[pic="one"] {
+      left: -200%;
+    }
+
+    input:nth-child(5):checked~div>div[pic="one"] {
+      left: -400%;
+    }
+
+    input:nth-child(7):checked~div>div[pic="one"] {
+      left: -600%;
+    }
+
+    input {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 2px solid black;
+      border-radius: 50%;
+      margin-right: 20px;
+      position: relative;
+      transition: .2s;
+    }
+
+    input+label::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      background-color: #49e68c;
+      border: 10px solid white;
+      border-radius: 50%;
+      transition: .2s;
+      box-sizing: border-box;
+    }
+
+    input:checked+label::after {
+      border: 0px solid white;
+    }
+
+    input:checked+label {
+      border: 2px solid #49e68c;
+    }
+
+    .placeholder {
+      height: 80%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="placeholder">
+  </div>
+  <div class="container">
+    <input type="radio" name="pic" id="a" checked>
+    <label for="a"></label>
+    <input type="radio" name="pic" id="b">
+    <label for="b"></label>
+    <input type="radio" name="pic" id="c">
+    <label for="c"></label>
+    <input type="radio" name="pic" id="d">
+    <label for="d"></label>
+    <div class="absolute outer1">
+      <div class="absolute imgs" pic="one">
+        <img src="./radio-slider/image1.jpg" alt="">
+        <img src="./radio-slider/image2.jpg" alt="">
+        <img src="./radio-slider/image3.jpg" alt="">
+        <img src="./radio-slider/image4.jpg" alt="">
+      </div>
+    </div>
+    <div class="absolute outer2">
+      <div class="absolute imgs" pic="two">
+        <img src="./radio-slider/image1.jpg" alt="">
+        <img src="./radio-slider/image2.jpg" alt="">
+        <img src="./radio-slider/image3.jpg" alt="">
+        <img src="./radio-slider/image4.jpg" alt="">
+      </div>
+    </div>
+  </div>
+
+
+</body>
+
+</html>

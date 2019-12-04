@@ -1,0 +1,109 @@
+* {
+  margin: inherit;
+  padding: inherit;
+  box-sizing: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.table {
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+
+.table tr {
+  border-top: 1px solid #dee2e6;
+}
+
+.table td,
+.table th {
+  padding: 14px;
+}
+
+.table thead tr {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table.table-dark {
+  background-color: #343a40;
+  color: white;
+}
+
+.table.table-dark tr {
+  border-color: #454d55;
+}
+
+.table thead.thead-dark {
+  background-color: #343a40;
+  color: white;
+}
+
+.table thead.thead-dark tr {
+  border-color: #343a40;
+}
+
+.table thead.thead-light {
+  background-color: #e9ecef;
+  color: #495057;
+}
+
+.table.table-striped tbody tr:nth-child(2n + 1) {
+  background-color: #f2f2f2;
+}
+
+.table.table-dark.table-striped tbody tr:nth-child(2n + 1) {
+  background-color: #3e444a;
+}
+
+.table.table-bordered td,
+.table.table-bordered th {
+  border: 1px solid #dee2e6;
+}
+
+.table.table-dark.table-bordered td,
+.table.table-dark.table-bordered th {
+  border: 1px solid #454d55;
+}
+
+.table.table-borderless td,
+.table.table-borderless tr {
+  border: hidden;
+}
+
+.table.table-hover tbody tr:hover {
+  background-color: #ececec;
+}
+
+.table.table-dark.table-hover tbody tr:hover {
+  background-color: #43494e;
+}
+
+.table.table-sm td,
+.table.table-sm th {
+  padding: 6px;
+}
+
+.table tbody tr.table-primary {
+  background-color: #b8daff;
+}
+.table tbody tr.table-primary:hover {
+  background-color: hsla(211, 99%, 80%, 1);
+}
+
+.table.table-dark tbody tr.table-primary {
+  background-color: #0078ff;
+}
+
+.table.table-dark tbody tr.table-primary:hover {
+  background-color: hsla(211, 100%, 60%, 1);
+}

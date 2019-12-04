@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>4种方法</title>
+  <style>
+    * {
+      margin: inherit;
+      padding: inherit;
+      box-sizing: inherit;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 16px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h2 {
+      margin: 25px;
+    }
+
+    div,
+    table {
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+
+    span,
+    td {
+      width: 100px;
+      height: 100px;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .box1 {
+      font-size: 0;
+    }
+
+    .box1>span {
+      display: inline-block;
+      position: relative;
+      font-size: initial;
+      border-top: 4px solid blue;
+      border-left: 4px solid blue;
+      line-height: 92px;
+    }
+
+    .box1>span:nth-child(3n) {
+      border-right: 4px solid blue;
+    }
+
+    .box1>span:nth-child(n+7) {
+      border-bottom: 4px solid blue;
+    }
+
+    .box1>span:hover::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: -4px;
+      left: -4px;
+      border: 4px solid red;
+      z-index: 2;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    .table1 td {
+      border: 4px solid blue;
+    }
+
+    .table1 td {
+      position: relative;
+    }
+
+    .table1 td:hover::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 4px solid red;
+      top: -4px;
+      left: -4px;
+    }
+
+    .table2 tr,
+    .table2 col,
+    .table3 tr,
+    .table3 col {
+      border: 4px solid blue;
+    }
+
+    .table2 td:hover {
+      border: 4px solid red;
+    }
+
+    .table3 td:hover {
+      border: 4px solid transparent;
+    }
+
+    .table4 {
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .table4 td {
+      border: 4px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>行内块元素与伪元素</h2>
+  <div class="box1">
+    <span>1</span>
+    <span>2</span>
+    <span>3</span>
+    <span>4</span>
+    <span>5</span>
+    <span>6</span>
+    <span>7</span>
+    <span>8</span>
+    <span>9</span>
+  </div>
+  <h2>表格单元与伪元素</h2>
+  <table class="table1">
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+  </table>
+  <h2>表格元素边框的优先级</h2>
+  <table class="table2">
+    <col>
+    <col>
+    <col>
+    <tr>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>5</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>8</td>
+      <td>9</td>
+    </tr>
+  </table>
+  <h2>表格元素重合,设置上层边框透明</h2>
+  <div class="relative">
+    <table class="table3">
+      <col>
+      <col>
+      <col>
+      <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+      </tr>
+    </table>
+    <table class="table4 absolute">
+      <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>8</td>
+        <td>9</td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>
