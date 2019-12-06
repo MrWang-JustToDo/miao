@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>4种方法</title>
+  <title>测试</title>
   <style>
     * {
       margin: inherit;
@@ -35,8 +35,8 @@
       margin: 0 auto;
     }
 
-    span,
-    td {
+    td,
+    span {
       width: 100px;
       height: 100px;
     }
@@ -49,43 +49,71 @@
       position: absolute;
     }
 
-    .box1 {
-      font-size: 0;
-    }
-
-    .box1>span {
-      display: inline-block;
-      position: relative;
-      font-size: initial;
-      border-top: 4px solid blue;
-      border-left: 4px solid blue;
-      line-height: 92px;
-    }
-
-    .box1>span:nth-child(3n) {
-      border-right: 4px solid blue;
-    }
-
-    .box1>span:nth-child(n+7) {
-      border-bottom: 4px solid blue;
-    }
-
-    .box1>span:hover::after {
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: -4px;
-      left: -4px;
-      border: 4px solid red;
-      z-index: 2;
-    }
-
     table {
       border-collapse: collapse;
     }
 
-    .table1 td {
+    .box span {
+      font-size: initial;
+      text-align: center;
+      line-height: 92px;
+      display: inline-block;
+      border: 4px solid blue;
+    }
+
+    .box span:nth-child(1) {
+      left: 0;
+      top: 0;
+    }
+
+    .box span:nth-child(2) {
+      left: 96px;
+      top: 0;
+    }
+
+    .box span:nth-child(3) {
+      left: 192px;
+      top: 0;
+    }
+
+    .box span:nth-child(4) {
+      left: 0;
+      top: 96px;
+    }
+
+    .box span:nth-child(5) {
+      left: 96px;
+      top: 96px;
+    }
+
+    .box span:nth-child(6) {
+      left: 192px;
+      top: 96px;
+    }
+
+    .box span:nth-child(7) {
+      left: 0;
+      top: 192px;
+    }
+
+    .box span:nth-child(8) {
+      left: 96px;
+      top: 192px;
+    }
+
+    .box span:nth-child(9) {
+      left: 192px;
+      top: 192px;
+    }
+
+    .box span:hover {
+      z-index: 1;
+      border: 4px solid red;
+    }
+
+
+    .table1 td,
+    .table5 td {
       border: 4px solid blue;
     }
 
@@ -127,23 +155,39 @@
     .table4 td {
       border: 4px solid red;
     }
+
+    .table5 td:hover {
+      font-size: 0;
+    }
+
+    .table5 td:hover::after {
+      font-size: 16px;
+      content: attr(data-num);
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      line-height: 96px;
+      border: 4px solid red;
+      float: left;
+      margin: -4px;
+    }
   </style>
 </head>
 
 <body>
-  <h2>行内块元素与伪元素</h2>
-  <div class="box1">
-    <span>1</span>
-    <span>2</span>
-    <span>3</span>
-    <span>4</span>
-    <span>5</span>
-    <span>6</span>
-    <span>7</span>
-    <span>8</span>
-    <span>9</span>
+  <h2>定位</h2>
+  <div class="box relative">
+    <span class="absolute">1</span>
+    <span class="absolute">2</span>
+    <span class="absolute">3</span>
+    <span class="absolute">4</span>
+    <span class="absolute">5</span>
+    <span class="absolute">6</span>
+    <span class="absolute">7</span>
+    <span class="absolute">8</span>
+    <span class="absolute">9</span>
   </div>
-  <h2>表格单元与伪元素</h2>
+  <h2>伪元素绝对定位</h2>
   <table class="table1">
     <tr>
       <td>1</td>
@@ -222,6 +266,24 @@
       </tr>
     </table>
   </div>
+  <h2>浮动</h2>
+  <table class="table5">
+    <tr>
+      <td data-num="1">1</td>
+      <td data-num="2">2</td>
+      <td data-num="3">3</td>
+    </tr>
+    <tr>
+      <td data-num="4">4</td>
+      <td data-num="5">5</td>
+      <td data-num="6">6</td>
+    </tr>
+    <tr>
+      <td data-num="7">7</td>
+      <td data-num="8">8</td>
+      <td data-num="9">9</td>
+    </tr>
+  </table>
 </body>
 
 </html>
