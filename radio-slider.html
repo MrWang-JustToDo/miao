@@ -35,21 +35,7 @@
       position: absolute;
     }
 
-    .outer1 {
-      font-size: 0;
-      box-sizing: content-box;
-      width: 400px;
-      height: 450px;
-      overflow: hidden;
-      border-top-left-radius: 8px;
-      border-bottom-left-radius: 8px;
-      white-space: nowrap;
-      top: 20px;
-      left: 21%;
-      z-index: 2;
-    }
-
-    .outer2 {
+    .content {
       font-size: 0;
       box-sizing: content-box;
       width: 800px;
@@ -58,38 +44,54 @@
       border-radius: 8px;
       white-space: nowrap;
       top: 20px;
+    }
+
+    .outer1 {
+      width: 800px;
       left: 50%;
       transform: translateX(-50%);
     }
 
-    .outer1>.imgs {
-      left: 0;
-      transition: .2s;
+    .outer2 {
+      width: 600px;
+      left: 21%;
+      z-index: 2;
     }
 
-    .outer2>.imgs {
+    .outer3 {
+      width: 400px;
+      left: 21%;
+      z-index: 4;
+    }
+
+    .outer4 {
+      width: 200px;
+      left: 21%;
+      z-index: 6;
+    }
+
+    .outer1>.imgs {
       left: 0;
       transition: .4s;
     }
 
+    .outer2>.imgs {
+      left: 0;
+      transition: .3s;
+    }
+
+    .outer3>.imgs {
+      left: 0;
+      transition: .2s;
+    }
+
+    .outer4>.imgs {
+      left: 0;
+      transition: .1s;
+    }
+
     img {
       width: 800px;
-    }
-
-    input:nth-child(1):checked~div>div[pic="two"] {
-      left: 0;
-    }
-
-    input:nth-child(3):checked~div>div[pic="two"] {
-      left: -100%;
-    }
-
-    input:nth-child(5):checked~div>div[pic="two"] {
-      left: -200%;
-    }
-
-    input:nth-child(7):checked~div>div[pic="two"] {
-      left: -300%;
     }
 
     input:nth-child(1):checked~div>div[pic="one"] {
@@ -97,16 +99,65 @@
     }
 
     input:nth-child(3):checked~div>div[pic="one"] {
-      left: -200%;
+      left: -100%;
     }
 
     input:nth-child(5):checked~div>div[pic="one"] {
-      left: -400%;
+      left: -200%;
     }
 
     input:nth-child(7):checked~div>div[pic="one"] {
+      left: -300%;
+    }
+
+    input:nth-child(1):checked~div>div[pic="two"] {
+      left: 0;
+    }
+
+    input:nth-child(3):checked~div>div[pic="two"] {
+      left: calc(-100%*8/6);
+    }
+
+    input:nth-child(5):checked~div>div[pic="two"] {
+      left: calc(-200%*8/6);
+    }
+
+    input:nth-child(7):checked~div>div[pic="two"] {
+      left: calc(-300%*8/6);
+    }
+
+    input:nth-child(1):checked~div>div[pic="three"] {
+      left: 0;
+    }
+
+    input:nth-child(3):checked~div>div[pic="three"] {
+      left: -200%;
+    }
+
+    input:nth-child(5):checked~div>div[pic="three"] {
+      left: -400%;
+    }
+
+    input:nth-child(7):checked~div>div[pic="three"] {
       left: -600%;
     }
+
+    input:nth-child(1):checked~div>div[pic="four"] {
+      left: 0;
+    }
+
+    input:nth-child(3):checked~div>div[pic="four"] {
+      left: -400%;
+    }
+
+    input:nth-child(5):checked~div>div[pic="four"] {
+      left: -800%;
+    }
+
+    input:nth-child(7):checked~div>div[pic="four"] {
+      left: -1600%;
+    }
+
 
     input {
       display: none;
@@ -163,7 +214,7 @@
     <label for="c"></label>
     <input type="radio" name="pic" id="d">
     <label for="d"></label>
-    <div class="absolute outer1">
+    <div class="absolute outer1 content">
       <div class="absolute imgs" pic="one">
         <img src="./radio-slider/image1.jpg" alt="">
         <img src="./radio-slider/image2.jpg" alt="">
@@ -171,8 +222,24 @@
         <img src="./radio-slider/image4.jpg" alt="">
       </div>
     </div>
-    <div class="absolute outer2">
+    <div class="absolute outer2 content">
       <div class="absolute imgs" pic="two">
+        <img src="./radio-slider/image1.jpg" alt="">
+        <img src="./radio-slider/image2.jpg" alt="">
+        <img src="./radio-slider/image3.jpg" alt="">
+        <img src="./radio-slider/image4.jpg" alt="">
+      </div>
+    </div>
+    <div class="absolute outer3 content">
+      <div class="absolute imgs" pic="three">
+        <img src="./radio-slider/image1.jpg" alt="">
+        <img src="./radio-slider/image2.jpg" alt="">
+        <img src="./radio-slider/image3.jpg" alt="">
+        <img src="./radio-slider/image4.jpg" alt="">
+      </div>
+    </div>
+    <div class="absolute outer4 content">
+      <div class="absolute imgs" pic="four">
         <img src="./radio-slider/image1.jpg" alt="">
         <img src="./radio-slider/image2.jpg" alt="">
         <img src="./radio-slider/image3.jpg" alt="">
