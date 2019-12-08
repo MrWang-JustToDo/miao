@@ -1,0 +1,32 @@
+.all-pro {
+  height: 460px;
+}
+
+.all-pro .left-li {
+  height: 100%;
+  width: 234px;
+  padding: 20px 0;
+  background-color: rgba(105, 101, 101, .6);
+  left: 0;
+  top: 0;
+  z-in
+}
+
+.all-pro .left-li li {
+  color: white;
+  height: 42px;
+  line-height: 42px;
+  padding-left: 30px;
+}
+
+.all-pro .left-li li:hover {
+  background-color: #ff6700;
+}
+
+.all-pro .pics img {
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
