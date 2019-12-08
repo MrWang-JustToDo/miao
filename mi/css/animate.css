@@ -1,0 +1,37 @@
+/* 立刻执行.延迟0.5s消失 */
+.delay {
+  transition-delay: .5s;
+}
+
+.delay:hover {
+  transition-delay: -.5s;
+}
+
+.shop::after {
+  transition-property: height, color, font-size;
+  transition-duration: .2s, 0s, 0s;
+  transition-delay: .3s;
+}
+
+.shop:hover::after {
+  transition-delay: 0s, .2s, .2s;
+}
+
+.logo a {
+  transition: all .2s;
+}
+
+.middle-list>li {
+  transition: all .1s;
+}
+
+.panel {
+  transition-property: height, border-top;
+  transition-duration: .2s, 0s;
+  transition-delay: .2s, .4s;
+}
+
+.panel ul {
+  transition-property: left;
+  transition-delay: 100000000000s;
+}

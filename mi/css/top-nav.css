@@ -1,0 +1,270 @@
+/* 最上方导航栏 */
+.header {
+  height: 40px;
+  background-color: #333;
+}
+
+.header nav li {
+  font-size: 12px;
+  height: 40px;
+  line-height: 40px;
+  color: #b0b0b0;
+}
+
+.header nav li:hover {
+  color: #fff;
+}
+
+.header nav li span {
+  color: #3f3f3f;
+  padding: 0 7px;
+}
+
+.header nav li.shop {
+  margin-left: 22px;
+  width: 120px;
+  background-color: #424242;
+
+}
+
+.header nav li.shop::after {
+  content: attr(data-msg);
+  position: absolute;
+  width: 318px;
+  height: 0;
+  line-height: 100px;
+  text-align: center;
+  font-size: 0;
+  color: white;
+  background-color: white;
+  box-shadow: 0 2px 5px 0 rgba(100, 100, 100, .3);
+  right: 0;
+  top: 100%;
+  z-index: 2;
+}
+
+.header nav li.shop i {
+  margin-right: 2px;
+}
+
+.header nav li.shop:hover {
+  background-color: white;
+  color: #ff6700;
+}
+
+.header nav li.shop:hover i {
+  border-color: #ff6700;
+}
+
+.header nav li.shop:hover::after {
+  font-size: inherit;
+  height: 100px;
+  color: #5d5d5d;
+}
+
+/* 中间logo搜索栏 */
+
+.middle-nav {
+  height: 100px;
+  line-height: 100px;
+  font-size: 0;
+}
+
+.middle-nav .left {
+  height: 100px;
+  width: 55px;
+  margin-right: 179px;
+}
+
+.middle-nav .left .logo {
+  display: inline-block;
+  width: 55px;
+  height: 55px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.middle-nav h1 {
+  display: none;
+}
+
+.middle-nav .left .logo a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-position: 3px 3px;
+  background-color: #ff6700;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+}
+
+.middle-nav .left .logo a.mi-home {
+  left: -100%;
+  background-image: url(../image/mi-home.png);
+}
+
+.middle-nav .left .logo a.mi-logo {
+  left: 0;
+  background-image: url(../image/mi-logo.png);
+}
+
+.middle-nav .left .logo:hover a.mi-logo {
+  left: 100%;
+}
+
+.middle-nav .left .logo:hover a.mi-home {
+  left: 0;
+}
+
+.middle-nav .middle-list {
+  font-size: 16px;
+}
+
+.middle-nav .middle-list>li {
+  color: #333;
+  padding: 0 10px;
+}
+
+.middle-nav .panel {
+  z-index: 2;
+  height: 0;
+  width: 100%;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
+  border-top: 1px solid white;
+}
+
+.middle-nav .panel:hover {
+  border-top: 1px solid #ccc;
+  height: 230px;
+}
+
+.middle-nav .panel ul {
+  left: 0;
+  top: 32px;
+  white-space: nowrap;
+  font-size: 0;
+  padding: 0;
+}
+
+.middle-nav .panel ul li:nth-child(6n+1) {
+  border: none;
+}
+
+.middle-nav .panel li {
+  display: inline-block;
+  text-align: center;
+  margin: initial;
+  width: 205px;
+  font-size: 12px;
+  line-height: 20px;
+  position: relative;
+  border-left: 1px solid #ccc;
+}
+
+.middle-nav .panel li a {
+  display: block;
+}
+
+.middle-nav .panel li::before {
+  content: attr(data-m);
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  font-style: 12px;
+  top: calc(100% + 10px);
+  left: 0;
+}
+
+.middle-nav .panel li::after {
+  content: attr(data-p);
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  font-style: 12px;
+  top: calc(100% + 30px);
+  color: #ff6700;
+  left: 0;
+}
+
+.middle-nav .middle-list>li:hover {
+  color: #ff6700;
+}
+
+.middle-nav .middle-list>li:not(:nth-child(n+8)):hover~.panel {
+  border-top: 1px solid #ccc;
+  transition-delay: 0s, 0s;
+  height: 230px;
+}
+
+.middle-nav .middle-list>li:nth-child(1):hover~.panel ul {
+  transition-delay: 0s;
+  left: 0;
+}
+
+.middle-nav .middle-list>li:nth-child(2):hover~.panel ul {
+  transition-delay: 0s;
+  left: -1230px;
+}
+
+.middle-nav .middle-list>li:nth-child(3):hover~.panel ul {
+  transition-delay: 0s;
+  left: -2460px;
+}
+
+.middle-nav .middle-list>li:nth-child(4):hover~.panel ul {
+  transition-delay: 0s;
+  left: -3690px;
+}
+
+.middle-nav .middle-list>li:nth-child(5):hover~.panel ul {
+  transition-delay: 0s;
+  left: -4920px;
+}
+
+.middle-nav .middle-list>li:nth-child(6):hover~.panel ul {
+  transition-delay: 0s;
+  left: -6150px;
+}
+
+.middle-nav .middle-list>li:nth-child(7):hover~.panel ul {
+  transition-delay: 0s;
+  left: -7380px;
+}
+
+.middle-nav .search div {
+  display: inline-block;
+  height: 50px;
+  line-height: 50px;
+  vertical-align: middle;
+}
+
+.middle-nav .search input {
+  height: 100%;
+  font-size: 16px;
+}
+
+.middle-nav .search input:nth-child(1) {
+  width: 245px;
+  border: 1px solid rgb(224, 224, 224);
+  padding: 0 10px;
+}
+
+.middle-nav .search input:nth-child(2) {
+  width: 52px;
+  background-color: white;
+  border: 1px solid rgb(224, 224, 224);
+  border-left: none;
+}
+
+.middle-nav .search input:nth-child(2):hover {
+  color: white;
+  background-color: #ff6700;
+}
+
+.middle-nav .search div:hover input {
+  border-color: #b0b0b0;
+}
