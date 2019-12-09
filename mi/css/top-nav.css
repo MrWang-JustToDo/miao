@@ -11,6 +11,33 @@
   color: #b0b0b0;
 }
 
+.header nav li.header-hover::after {
+  content: attr(data-msg);
+  position: absolute;
+  width: 124px;
+  height: 0;
+  background-image: url("../image//header-download.png");
+  background-repeat: no-repeat;
+  background-size: 90px 90px;
+  background-position: 17px 14px;
+  left: -68%;
+  top: 100%;
+  line-height: 260px;
+  font-size: 14px;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: white;
+  color: black;
+  box-shadow:  0 0 0 0 rgba(0, 0, 0, 0);
+  overflow: hidden;
+  z-index: 5;
+}
+
+.header nav li.header-hover:hover::after {
+  box-shadow:  0 4px 6px 0 rgba(0, 0, 0, 0.4);
+  height: 160px;
+}
+
 .header nav li:hover {
   color: #fff;
 }
@@ -40,7 +67,7 @@
   box-shadow: 0 2px 5px 0 rgba(100, 100, 100, .3);
   right: 0;
   top: 100%;
-  z-index: 2;
+  z-index: 4;
 }
 
 .header nav li.shop i {
@@ -127,19 +154,20 @@
 }
 
 .middle-nav .panel {
-  z-index: 2;
+  z-index: 4;
   height: 0;
   width: 100%;
   top: 100%;
   left: 0;
   background-color: white;
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
   border-top: 1px solid white;
 }
 
 .middle-nav .panel:hover {
   border-top: 1px solid #ccc;
   height: 230px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
 }
 
 .middle-nav .panel ul {
@@ -196,8 +224,9 @@
 
 .middle-nav .middle-list>li:not(:nth-child(n+8)):hover~.panel {
   border-top: 1px solid #ccc;
-  transition-delay: 0s, 0s;
+  transition-delay: 0s, 0s, 0s;
   height: 230px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
 }
 
 .middle-nav .middle-list>li:nth-child(1):hover~.panel ul {

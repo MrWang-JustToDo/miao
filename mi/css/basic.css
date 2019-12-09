@@ -115,3 +115,11 @@ h1 {
 .overflow {
   overflow: hidden;
 }
+
+.height-inherit {
+  height: inherit;
+}
+
+.width-inherit {
+  width: inherit;
+}
