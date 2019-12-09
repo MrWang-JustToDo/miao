@@ -152,15 +152,12 @@
   right: 0;
 }
 
-.all-pro .pics input {
-  display: none;
-}
-
 .all-pro .pics img {
   position: absolute;
   width: 100%;
   top: 0;
   left: 0;
+  opacity: 0;
 }
 
 .all-pro .pics a:nth-child(1)>img {
@@ -173,23 +170,6 @@
 
 .all-pro .pics input:checked+*+label, .all-pro .pics input:checked+*+*+label {
   display: block;
-}
-
-
-.all-pro .pics input:nth-child(1)~div>a:nth-child(1)>img {
-  opacity: 0;
-}
-
-.all-pro .pics input:nth-child(5)~div>a:nth-child(2)>img {
-  opacity: 0;
-}
-
-.all-pro .pics input:nth-child(9)~div>a:nth-child(3)>img {
-  opacity: 0;
-}
-
-.all-pro .pics input:nth-child(13)~div>a:nth-child(4)>img {
-  opacity: 0;
 }
 
 .all-pro .pics input:nth-child(1):checked~div>a:nth-child(1)>img  {

@@ -64,6 +64,14 @@ h1 {
   margin: 0;
 }
 
+.preload {
+	-webkit-transition: none !important;
+	-moz-transition: none !important;
+	-ms-transition: none !important;
+	-o-transition: none !important;
+	transition: none !important;
+}
+
 .container {
   width: 1226px;
   height: inherit;
@@ -122,4 +130,8 @@ h1 {
 
 .width-inherit {
   width: inherit;
+}
+
+.son-input-hidden input {
+  display: none;
 }

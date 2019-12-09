@@ -1,10 +1,16 @@
 .header .header-hover::after {
-  transition-property: height;
-  transition-duration: .3s;
+  transition-property: height, box-shadow;
+  transition-duration: .3s, 0s;
+  transition-delay: 0s, .3s;
+}
+
+.header .header-hover:hover::after {
+  transition-delay: 0s, 0s;
 }
 
 
 .header .shop {
+  transition-property: background-color, color;
   transition-delay: .5s;
 }
 
@@ -51,4 +57,14 @@
 
 .more-pro .more-pro-im img {
   transition: all .5s;
+}
+
+.home-main .home-main-first .second-col-pics ul {
+  transition-property: left;
+  transition-duration: .8s;
+}
+
+.home-main .home-hover, .home-main .home-son-hover>* {
+  transition-property: top, box-shadow;
+  transition-duration: .3s;
 }
