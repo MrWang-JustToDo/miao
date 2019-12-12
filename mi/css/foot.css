@@ -1,0 +1,139 @@
+/* more开始 */
+.more {
+    height: 300px;
+}
+
+.more .fix-service {
+    height: 80px;
+    padding: 27px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.more .fix-service li {
+    color: #616161;
+    width: 19.8%;
+}
+
+.more .fix-service li.border-right {
+    border-right: 1px solid #e0e0e0;
+}
+
+.more .fix-service li:hover {
+    color: #ff6700;
+}
+
+.more .help-msg {
+    padding: 40px 0;
+}
+
+.more .help-msg dl {
+    font-size: 12px;
+    color: #757575;
+    width: 160px;
+    height: 112px;
+}
+
+.more .help-msg div {
+    width: 252px;
+    border-left: 1px solid #e0e0e0;
+}
+
+.more .help-msg dl dt {
+    font-size: 14px;
+    margin-bottom: 26px;
+    color: #424242;
+}
+
+.more .help-msg dl dd {
+    margin-top: 10px;
+}
+
+.more .help-msg dl dd:hover {
+    color: #ff6700;
+}
+
+.more .help-msg div>* {
+    display: block;
+    font-size: 12px;
+    color: #757575;
+}
+
+.more .help-msg .phone {
+    margin: 0 0 5px;
+    font-size: 22px;
+    line-height: 1;
+    color: #ff6700;
+}
+
+.more .help-msg div a {
+    margin-top: 16px;
+    width: 120px;
+    height: 30px;
+    line-height: 28px;
+    color: #ff6700;
+    border: 1px solid #ff6700;
+}
+
+.more .help-msg div a:hover {
+    background-color: #ff6700;
+    color: white;
+}
+
+/* footer开始 */
+.footer {
+    /* height: 250px; */
+    padding: 30px 0;
+    font-size: 12px;
+    background-color: #fafafa;
+}
+
+.footer .info-mi {
+    height: 140px;
+}
+
+.footer .info-mi .logo {
+    margin-right: 10px;
+}
+
+.footer .info-mi .all-site {
+    color: #757575;
+    max-width: 1160px;
+    word-break: break-all;
+}
+
+.footer .info-mi .all-site a {
+    position: relative;
+    margin-right: 8px;
+}
+
+.footer .info-mi .all-site a:hover,
+.footer .info-mi .about-mi a:hover {
+    color: #ff6700;
+}
+
+.footer .info-mi .all-site a:not(:last-child)::after {
+    content: "";
+    height: 80%;
+    position: absolute;
+    border-right: 1px solid #b0b0b0;
+    left: calc(100% + 5px);
+    top: 5%;
+}
+
+.footer .info-mi .about-mi {
+    color: #b0b0b0;
+}
+
+.footer .info-link {
+    margin-bottom: 15px;
+}
+
+.footer .info-link img {
+    height: 28px;
+}
+
+.footer .end {
+    margin-top: 30px;
+    color: #b0b0b0;
+    font-size: 20px;
+}

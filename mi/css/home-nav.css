@@ -1,9 +1,9 @@
+/* all-pro开始 */
 .all-pro {
   height: 460px;
 }
 
 .all-pro .left-li {
-  height: 100%;
   width: 234px;
   padding: 20px 0;
   background-color: rgba(105, 101, 101, .6);
@@ -28,7 +28,6 @@
 } 
 
 .all-pro .left-li ul {
-  font-size: 0;
   height: 100%;
   top:0;
   left: 100%;
@@ -36,6 +35,7 @@
   background-color: white;
   box-shadow: 3px 0 5px 0px rgba(100, 100, 100, .3) ;
   display: none;
+  white-space: normal;
 }
 
 .all-pro .left-li ul:hover {
@@ -45,7 +45,6 @@
 .all-pro .left-li ul li {
   writing-mode: horizontal-tb;
   font-size: 12px;
-  display: inline-block;
   width: 265px;
   height: 76px;
   line-height: 76px;
@@ -67,8 +66,11 @@
   top: 0;
 }
 
+.all-pro .left-li ul li a,
 .all-pro .left-li ul li img {
   display: block;
+  width: 40px;
+  height: 40px;
 }
 
 .all-pro .left-li div:hover {
@@ -86,7 +88,6 @@
   bottom: 25px;
   border: 2px solid #939393;
   background-color: rgba(20,20,20,.4);
-  cursor: pointer;
   z-index: 2;
 }
 
@@ -146,10 +147,14 @@
 
 .all-pro .pics .placeholder {
   width: 200px;
-  height: 40px;
+  height: 62px;
   z-index: 1;
-  bottom: 20px;
+  bottom: 0px;
   right: 0;
+}
+
+.all-pro .pics a {
+  display: block;
 }
 
 .all-pro .pics img {
@@ -158,10 +163,6 @@
   top: 0;
   left: 0;
   opacity: 0;
-}
-
-.all-pro .pics a:nth-child(1)>img {
-  opacity: 1;
 }
 
 .all-pro .pics input+*+label, .all-pro .pics input+*+*+label{
@@ -188,7 +189,7 @@
   opacity: 1;
 }
 
-
+/* more-pro开始 */
 .more-pro {
   height: 170px;
   margin-top: 14px;
@@ -196,7 +197,7 @@
 }
 
 .more-pro .more-pro-li {
-  font-size: 0;
+  white-space: normal;
   width: 234px;
   background-color: #5f5750;
   color: white;
@@ -205,11 +206,9 @@
 
 .more-pro .more-pro-li a{
   font-size: 12px;
-  display: inline-block;
   width: 76px;
   height: 82px;
   padding-top: 18px;
-  text-align: center;
   position: relative;
   opacity: .7;
 }
@@ -239,14 +238,15 @@
 }
 
 .more-pro .more-pro-im {
-  font-size: 0;
-  white-space: nowrap;
   margin-right: -1px;
 }
 
 .more-pro .more-pro-im>li {
-  display: inline-block;
   margin-left: 15px;
+}
+
+.more-pro .more-pro-im a {
+  display: block;
 }
 
 .more-pro .more-pro-im img {
@@ -255,6 +255,6 @@
 }
 
 .more-pro .more-pro-im img:hover {
-  box-shadow: 0 20px 10px 0 rgba(200, 200, 200, .3);
+  box-shadow: 0 20px 10px 0 rgba(150, 150, 150, .2);
 }
 

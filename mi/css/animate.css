@@ -1,11 +1,11 @@
-.header .header-hover::after {
+.header .download::after {
   transition-property: height, box-shadow;
   transition-duration: .3s, 0s;
   transition-delay: 0s, .3s;
 }
 
-.header .header-hover:hover::after {
-  transition-delay: 0s, 0s;
+.header .download:hover::after {
+  transition-delay: 0s;
 }
 
 
@@ -15,7 +15,7 @@
 }
 
 .header .shop:hover {
-  transition-delay: -.5s;
+  transition-delay: 0s;
 }
 
 .header .shop::after {
@@ -29,11 +29,11 @@
 }
 
 .middle-nav .logo a {
-  transition: all .2s;
+  transition: left .2s;
 }
 
 .middle-nav .middle-list>li {
-  transition: all .1s;
+  transition: color .1s;
 }
 
 .middle-nav .panel {
@@ -48,15 +48,15 @@
 }
 
 .all-pro .left-li ul li {
-  transition: all .1s;
+  transition: color .1s;
 }
 
 .all-pro .pics img {
-  transition: all .8s;
+  transition: opacity .8s;
 }
 
 .more-pro .more-pro-im img {
-  transition: all .5s;
+  transition: box-shadow .5s;
 }
 
 .home-main .home-main-first .second-col-pics ul {
@@ -64,7 +64,43 @@
   transition-duration: .8s;
 }
 
-.home-main .home-hover, .home-main .home-son-hover>* {
-  transition-property: top, box-shadow;
+.home-main .home-main-second .more li {
+  transition-property: color;
+  transition-duration: .3s;
+}
+
+.home-main .home-hover,
+.home-main .home-son-hover>* {
+  /* transition-property: top, box-shadow; */
+  /* transition-duration: .2s, .2s; */
+  transition-property: transform, box-shadow;
+  transition-duration: .2s;
+}
+
+.home-main .more-border {
+  transition-property: color, border-color;
+  transition-delay: 10000000s;
+}
+
+.home-main .right-pic-li>.right-pic-all {
+  transition-property: left;
+  transition-delay: 10000000s;
+}
+
+.home-main .more-border:hover~.right-pic-li>.right-pic-all {
+  transition-delay: 0s;
+}
+
+.home-main .home-last-pro .play {
+  transition-property: border-color, background-color;
+  transition-duration: .3s;
+}
+
+.more .fix-service li {
+  transition: color .3s;
+}
+
+.more .help-msg div a {
+  transition-property: color, background-color;
   transition-duration: .3s;
 }

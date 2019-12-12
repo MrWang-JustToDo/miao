@@ -5,18 +5,29 @@
 }
 
 .header nav li {
+  height: 100%;
   font-size: 12px;
-  height: 40px;
   line-height: 40px;
   color: #b0b0b0;
 }
 
-.header nav li.header-hover::after {
+.header nav li.download::before {
+  content: "";
+  position: absolute;
+  border-width:8px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+  left: 20%;
+  bottom: 0px;
+  display: none;
+}
+
+.header nav li.download::after {
   content: attr(data-msg);
   position: absolute;
   width: 124px;
   height: 0;
-  background-image: url("../image//header-download.png");
+  background-image: url("../image/header-download.png");
   background-repeat: no-repeat;
   background-size: 90px 90px;
   background-position: 17px 14px;
@@ -24,7 +35,6 @@
   top: 100%;
   line-height: 260px;
   font-size: 14px;
-  text-align: center;
   box-sizing: border-box;
   background-color: white;
   color: black;
@@ -33,7 +43,11 @@
   z-index: 5;
 }
 
-.header nav li.header-hover:hover::after {
+.header nav li.download:hover::before {
+  display: block;
+}
+
+.header nav li.download:hover::after {
   box-shadow:  0 4px 6px 0 rgba(0, 0, 0, 0.4);
   height: 160px;
 }
@@ -51,7 +65,6 @@
   margin-left: 22px;
   width: 120px;
   background-color: #424242;
-
 }
 
 .header nav li.shop::after {
@@ -65,22 +78,14 @@
   color: white;
   background-color: white;
   box-shadow: 0 2px 5px 0 rgba(100, 100, 100, .3);
-  right: 0;
+  right: .1px;
   top: 100%;
   z-index: 4;
-}
-
-.header nav li.shop i {
-  margin-right: 2px;
 }
 
 .header nav li.shop:hover {
   background-color: white;
   color: #ff6700;
-}
-
-.header nav li.shop:hover i {
-  border-color: #ff6700;
 }
 
 .header nav li.shop:hover::after {
@@ -98,7 +103,6 @@
 }
 
 .middle-nav .left {
-  height: 100px;
   width: 55px;
   margin-right: 179px;
 }
@@ -116,13 +120,11 @@
 }
 
 .middle-nav .left .logo a {
-  display: block;
   width: 100%;
   height: 100%;
   background-position: 3px 3px;
   background-color: #ff6700;
   background-repeat: no-repeat;
-  position: absolute;
   top: 0;
 }
 
@@ -132,7 +134,7 @@
 }
 
 .middle-nav .left .logo a.mi-logo {
-  left: 0;
+  left: 0px;
   background-image: url(../image/mi-logo.png);
 }
 
@@ -153,6 +155,10 @@
   padding: 0 10px;
 }
 
+.middle-nav .middle-list>li:hover {
+  color: #ff6700;
+}
+
 .middle-nav .panel {
   z-index: 4;
   height: 0;
@@ -170,12 +176,13 @@
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
 }
 
+.middle-nav .middle-list .panel .container {
+  width: 1230px;
+}
+
 .middle-nav .panel ul {
   left: 0;
   top: 32px;
-  white-space: nowrap;
-  font-size: 0;
-  padding: 0;
 }
 
 .middle-nav .panel ul li:nth-child(6n+1) {
@@ -183,9 +190,6 @@
 }
 
 .middle-nav .panel li {
-  display: inline-block;
-  text-align: center;
-  margin: initial;
   width: 205px;
   font-size: 12px;
   line-height: 20px;
@@ -197,12 +201,17 @@
   display: block;
 }
 
+.middle-nav .panel li img {
+  width: 160px;
+  height: 110px;
+}
+
 .middle-nav .panel li::before {
   content: attr(data-m);
   position: absolute;
   width: 100%;
   height: 20px;
-  font-style: 12px;
+  font-size: 12px;
   top: calc(100% + 10px);
   left: 0;
 }
@@ -218,57 +227,49 @@
   left: 0;
 }
 
-.middle-nav .middle-list>li:hover {
-  color: #ff6700;
-}
-
 .middle-nav .middle-list>li:not(:nth-child(n+8)):hover~.panel {
   border-top: 1px solid #ccc;
-  transition-delay: 0s, 0s, 0s;
   height: 230px;
   box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .1);
+  transition-delay: 0s;
+}
+
+.middle-nav .middle-list>li:not(:nth-child(n+8)):hover~.panel ul {
+  transition-delay: 0s;
 }
 
 .middle-nav .middle-list>li:nth-child(1):hover~.panel ul {
-  transition-delay: 0s;
-  left: 0;
+  left: .1px;
 }
 
 .middle-nav .middle-list>li:nth-child(2):hover~.panel ul {
-  transition-delay: 0s;
-  left: -1230px;
+  left: -100%;
 }
 
 .middle-nav .middle-list>li:nth-child(3):hover~.panel ul {
-  transition-delay: 0s;
-  left: -2460px;
+  left: -200%;
 }
 
 .middle-nav .middle-list>li:nth-child(4):hover~.panel ul {
-  transition-delay: 0s;
-  left: -3690px;
+  left: -300%;
 }
 
 .middle-nav .middle-list>li:nth-child(5):hover~.panel ul {
-  transition-delay: 0s;
-  left: -4920px;
+  left: -400%;
 }
 
 .middle-nav .middle-list>li:nth-child(6):hover~.panel ul {
-  transition-delay: 0s;
-  left: -6150px;
+  left: -500%;
 }
 
 .middle-nav .middle-list>li:nth-child(7):hover~.panel ul {
-  transition-delay: 0s;
-  left: -7380px;
+  left: -600%;
 }
 
 .middle-nav .search div {
   display: inline-block;
   height: 50px;
   line-height: 50px;
-  vertical-align: middle;
 }
 
 .middle-nav .search input {

@@ -7,7 +7,6 @@ html {
     Heiti SC,
     WenQuanYi Micro Hei,
     sans-serif;
-  height: 1000px;
   box-sizing: border-box;
 }
 
@@ -51,7 +50,7 @@ ul {
   list-style: none;
 }
 
-li {
+li, label {
   cursor: pointer;
 }
 
@@ -62,6 +61,10 @@ a {
 
 h1 {
   margin: 0;
+}
+
+i {
+  font-style: normal;
 }
 
 .preload {
@@ -75,17 +78,18 @@ h1 {
 .container {
   width: 1226px;
   height: inherit;
+  min-width: 1000px;
 }
 
 .border {
   box-shadow: 0 0 2px 0px red;
 }
 
-.float-left {
+.float-left.float-left.float-left {
   float: left;
 }
 
-.float-right {
+.float-right.float-right.float-right {
   float: right;
 }
 
@@ -134,4 +138,16 @@ h1 {
 
 .son-input-hidden input {
   display: none;
+}
+
+.son-inline-block {
+  font-size: 0;
+  white-space: nowrap;
+  top: 0;
+  left: 0;
+}
+
+.son-inline-block>* {
+  display: inline-block;
+  font-size: initial;
 }
