@@ -96,6 +96,10 @@
   transition-duration: .3s;
 }
 
+.side ul li {
+  transition: color .3s;
+}
+
 .more .fix-service li {
   transition: color .3s;
 }

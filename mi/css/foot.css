@@ -1,3 +1,42 @@
+/* side开始 */
+.side {
+    position: fixed;
+    right: 0;
+    bottom: 180px;
+    z-index: 100;
+}
+
+.side ul li {
+    padding-top: 15px;
+    width: 84px;
+    height: 92px;
+    color: #757575;
+    background-color: white;
+    border: 1px solid #f5f5f5;
+    margin-top: -1px;
+}
+
+.side ul li a {
+    display: block;
+    height: 75px;
+}
+
+.side ul li:last-child {
+    margin-top: 16px;
+}
+
+.side ul li:hover {
+    color: #ff6700;
+}
+
+.side ul a::after {
+    position: absolute;
+    content: attr(data-msg);
+    width: 100%;
+    bottom: 16px;
+    left: 0;
+}
+
 /* more开始 */
 .more {
     height: 300px;
