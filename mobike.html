@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      outline: none;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft Yahei', 'WenQuanYi Micro Hei', Arial, Verdana, sans-serif;
+      font-size: 16px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+      font-size: initial;
+    }
+
+    ::selection {
+      background-color: rgba(245, 199, 199, 0.3);
+    }
+
+    .box-text-center::before {
+      content: "";
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .box-text-center>* {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .border {
+      box-shadow: 0 0 0px 2px red inset;
+    }
+
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .box-center {
+      margin: 0 auto;
+    }
+
+    .float-left {
+      float: left;
+    }
+
+    .float-right {
+      float: right;
+    }
+
+    .height-inherit {
+      height: inherit;
+    }
+
+    .top {
+      background-image: url("./mobike/p1.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50% 45%;
+    }
+
+    .container {
+      padding: 0 20px;
+    }
+
+    @media screen and (min-width: 1085px) {
+      .container {
+        /* min-width: 1040px; */
+        width: 1080px;
+      }
+
+      .top {
+        overflow: hidden;
+        /* min-height: 763px; */
+        height: 795px;
+      }
+
+      .top .header>ul {
+        display: block;
+      }
+
+      .top .header .button {
+        display: none;
+      }
+
+      .top .middle-text .logo h1 {
+        font-size: 420%;
+      }
+
+      .middle {
+        white-space: nowrap;
+      }
+
+      .middle a {
+        width: 25%;
+      }
+
+      .middle a:nth-child(1) {
+        border-right: 2px solid white;
+      }
+
+      .middle a:nth-child(2) {
+        border-right: 2px solid white;
+      }
+
+      .middle a:nth-child(3) {
+        border-right: 2px solid white;
+      }
+
+      .advanced .item {
+        height: 140px;
+        width: 33%;
+      }
+
+      .advanced .item:nth-child(2) {
+        text-align: center;
+      }
+
+      .advanced .item:nth-child(3) {
+        text-align: right;
+      }
+    }
+
+    @media screen and (min-width:650px) and (max-width: 1085px) {
+      .container {
+        width: 100%;
+      }
+
+      .top {
+        /* max-height: 630px; */
+        height: 598px;
+      }
+
+      .top .header>ul {
+        display: none;
+      }
+
+      .top .header .button {
+        display: block;
+      }
+
+      .top .middle-text .logo h1 {
+        font-size: 280%;
+      }
+
+      .middle a {
+        width: 50%;
+      }
+
+      .middle a:nth-child(1) {
+        border-right: 2px solid white;
+      }
+
+      .middle a:nth-child(3) {
+        border-right: 2px solid white;
+      }
+
+      .advanced .item {
+        height: 140px;
+        width: 33%;
+      }
+
+      .advanced .item:nth-child(2) {
+        text-align: center;
+      }
+
+      .advanced .item:nth-child(3) {
+        text-align: right;
+      }
+    }
+
+    @media screen and (min-width:650px) and (max-width: 730px) {
+      .about .container.container {
+        white-space: normal;
+      }
+
+      .about .container.container .second {
+        white-space: nowrap;
+        width: 80%;
+      }
+    }
+
+
+    @media screen and (max-width:650px) {
+      .middle a {
+        width: 100%;
+      }
+
+      .middle a:nth-child(1) {
+        border-right: none;
+      }
+
+      .middle a:nth-child(3) {
+        border-right: none;
+      }
+
+      .advanced .item {
+        height: 90px;
+        white-space: normal;
+        width: 50%;
+      }
+
+      .about .container.container .first {
+        width: 45%;
+      }
+
+      .about .container.container .second {
+        white-space: normal;
+        width: 55%;
+      }
+
+      .about .container.container .second>* {
+        width: 40%;
+        margin-bottom: 40px;
+      }
+    }
+
+    @media screen and (max-width:560px) {
+      .about .container.container {
+        white-space: normal;
+      }
+
+      .about .container.container .first {
+        width: 100%;
+      }
+
+      .about .container.container .second {
+        white-space: normal;
+        width: 100%;
+      }
+
+      .about .container.container .second>* {
+        width: 40%;
+        margin-bottom: 40px;
+      }
+    }
+
+    @media screen and (max-width:440px) {
+      .foot.foot>div {
+        white-space: normal;
+      }
+
+      .foot.foot .left {
+        width: 90%;
+      }
+
+      .foot.foot .right {
+        margin-top: 50px;
+        float: none;
+      }
+    }
+
+
+    .top header {
+      height: 80px;
+    }
+
+    .top header::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(100, 100, 100, .3);
+    }
+
+    .top .header {
+      font-size: 0;
+    }
+
+    .top .header>ul {
+      font-size: 0;
+      margin-right: -20px;
+    }
+
+    .top .header>ul>li {
+      display: inline-block;
+      font-size: initial;
+      height: inherit;
+      padding: 0 20px;
+      color: white;
+    }
+
+    .top .header .more:hover::after {
+      content: "";
+      position: absolute;
+      border: 10px solid white;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-top-color: transparent;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 65%;
+    }
+
+    .top .header .more>.more-info {
+      width: 240px;
+      border-radius: 4px;
+      background-color: white;
+      color: black;
+      font-size: 20px;
+      left: -5%;
+      top: 70px;
+      display: none;
+      padding: 7px 0;
+      z-index: 100;
+    }
+
+    .top .header .more>.more-info li {
+      padding: 8px 20px;
+      transition: color .3s;
+    }
+
+    .top .header .more>.more-info li:hover {
+      color: #e23d0e;
+    }
+
+    .top .header .more>.more-info li p {
+      font-size: 14px;
+      opacity: .5;
+      color: black;
+    }
+
+    .top .header .more:hover>.more-info {
+      display: block;
+    }
+
+    .top .header .button a {
+      width: 20px;
+      height: 40px;
+      color: white;
+    }
+
+    .top .header .button a::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 25%;
+      border: 1px solid white;
+    }
+
+    .top .header .button a::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 75%;
+      border: 1px solid white;
+    }
+
+    .top .middle-text {
+      height: calc(100% - 80px - 43px);
+      font-size: 0;
+    }
+
+    .top .middle-text>* {
+      font-size: initial;
+    }
+
+    .top .middle-text .logo h1 {
+      font-weight: bold;
+      line-height: 1;
+      margin-bottom: 20px;
+    }
+
+    .top .middle-text .logo a {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: bold;
+      padding: 14px 26px;
+      letter-spacing: .1em;
+      border-radius: 6px;
+      color: white;
+      background-color: rgba(0, 0, 0, .6);
+      transition: background-color .3s;
+    }
+
+    .top .middle-text .logo a:hover {
+      background-color: rgba(0, 0, 0, .8);
+    }
+
+    .top .bottom-text {
+      width: 100%;
+      background: rgba(122, 112, 101, 0.4) none repeat scroll 0% 0%;
+      bottom: 0;
+    }
+
+    .top .bottom-text div {
+      padding-left: 75px;
+      font-size: 1px;
+      color: white;
+    }
+
+    .top .bottom-text div>div {
+      margin-left: -55px;
+      font-size: 12px;
+      height: 18px;
+      line-height: 16px;
+      padding: 0 8px;
+      background: linear-gradient(to bottom, #ec614f 0%, #ff2e2e 100%);
+      border-radius: 4px;
+      font-variant: small-caps
+    }
+
+    .top .bottom-text div>p {
+      padding: 12px 0;
+      font-size: 16px;
+      margin-left: 8px;
+      line-height: 18px;
+      font-weight: 200;
+    }
+
+    .middle {
+      font-size: 0;
+    }
+
+    .middle a {
+      display: inline-block;
+      height: 260px;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50% 45%;
+      padding: 2.4vw;
+      text-align: center;
+      min-width: 260px;
+      border-top: 2px solid white;
+    }
+
+    .middle a:nth-child(1) {
+      background-image: url("./mobike/p2.jpg");
+    }
+
+    .middle a:nth-child(2) {
+      background-image: url("./mobike/p3.jpg");
+    }
+
+    .middle a:nth-child(3) {
+      background-image: url("./mobike/p4.jpg");
+    }
+
+    .middle a:nth-child(4) {
+      background-image: url("./mobike/p5.jpg");
+    }
+
+    .middle a h2 {
+      font-size: 24px;
+      font-weight: 400;
+      color: white;
+    }
+
+    .advanced {
+      border-bottom: 1px solid #eee;
+    }
+
+    .advanced>div {
+      font-size: 0;
+    }
+
+    .advanced .item {
+      display: inline-block;
+      white-space: nowrap;
+      min-width: 220px;
+
+    }
+
+    .advanced .item .img {
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      width: 50px;
+      height: 50px;
+    }
+
+    .advanced .item .text {
+      text-align: left;
+      height: 50px;
+      padding-left: 10px;
+    }
+
+    .advanced .item:nth-child(1) .img {
+      background-image: url("./mobike/p6.png");
+    }
+
+    .advanced .item:nth-child(2) .img {
+      background-image: url("./mobike/p7.png");
+    }
+
+    .advanced .item:nth-child(3) .img {
+      background-image: url("./mobike/p8.png");
+    }
+
+    .advanced .item .text p:nth-child(1) {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .advanced .item .text p:nth-child(2) {
+      font-size: 16px;
+      font-weight: 200;
+    }
+
+    .about {
+      border-bottom: 1px solid #eee;
+    }
+
+    .about>div {
+      overflow: hidden;
+      padding-top: 45px;
+      padding-bottom: 45px;
+      white-space: nowrap;
+    }
+
+    .about>div>* {
+      display: inline-block;
+    }
+
+    .about div .first {
+      vertical-align: top;
+      width: 35%;
+      line-height: 2.3;
+      margin-right: 40px;
+    }
+
+    .about div .first a {
+      display: block;
+      width: 160px;
+      background-image: url(https://mobike.com/cn/assets/themes/moby/img/logo-text.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      margin-bottom: 10px;
+      text-indent: -9999em;
+    }
+
+    .about div .first p {
+      font-weight: 200;
+    }
+
+    .about div .second {
+
+      width: 65%;
+      min-width: 410px;
+    }
+
+    .about div .second>* {
+      display: inline-block;
+      width: 25%;
+      vertical-align: top;
+      font-size: 15px;
+    }
+
+    .about div .second dt {
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .about div .second dd {
+      line-height: 2;
+      font-weight: 300;
+      transition: color .3s;
+    }
+
+    .about div .second dd:hover {
+      color: #e23d0e;
+    }
+
+    .foot>div {
+      padding-top: 45px;
+      padding-bottom: 45px;
+      line-height: 2.3;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    .foot .right {
+      float: right;
+      width: 40px;
+      height: 40px;
+      background-image: url("https://mobike.com/cn/assets/themes/moby/img/footer-chengxin.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top relative">
+    <header class="relative">
+      <div class="header height-inherit container box-center box-text-center">
+        <a class="left relative" href="#">
+          <svg width="100px" height="37px" viewBox="0 0 245 97" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+            <title>Artboard@1x</title>
+            <desc>Created with Sketch.</desc>
+            <defs>
+              <polygon id="path-1" points="0 96.9126 244.815 96.9126 244.815 -0.0004 0 -0.0004"></polygon>
+            </defs>
+            <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="Group-19">
+                <path
+                  d="M79.9451,37.6161 C73.6651,37.6161 68.5551,32.5071 68.5551,26.2261 C68.5551,19.9461 73.6651,14.8371 79.9451,14.8371 C86.2251,14.8371 91.3351,19.9461 91.3351,26.2261 C91.3351,32.5071 86.2251,37.6161 79.9451,37.6161 M79.9451,6.4831 C69.0581,6.4831 60.2011,15.3401 60.2011,26.2261 C60.2011,37.1131 69.0581,45.9701 79.9451,45.9701 C90.8311,45.9701 99.6881,37.1131 99.6881,26.2261 C99.6881,15.3401 90.8311,6.4831 79.9451,6.4831"
+                  id="Fill-1" fill="#FFFFFF"></path>
+                <path
+                  d="M137.5623,26.2265 C137.5623,32.5065 132.4533,37.6165 126.1733,37.6165 C119.8923,37.6165 114.7833,32.5065 114.7833,26.2265 C114.7833,19.9465 119.8923,14.8365 126.1733,14.8365 C132.4533,14.8365 137.5623,19.9465 137.5623,26.2265 M126.1733,6.4835 C122.0403,6.4835 118.1273,7.7335 114.7833,10.1105 L114.7833,0.5885 L106.4303,0.5885 L106.4303,26.2265 C106.4303,37.1135 115.2863,45.9695 126.1733,45.9695 C137.0593,45.9695 145.9163,37.1135 145.9163,26.2265 C145.9163,15.3395 137.0593,6.4835 126.1733,6.4835"
+                  id="Fill-3" fill="#FFFFFF"></path>
+                <mask id="mask-2" fill="white">
+                  <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-6"></g>
+                <polygon id="Fill-5" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="154.177 44.7726 162.531 44.7726 162.531 14.9036 154.177 14.9036"></polygon>
+                <path
+                  d="M53.825,20.8524 C53.218,12.7494 46.456,6.4834 38.273,6.4834 C33.95,6.4834 29.848,8.2784 26.912,11.4304 C23.977,8.2784 19.874,6.4834 15.552,6.4834 C7.368,6.4834 0.637,12.7494 0.03,20.8524 L0,21.4374 L0,44.7724 L8.353,44.7724 L8.353,21.6974 L8.382,21.4814 C8.666,17.7554 11.816,14.8364 15.552,14.8364 C19.281,14.8364 22.426,17.7444 22.721,21.4594 L22.721,44.7724 L31.074,44.7724 L31.074,21.6964 L31.103,21.4814 C31.387,17.7554 34.537,14.8364 38.273,14.8364 C42.01,14.8364 45.159,17.7554 45.443,21.4814 L45.471,21.8554 L45.471,44.7724 L53.825,44.7724 L53.825,20.8524 Z"
+                  id="Fill-7" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <path
+                  d="M163.301,4.9472 C163.301,2.2152 161.086,0.0002 158.354,0.0002 C155.621,0.0002 153.406,2.2152 153.406,4.9472 C153.406,7.6792 155.621,9.8942 158.354,9.8942 C161.086,9.8942 163.301,7.6792 163.301,4.9472"
+                  id="Fill-8" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <polygon id="Fill-9" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="203.3416 7.6816 193.5436 7.6816 181.1476 24.5846 180.5456 24.5846 180.5456 0.5886 172.1926 0.5886 172.1926 44.7726 180.5456 44.7726 180.5456 27.8826 181.1576 27.8826 193.5436 44.7726 203.3416 44.7726 189.7756 26.2266">
+                </polygon>
+                <path
+                  d="M225.0662,14.4648 C230.0082,14.4648 234.1962,17.7608 235.7392,22.3488 L235.7392,23.1948 L214.4182,23.1948 L214.4182,22.2588 C215.9852,17.7178 220.1542,14.4648 225.0662,14.4648 Z M244.5832,29.2578 C244.7352,28.2698 244.8152,27.2578 244.8152,26.2268 C244.8152,15.3188 235.9732,6.4778 225.0662,6.4778 C214.1592,6.4778 205.3172,15.3188 205.3172,26.2268 C205.3172,37.1338 214.1592,45.9758 225.0662,45.9758 C232.8402,45.9758 239.5542,41.4778 242.7762,34.9478 L242.7762,33.9988 L234.3932,33.9988 C232.2472,36.4778 229.0692,38.0558 225.5072,38.0558 C220.3442,38.0558 215.9762,34.7488 214.4182,30.1658 L214.4182,29.2578 L244.5832,29.2578 Z"
+                  id="Fill-10" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <polygon id="Fill-11" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="41.9207 72.2929 38.4397 72.2929 38.4397 71.0359 33.4037 71.0359 33.4037 72.2929 29.9217 72.2929 29.9217 74.6169 35.6327 74.6169 29.9217 76.7269 29.9217 78.8879 33.4037 77.6019 33.4037 79.5189 38.4397 79.5189 38.4397 77.6019 41.9207 78.8879 41.9207 76.7269 36.2097 74.6169 41.9207 74.6169">
+                </polygon>
+                <polygon id="Fill-12" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="55.3845 76.7265 49.6735 74.6175 55.3545 74.6175 55.3545 72.2925 51.8735 72.2925 51.8735 71.0365 46.8375 71.0365 46.8375 72.2925 43.3565 72.2925 43.3565 74.6175 49.0965 74.6175 43.3855 76.7265 43.3855 78.8875 46.8375 77.6135 46.8375 79.5185 51.8735 79.5185 51.8735 77.5905 55.3845 78.8875">
+                </polygon>
+                <path
+                  d="M55.9534,66.1474 L44.0724,66.1474 L44.0724,65.7824 C44.0724,65.1594 43.5674,64.6534 42.9444,64.6534 L37.9214,64.6534 L37.9214,66.1474 L22.7604,66.1474 L22.7604,96.6884 L26.6754,96.6884 C27.2994,96.6884 27.8044,96.1824 27.8044,95.5594 L27.8044,69.5084 L55.9534,69.5084 L55.9534,66.1474 Z"
+                  id="Fill-13" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <polygon id="Fill-14" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="111.4666 69.0917 111.4666 65.7307 95.7056 65.7307 95.7056 69.0917 101.0646 69.0917 101.0646 72.8517 95.7056 72.8517 95.7056 76.2117 101.0646 76.2117 101.0646 79.9717 95.7056 79.9717 95.7056 83.3317 101.0646 83.3317 101.0646 87.0917 95.7056 87.0917 95.7056 90.4527 101.0646 90.4527 101.0646 96.6887 106.1076 96.6887 106.1076 90.4527 111.4666 90.4527 111.4666 87.0917 106.1076 87.0917 106.1076 83.3317 111.4666 83.3317 111.4666 79.9717 106.1076 79.9717 106.1076 76.2117 111.4666 76.2117 111.4666 72.8517 106.1076 72.8517 106.1076 69.0917">
+                </polygon>
+                <path
+                  d="M93.7654,68.0175 L93.7654,65.7855 L78.0724,65.7855 L78.0724,69.1465 L83.4304,69.1465 L83.4304,75.1495 L78.0724,75.1495 L78.0724,78.5105 L83.4304,78.5105 L83.4304,84.5145 L78.0724,84.5145 L78.0724,87.8745 L82.7824,87.8745 L79.4764,94.7575 L83.9634,96.9135 L88.3034,87.8745 L93.7654,87.8745 L93.7654,84.5145 L88.4074,84.5145 L88.4074,78.5105 L93.7654,78.5105 L93.7654,75.1495 L88.4074,75.1495 L88.4074,69.1465 L92.6374,69.1465 C93.2604,69.1465 93.7654,68.6405 93.7654,68.0175"
+                  id="Fill-15" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <path
+                  d="M55.3548,82.5761 L55.3548,81.3811 L29.9218,81.3811 L29.9218,83.7051 L40.7008,83.7051 L40.7008,85.9301 L29.9218,85.9301 L29.9218,88.2541 L40.7008,88.2541 L40.7008,90.4781 L29.9218,90.4781 L29.9218,92.8031 L40.7008,92.8031 L40.7008,94.9081 L35.2648,94.9081 L35.2648,96.7631 L44.6158,96.7631 C45.2388,96.7631 45.7448,96.2581 45.7448,95.6351 L45.7448,92.8031 L55.3548,92.8031 L55.3548,90.4781 L45.7448,90.4781 L45.7448,88.2541 L55.3548,88.2541 L55.3548,85.9301 L45.7448,85.9301 L45.7448,83.7051 L54.2268,83.7051 C54.8498,83.7051 55.3548,83.2001 55.3548,82.5761"
+                  id="Fill-16" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <path
+                  d="M139.739,79.9716 L147.51,79.9716 L147.51,76.6756 L139.739,76.6756 L139.739,79.9716 Z M139.738,73.3146 L147.509,73.3146 L147.509,69.5086 L139.738,69.5086 L139.738,73.3146 Z M152.553,73.3146 L160.449,73.3146 L160.449,69.5086 L152.553,69.5086 L152.553,73.3146 Z M152.553,79.9716 L160.449,79.9716 L160.449,76.6756 L152.553,76.6756 L152.553,79.9716 Z M166.223,87.0916 L152.553,87.0916 L152.553,83.3316 L165.493,83.3316 L165.493,66.1476 L161.179,66.1476 L161.179,64.5826 L156.215,64.5826 C155.592,64.5826 155.086,65.0886 155.086,65.7116 L155.086,66.1476 L144.976,66.1476 L144.976,65.7116 C144.976,65.0886 144.47,64.5826 143.847,64.5826 L138.883,64.5826 L138.883,66.1476 L134.695,66.1476 L134.695,83.3316 L147.509,83.3316 L147.509,87.0916 L133.965,87.0916 L133.965,90.4526 L147.509,90.4526 L147.509,96.6886 L152.553,96.6886 L152.553,90.4526 L166.223,90.4526 L166.223,87.0916 Z"
+                  id="Fill-17" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <polygon id="Fill-18" fill="#FFFFFF" mask="url(#mask-2)"
+                  points="221.4461 87.0917 208.9531 87.0917 208.9531 82.7137 220.7161 82.7137 220.7161 79.3537 208.9531 79.3537 208.9531 73.6777 203.9091 73.6777 203.9091 79.3537 195.2771 79.3537 198.6881 69.8387 220.7161 69.8387 220.7161 66.4787 199.8931 66.4787 200.5731 64.5827 195.2141 64.5827 194.5341 66.4787 189.9311 66.4787 189.9311 69.8387 193.3291 69.8387 189.9181 79.3537 189.9311 79.3537 189.9311 82.7137 203.9091 82.7137 203.9091 87.0917 189.1881 87.0917 189.1881 90.4527 203.9091 90.4527 203.9091 96.6887 208.9531 96.6887 208.9531 90.4527 221.4461 90.4527">
+                </polygon>
+              </g>
+            </g>
+          </svg>
+        </a>
+        <ul class="relative float-right height-inherit">
+          <li class="relative box-text-center more"><a href="#">产品</a>
+            <ul class="absolute more-info">
+              <li><a href="#">经典版<p>轻便, 可靠</p></a></li>
+              <li><a href="#">轻骑<p>城市随处可骑</p></a></li>
+              <li><a href="#">智能锁<p>摩拜智造, 天生靠得住</p></a></li>
+            </ul>
+          </li>
+          <li class="box-text-center"><a href="#">摩拜科技</a></li>
+          <li class="box-text-center"><a href="#">关于</a></li>
+          <li class="box-text-center"><a href="#">广告合作</a></li>
+        </ul>
+        <div class="button float-right height-inherit box-text-center">
+          <a class="relative" href="#"></a>
+        </div>
+      </div>
+    </header>
+    <div class="middle-text box-text-center container box-center">
+      <div class="logo">
+        <h1>让自行车回归城市</h1>
+        <a href="#">立即开始使用 Mobike</a>
+      </div>
+    </div>
+    <div class="bottom-text absolute">
+      <div class="container box-center box-text-center">
+        <div><a href="#">news</a></div>
+        <p><a href="#">“摩拜公交” 小程序上线 线上购买地铁票省时省力</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="middle">
+    <a href="#">
+      <h2>大国品牌</h2>
+    </a>
+    <a href="#">
+      <h2>摩拜科技</h2>
+    </a>
+    &shy;
+    <a href="#">
+      <h2>摩拜生活</h2>
+    </a>
+    <a href="#">
+      <h2>摩拜校招</h2>
+    </a>
+  </div>
+  <div class="advanced">
+    <div class="container box-center">
+      <div class="item box-text-center">
+        <div class="img"></div>
+        <div class="text">
+          <p>微信小程序</p>
+          <p>微信扫一扫, 直接用车</p>
+        </div>
+      </div>
+      <div class="item box-text-center">
+        <div class="img"></div>
+        <div class="text">
+          <p>红包车</p>
+          <p>骑摩拜, 能赚钱</p>
+        </div>
+      </div>
+      <div class="item box-text-center">
+        <div class="img"></div>
+        <div class="text">
+          <p>摩拜分</p>
+          <p>文明骑行, 信用生活</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="about">
+    <div class="container box-center">
+      <div class="first">
+        <a href="#">Mobike</a>
+        <p>Beijing Mobike Technology Co., Ltd</p>
+        <p>客服电话 400-618-7799</p>
+        <p>北京摩拜科技有限公司</p>
+      </div>
+      <div class="second">
+        <dl>
+          <dt>产品</dt>
+          <dd><a href="#">经典版</a></dd>
+          <dd><a href="#">轻骑</a></dd>
+          <dd><a href="#">智能锁</a></dd>
+        </dl>
+        <dl>
+          <dt>生活</dt>
+          <dd><a href="#">城市</a></dd>
+        </dl>
+        <dl>
+          <dt>关于</dt>
+          <dd><a href="#">关于 Mobike</a></dd>
+          <dd><a href="#">加入我们</a></dd>
+          <dd><a href="#">联系我们</a></dd>
+          <dd><a href="#">服务协议</a></dd>
+        </dl>
+        <dl>
+          <dt>社会网络</dt>
+          <dd><a href="#">微博</a></dd>
+          <dd><a href="#">微信</a></dd>
+          <dd><a href="#">知乎专栏</a></dd>
+          <dd><a href="#">Facebook</a></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="container box-center box-text-center">
+      <div class="left">
+        <p>京 ICP 备15053449 号 京公网安备 11010502032956 号 </p>
+        <p>增值电信业务经营许可证编号：京B2-20170053 /p>
+      </div>
+      <div class="right"></div>
+    </div>
+  </div>
+</body>
+
+</html>

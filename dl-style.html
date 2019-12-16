@@ -1,21 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        dt, dd {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        dl {
+            padding-left: 200px;
+        }
+
+        dt,
+        dd {
             width: 200px;
             height: 100px;
-            border: 1px solid red;
             float: left;
+            border: 1px solid red;
             text-align: center;
             line-height: 98px;
         }
+
         dt {
-            margin-bottom: 200px;
+            margin-left: -200px;
         }
 
         dd {
@@ -28,6 +41,7 @@
         }
     </style>
 </head>
+
 <body>
     <dl>
         <dt>dt</dt>
@@ -48,4 +62,5 @@
         <dd>dd</dd>
     </dl>
 </body>
+
 </html>
