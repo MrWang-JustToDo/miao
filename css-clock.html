@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./basic.css">
+  <title>使用CSS实现钟表效果</title>
+  <style>
+    .outer {
+      width: 400px;
+      height: 400px;
+      margin: 50px auto;
+      font-size: 30px;
+      border-radius: 50%;
+      font-size: 30px;
+      font-family: roboto;
+    }
+
+    .outer>.clock {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    .outer>.center {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-image: radial-gradient(circle, black 0, white 66%, transparent 100%);
+      z-index: 100;
+    }
+
+    .clock>div.num {
+      position: absolute;
+      height: 50%;
+      top: 0;
+      left: 50%;
+      transform-origin: bottom center;
+      padding-top: 10px;
+    }
+
+    .clock>div.ss {
+      width: 2px;
+      height: 55%;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-timing-function: steps(60);
+      transform-origin: 50% 82%;
+      animation-name: all;
+      animation-duration: 60s;
+      animation-iteration-count: infinite;
+    }
+
+    .clock>div.ss::after {
+      content: "";
+      position: absolute;
+      background-color: rgb(147, 39, 235);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform-origin: 50% 82%;
+      animation-name: s-s;
+      animation-duration: 1s;
+      animation-delay: 0.1s;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(1, -0, 1, 1);
+    }
+
+    .clock>div.mm {
+      width: 3px;
+      height: 45%;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-timing-function: steps(60);
+      transform-origin: 50% 77.5%;
+      animation-name: all;
+      animation-duration: 3600s;
+      animation-iteration-count: infinite;
+    }
+
+    .clock>div.mm::after {
+      position: absolute;
+      content: "";
+      background-color: rgb(236, 42, 42);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform-origin: 50% 77.5%;
+      animation-name: m-m;
+      animation-duration: 60s;
+      animation-delay: .2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(1, -0, 1, 1);
+    }
+
+    .clock>div.hh {
+      width: 6px;
+      height: 25%;
+      top: 28%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation-timing-function: steps(60);
+      transform-origin: 50% 89%;
+      animation-name: all;
+      animation-duration: 216000s;
+      animation-iteration-count: infinite;
+    }
+
+    .clock>div.hh::after {
+      position: absolute;
+      content: "";
+      background-color: rgb(54, 42, 235);
+      width: 100%;
+      height: 100%;
+      animation-name: h-h;
+      transform-origin: 50% 89%;
+      animation-duration: 3600s;
+      animation-delay: .2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: cubic-bezier(1, -0, 1, 1);
+    }
+
+    @keyframes s-s {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      60% {
+        transform: rotate(0deg);
+      }
+
+      95% {
+        transform: rotate(1deg);
+      }
+
+      98% {
+        transform: rotate(-.5deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes m-m {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      90% {
+        transform: rotate(0deg);
+      }
+
+      99% {
+        transform: rotate(1deg);
+      }
+
+      99.5% {
+        transform: rotate(-.5deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    @keyframes h-h {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      99.7% {
+        transform: rotate(0deg);
+      }
+
+      99.8% {
+        transform: rotate(1deg);
+      }
+
+      99.9% {
+        transform: rotate(-0.5deg);
+      }
+
+      100% {
+        transform: rotate(0deg);
+      }
+    }
+
+
+    @keyframes all {
+      from {
+        transform: translateX(-50%) rotate(0deg);
+      }
+
+      to {
+        transform: translateX(-50%) rotate(360deg);
+      }
+    }
+
+    .one {
+      transform: translateX(-50%) rotate(30deg);
+    }
+
+    .one p {
+      transform: rotate(-30deg);
+    }
+
+    .two {
+      transform: translateX(-50%) rotate(60deg);
+    }
+
+    .two p {
+      transform: rotate(-60deg);
+    }
+
+    .three {
+      transform: translateX(-50%) rotate(90deg);
+    }
+
+    .three p {
+      transform: rotate(-90deg);
+    }
+
+    .four {
+      transform: translateX(-50%) rotate(120deg);
+    }
+
+    .four p {
+      transform: rotate(-120deg);
+    }
+
+    .five {
+      transform: translateX(-50%) rotate(150deg);
+    }
+
+    .five p {
+      transform: rotate(-150deg);
+    }
+
+    .six {
+      transform: translateX(-50%) rotate(180deg);
+    }
+
+    .six p {
+      transform: rotate(-180deg);
+    }
+
+    .seven {
+      transform: translateX(-50%) rotate(210deg);
+    }
+
+    .seven p {
+      transform: rotate(-210deg);
+    }
+
+    .eight {
+      transform: translateX(-50%) rotate(240deg);
+    }
+
+    .eight p {
+      transform: rotate(-240deg);
+    }
+
+    .nine {
+      transform: translateX(-50%) rotate(270deg);
+    }
+
+    .nine p {
+      transform: rotate(-270deg);
+    }
+
+    .ten {
+      transform: translateX(-50%) rotate(300deg);
+    }
+
+    .ten p {
+      transform: rotate(-300deg);
+    }
+
+    .eleven {
+      transform: translateX(-50%) rotate(330deg);
+    }
+
+    .eleven p {
+      transform: rotate(-330deg);
+    }
+
+    .twelve {
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer border relative flex-center">
+    <div class="clock absolute">
+      <div class="one num">
+        <p>1</p>
+      </div>
+      <div class="two num">
+        <p>2</p>
+      </div>
+      <div class="three num">
+        <p>3</p>
+      </div>
+      <div class="four num">
+        <p>4</p>
+      </div>
+      <div class="five num">
+        <p>5</p>
+      </div>
+      <div class="six num">
+        <p>6</p>
+      </div>
+      <div class="seven num">
+        <p>7</p>
+      </div>
+      <div class="eight num">
+        <p>8</p>
+      </div>
+      <div class="nine num">
+        <p>9</p>
+      </div>
+      <div class="ten num">
+        <p>10</p>
+      </div>
+      <div class="eleven num">
+        <p>11</p>
+      </div>
+      <div class="twelve num">
+        <p>12</p>
+      </div>
+      <div class="absolute hh"></div>
+      <div class="absolute mm"></div>
+      <div class="absolute ss"></div>
+    </div>
+    <div class="center relative"></div>
+  </div>
+</body>
+
+</html>

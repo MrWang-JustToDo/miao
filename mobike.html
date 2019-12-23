@@ -5,94 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./basic.css">
   <title>Document</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      outline: none;
-    }
-
     body {
       font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft Yahei', 'WenQuanYi Micro Hei', Arial, Verdana, sans-serif;
       font-size: 16px;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
+    * {
+      outline: none;
     }
 
-    ul {
-      list-style: none;
-      font-size: initial;
+    a {
+      display: block;
     }
 
     ::selection {
       background-color: rgba(245, 199, 199, 0.3);
     }
 
-    .box-text-center::before {
-      content: "";
-      height: 100%;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .box-text-center>* {
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .border {
-      box-shadow: 0 0 0px 2px red inset;
-    }
-
-    .relative {
-      position: relative;
-    }
-
-    .absolute {
-      position: absolute;
-    }
-
-    .box-center {
-      margin: 0 auto;
-    }
-
-    .float-left {
-      float: left;
-    }
-
-    .float-right {
-      float: right;
-    }
-
-    .height-inherit {
-      height: inherit;
-    }
-
-    .top {
-      background-image: url("./mobike/p1.jpg");
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: 50% 45%;
-    }
-
-    .container {
-      padding: 0 20px;
-    }
-
     @media screen and (min-width: 1085px) {
       .container {
-        /* min-width: 1040px; */
         width: 1080px;
       }
 
       .top {
         overflow: hidden;
-        /* min-height: 763px; */
         height: 795px;
       }
 
@@ -104,7 +43,7 @@
         display: none;
       }
 
-      .top .middle-text .logo h1 {
+      .top .middle-text .info h1 {
         font-size: 420%;
       }
 
@@ -148,7 +87,6 @@
       }
 
       .top {
-        /* max-height: 630px; */
         height: 598px;
       }
 
@@ -160,7 +98,7 @@
         display: block;
       }
 
-      .top .middle-text .logo h1 {
+      .top .middle-text .info h1 {
         font-size: 280%;
       }
 
@@ -201,7 +139,6 @@
       }
     }
 
-
     @media screen and (max-width:650px) {
       .container {
         width: 100%;
@@ -219,7 +156,7 @@
         display: block;
       }
 
-      .top .middle-text .logo h1 {
+      .top .middle-text .info h1 {
         font-size: 280%;
       }
 
@@ -237,7 +174,6 @@
 
       .advanced .item {
         height: 90px;
-        white-space: normal;
         width: 50%;
       }
 
@@ -268,6 +204,7 @@
       .about .container.container .second {
         white-space: normal;
         width: 100%;
+        margin-top: 40px;
       }
 
       .about .container.container .second>* {
@@ -291,8 +228,23 @@
       }
     }
 
+    .top .bgimg {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-image: url("./mobike/p1.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: 50% 45%;
+    }
+
+    .container {
+      padding: 0 20px;
+    }
 
     .top header {
+      z-index: 2;
       height: 80px;
     }
 
@@ -304,19 +256,11 @@
       background-color: rgba(100, 100, 100, .3);
     }
 
-    .top .header {
-      font-size: 0;
-    }
-
     .top .header>ul {
-      font-size: 0;
       margin-right: -20px;
     }
 
-    .top .header>ul>li {
-      display: inline-block;
-      font-size: initial;
-      height: inherit;
+    .top .header>ul>li>a {
       padding: 0 20px;
       color: white;
     }
@@ -340,7 +284,7 @@
       color: black;
       font-size: 20px;
       left: -5%;
-      top: 70px;
+      top: 135%;
       display: none;
       padding: 7px 0;
       z-index: 100;
@@ -365,46 +309,103 @@
       display: block;
     }
 
-    .top .header .button a {
-      width: 20px;
-      height: 40px;
-      color: white;
+    .top .header .button {
+      width: 40px;
     }
 
-    .top .header .button a::before {
+    .top .header .button label {
+      width: 26px;
+      height: 40px;
+      color: white;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .top .header .logo {
+      z-index: 10;
+    }
+
+    .top .header .button label::before {
       content: "";
       position: absolute;
       width: 100%;
       left: 0;
       top: 25%;
       border: 1px solid white;
+      transition: .2s;
+      transform-origin: 100% 0;
+      transform: rotate(0deg);
     }
 
-    .top .header .button a::after {
+    .top .header .button label::after {
       content: "";
       position: absolute;
       width: 100%;
       left: 0;
       top: 75%;
       border: 1px solid white;
+      transition: .2s;
+      transform-origin: 100% 100%;
+      transform: rotate(0deg);
+    }
+
+    .top .header input:checked+label::before {
+      transform: rotate(-45deg);
+    }
+
+    .top .header input:checked+label::after {
+      transform: rotate(45deg);
+    }
+
+    .top .header input:checked~ul.button-li {
+      transition-delay: 0s, 0s;
+      height: calc(100% + 5 * 57px);
+      opacity: 1;
+    }
+
+    .top .header .button-li {
+      opacity: 0;
+      width: 100%;
+      height: 0;
+      top: 0;
+      left: 0;
+      border: 1px solid red;
+      padding-top: 80px;
+      background-color: rgba(226, 61, 14, .9);
+      color: white;
+      transition-property: opacity, height;
+      transition-duration: .5s, 0s;
+      transition-delay: 0s, .5s;
+      z-index: 5;
+    }
+
+    .top .header .button-li li {
+      padding-top: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(100, 100, 100, .2);
+    }
+
+    .top .header .button-li li:nth-child(1) {
+      border-top: 1px solid rgba(100, 100, 100, .2);
+      ;
+    }
+
+    .top .header .button-li li:last-child {
+      border: none;
     }
 
     .top .middle-text {
       height: calc(100% - 80px - 43px);
-      font-size: 0;
+      z-index: 1;
     }
 
-    .top .middle-text>* {
-      font-size: initial;
-    }
-
-    .top .middle-text .logo h1 {
+    .top .middle-text .info h1 {
       font-weight: bold;
       line-height: 1;
       margin-bottom: 20px;
     }
 
-    .top .middle-text .logo a {
+    .top .middle-text .info a {
       display: inline-block;
       font-size: 22px;
       font-weight: bold;
@@ -416,7 +417,7 @@
       transition: background-color .3s;
     }
 
-    .top .middle-text .logo a:hover {
+    .top .middle-text .info a:hover {
       background-color: rgba(0, 0, 0, .8);
     }
 
@@ -456,13 +457,11 @@
     }
 
     .middle a {
-      display: inline-block;
       height: 260px;
       background-repeat: no-repeat;
       background-size: cover;
       background-position: 50% 45%;
       padding: 2.4vw;
-      text-align: center;
       min-width: 260px;
       border-top: 2px solid white;
     }
@@ -493,15 +492,9 @@
       border-bottom: 1px solid #eee;
     }
 
-    .advanced>div {
-      font-size: 0;
-    }
-
     .advanced .item {
-      display: inline-block;
       white-space: nowrap;
-      min-width: 220px;
-
+      min-width: 210px;
     }
 
     .advanced .item .img {
@@ -538,6 +531,7 @@
     .advanced .item .text p:nth-child(2) {
       font-size: 16px;
       font-weight: 200;
+      white-space: normal;
     }
 
     .about {
@@ -545,14 +539,8 @@
     }
 
     .about>div {
-      overflow: hidden;
       padding-top: 45px;
       padding-bottom: 45px;
-      white-space: nowrap;
-    }
-
-    .about>div>* {
-      display: inline-block;
     }
 
     .about div .first {
@@ -563,7 +551,6 @@
     }
 
     .about div .first a {
-      display: block;
       width: 160px;
       background-image: url(https://mobike.com/cn/assets/themes/moby/img/logo-text.svg);
       background-repeat: no-repeat;
@@ -577,13 +564,11 @@
     }
 
     .about div .second {
-
       width: 65%;
       min-width: 410px;
     }
 
     .about div .second>* {
-      display: inline-block;
       width: 25%;
       vertical-align: top;
       font-size: 15px;
@@ -608,13 +593,15 @@
     .foot>div {
       padding-top: 45px;
       padding-bottom: 45px;
-      line-height: 2.3;
-      font-size: 12px;
       color: #aaa;
     }
 
-    .foot .right {
-      float: right;
+    .foot .left {
+      line-height: 2.3;
+      font-size: 12px;
+    }
+
+    .foot .right a {
       width: 40px;
       height: 40px;
       background-image: url("https://mobike.com/cn/assets/themes/moby/img/footer-chengxin.jpg");
@@ -627,12 +614,12 @@
 
 <body>
   <div class="top relative">
+    <div class="bgimg absolute"></div>
     <header class="relative">
-      <div class="header height-inherit container box-center box-text-center">
-        <a class="left relative" href="#">
+      <div class="header height-inherit container box-center son-inline-center">
+        <a class="logo relative" href="#">
           <svg width="100px" height="37px" viewBox="0 0 245 97" version="1.1" xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink">
-            <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
             <title>Artboard@1x</title>
             <desc>Created with Sketch.</desc>
             <defs>
@@ -692,44 +679,54 @@
             </g>
           </svg>
         </a>
-        <ul class="relative float-right height-inherit">
-          <li class="relative box-text-center more"><a href="#">产品</a>
+        <ul class="relative float-right height-inherit son-inline-center">
+          <li class="relative more"><a href="#">产品</a>
             <ul class="absolute more-info">
               <li><a href="#">经典版<p>轻便, 可靠</p></a></li>
               <li><a href="#">轻骑<p>城市随处可骑</p></a></li>
               <li><a href="#">智能锁<p>摩拜智造, 天生靠得住</p></a></li>
             </ul>
           </li>
-          <li class="box-text-center"><a href="#">摩拜科技</a></li>
-          <li class="box-text-center"><a href="#">关于</a></li>
-          <li class="box-text-center"><a href="#">广告合作</a></li>
+          <li><a href="#">摩拜科技</a></li>
+          <li><a href="#">关于</a></li>
+          <li><a href="#">广告合作</a></li>
         </ul>
-        <div class="button float-right height-inherit box-text-center">
-          <a class="relative" href="#"></a>
+        <div class="button float-right height-inherit son-inline-center">
+          <input type="checkbox" name="" id="button" style="display: none;">
+          <label class="relative" for="button">
+          </label>
+          <ul class="button-li absolute overflow">
+            <li class="container"><a href="#">产品</a> </li>
+            <li class="container"><a href="#">摩拜科技</a> </li>
+            <li class="container"><a href="#">关于</a> </li>
+            <li class="container"><a href="#">广告合作</a> </li>
+            <li class="container"><a href="#">立即开始使用 Mobike></a></li>
+          </ul>
         </div>
       </div>
     </header>
-    <div class="middle-text box-text-center container box-center">
-      <div class="logo">
-        <h1>让自行车回归城市</h1>
-        <a href="#">立即开始使用 Mobike</a>
+    <div class="middle-text relative">
+      <div class="container height-inherit son-inline-center box-center">
+        <div class="info">
+          <h1>让自行车回归城市</h1>
+          <a href="#">立即开始使用 Mobike</a>
+        </div>
       </div>
     </div>
     <div class="bottom-text absolute">
-      <div class="container box-center box-text-center">
+      <div class="container box-center son-inline-center">
         <div><a href="#">news</a></div>
         <p><a href="#">“摩拜公交” 小程序上线 线上购买地铁票省时省力</a></p>
       </div>
     </div>
   </div>
-  <div class="middle">
+  <div class="middle text-center son-inline-block">
     <a href="#">
       <h2>大国品牌</h2>
     </a>
     <a href="#">
       <h2>摩拜科技</h2>
     </a>
-    &shy;
     <a href="#">
       <h2>摩拜生活</h2>
     </a>
@@ -738,39 +735,39 @@
     </a>
   </div>
   <div class="advanced">
-    <div class="container box-center">
-      <div class="item box-text-center">
+    <div class="container box-center son-inline-block">
+      <div class="item son-inline-center">
         <div class="img"></div>
         <div class="text">
           <p>微信小程序</p>
-          <p>微信扫一扫, 直接用车</p>
+          <p>微信扫一扫，直接用车</p>
         </div>
       </div>
-      <div class="item box-text-center">
+      <div class="item son-inline-center">
         <div class="img"></div>
         <div class="text">
           <p>红包车</p>
-          <p>骑摩拜, 能赚钱</p>
+          <p>骑摩拜，能赚钱</p>
         </div>
       </div>
-      <div class="item box-text-center">
+      <div class="item son-inline-center">
         <div class="img"></div>
         <div class="text">
           <p>摩拜分</p>
-          <p>文明骑行, 信用生活</p>
+          <p>文明骑行，信用生活</p>
         </div>
       </div>
     </div>
   </div>
   <div class="about">
-    <div class="container box-center">
+    <div class="container box-center son-inline-block-nowrap overflow">
       <div class="first">
         <a href="#">Mobike</a>
         <p>Beijing Mobike Technology Co., Ltd</p>
         <p>客服电话 400-618-7799</p>
         <p>北京摩拜科技有限公司</p>
       </div>
-      <div class="second">
+      <div class="second son-inline-block">
         <dl>
           <dt>产品</dt>
           <dd><a href="#">经典版</a></dd>
@@ -799,12 +796,12 @@
     </div>
   </div>
   <div class="foot">
-    <div class="container box-center box-text-center">
+    <div class="container box-center son-inline-center">
       <div class="left">
         <p>京 ICP 备15053449 号 京公网安备 11010502032956 号 </p>
         <p>增值电信业务经营许可证编号：京B2-20170053 /p>
       </div>
-      <div class="right"></div>
+      <div class="right float-right son-inline-center"><a href="#"></a></div>
     </div>
   </div>
 </body>

@@ -20,6 +20,14 @@
       box-sizing: border-box;
     }
 
+    .relative {
+      position: relative;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
     .container {
       width: 470px;
       margin: 0 auto;
@@ -104,6 +112,38 @@
       border-radius: 2px;
       color: white;
     }
+
+    .start {
+      padding: 48px 16px 40px;
+      background-color: #fafbfc;
+    }
+
+    .start .bgi {
+      width: 330px;
+      height: 650px;
+      left: 0;
+      top: 15px;
+      background-image: radial-gradient(circle at 50% 50%, #e0e3e7 0, #e0e3e7 25%, transparent 30%, transparent 100%);
+      background-size: 10px 10px;
+      background-repeat: repeat;
+    }
+
+    .start .start-msg {
+      width: 468px;
+      height: 652px;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 0 4px 0 rgba(100, 100, 100, .3);
+      z-index: 1;
+      padding: 24px;
+      text-align: center;
+      word-wrap: break-word;
+    }
+
+    .start .start-msg h2 {
+      font-size: 26px;
+      color: #24292e;
+    }
   </style>
 </head>
 
@@ -130,6 +170,12 @@
         40&shy; million&nbsp;developers.
       </p>
       <a class="button" href="#">Sign up for GitHub</a>
+    </div>
+  </div>
+  <div class="start relative">
+    <div class="bgi absolute"></div>
+    <div class="start-msg relative">
+      <h2>Get started with GitHub Enterprise</h2>
     </div>
   </div>
 </body>

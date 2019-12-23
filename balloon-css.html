@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./basic.css">
+  <title>Document</title>
+  <style>
+    html {
+      --bgc: red;
+      --time: .4s;
+      --start: 6px;
+      --end: 12px;
+    }
+
+    div.outer {
+      margin-top: 100px;
+    }
+
+    p {
+      margin: 100px;
+    }
+
+    button {
+      display: inline-block;
+      width: 180px;
+      padding: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      color: #fff;
+      text-align: center;
+      border: none;
+      border-radius: 3px;
+      background-color: var(--bgc);
+    }
+
+    button[data-balloon-pos] {
+      position: relative;
+      transition-property: opacity, transform;
+      transition-duration: calc(var(--time) / 1.1);
+      transition-delay: calc(var(--time) - calc(var(--time) / 1.1));
+    }
+
+    button[data-balloon-pos]::before {
+      position: absolute;
+      content: attr(aria-label);
+      padding: 6px 12px;
+      background-color: black;
+      color: white;
+      opacity: 0;
+      transition-duration: inherit;
+      transition-delay: inherit;
+      transition-property: inherit;
+      z-index: -1;
+      white-space: nowrap;
+    }
+
+    button[data-balloon-pos]::after {
+      position: absolute;
+      content: "";
+      border: var(--start) solid black;
+      transition-duration: inherit;
+      transition-delay: inherit;
+      transition-property: inherit;
+      opacity: 0;
+      z-index: -1;
+    }
+
+    button[data-balloon-pos]:hover::before,
+    button[data-balloon-pos]:hover::after {
+      transition-delay: 0s;
+      opacity: 1;
+      z-index: 1;
+    }
+
+    button[data-balloon-pos="up"]::before {
+      left: 50%;
+      transform: translateX(-50%) translateY(var(--start));
+      bottom: 100%;
+    }
+
+    button[data-balloon-pos="up"]::after {
+      left: 50%;
+      transform: translateX(-50%) translateY(var(--start));
+      border-bottom-color: transparent;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      bottom: calc(100% - var(--start) - var(--start));
+    }
+
+    button[data-balloon-pos="up"]:hover::before,
+    button[data-balloon-pos="up"]:hover::after {
+      transform: translateX(-50%) translateY(calc(0px - var(--end)));
+    }
+
+    button[data-balloon-pos="left"]::before {
+      top: 50%;
+      transform: translateY(-50%) translateX(calc(0px - var(--start)));
+      right: 100%;
+    }
+
+    button[data-balloon-pos="left"]::after {
+      border-right-color: transparent;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      top: 50%;
+      transform: translateY(-50%) translateX(calc(0px - var(--start)));
+      right: calc(100% - 6px - 6px);
+    }
+
+    button[data-balloon-pos="left"]:hover::before,
+    button[data-balloon-pos="left"]:hover::after {
+      transform: translateY(-50%) translateX(calc(0px - var(--end)));
+    }
+
+    button[data-balloon-pos="right"]::before {
+      top: 50%;
+      transform: translateY(-50%) translateX(var(--start));
+      left: 100%;
+    }
+
+    button[data-balloon-pos="right"]::after {
+      border-left-color: transparent;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      top: 50%;
+      transform: translateY(-50%) translateX(var(--start));
+      left: calc(100% - 6px - 6px);
+    }
+
+    button[data-balloon-pos="right"]:hover::before,
+    button[data-balloon-pos="right"]:hover::after {
+      transform: translateY(-50%) translateX(var(--end));
+    }
+
+    button[data-balloon-pos="down"]::before {
+      left: 50%;
+      transform: translateX(-50%) translateY(var(--start));
+      top: 100%;
+    }
+
+    button[data-balloon-pos="down"]::after {
+      left: 50%;
+      transform: translateX(-50%) translateY(var(--start));
+      border-top-color: transparent;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      top: calc(100% - var(--start) - var(--start));
+    }
+
+    button[data-balloon-pos="down"]:hover::before,
+    button[data-balloon-pos="down"]:hover::after {
+      transform: translateX(-50%) translateY(var(--end));
+    }
+
+    button[data-balloon-pos="up-left"]::before {
+      bottom: 100%;
+      transform: translateY(calc(0px - var(--start)));
+      left: 0%;
+    }
+
+    button[data-balloon-pos="up-left"]::after {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      top: 0%;
+      transform: translateY(calc(0px - var(--start)));
+      left: 6px;
+    }
+
+    button[data-balloon-pos="up-left"]:hover::before,
+    button[data-balloon-pos="up-left"]:hover::after {
+      transform: translateY(calc(0px - var(--end)));
+    }
+
+    button[data-balloon-pos="up-right"]::before {
+      bottom: 100%;
+      transform: translateY(calc(0px - var(--start)));
+      right: 0%;
+    }
+
+    button[data-balloon-pos="up-right"]::after {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: transparent;
+      top: 0%;
+      transform: translateY(calc(0px - var(--start)));
+      right: 6px;
+    }
+
+    button[data-balloon-pos="up-right"]:hover::before,
+    button[data-balloon-pos="up-right"]:hover::after {
+      transform: translateY(calc(0px - var(--end)));
+    }
+
+    button[data-balloon-pos="down-left"]::before {
+      top: 100%;
+      transform: translateY(var(--start));
+      left: 0%;
+    }
+
+    button[data-balloon-pos="down-left"]::after {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-top-color: transparent;
+      bottom: 0%;
+      transform: translateY(var(--start));
+      left: 6px;
+    }
+
+    button[data-balloon-pos="down-left"]:hover::before,
+    button[data-balloon-pos="down-left"]:hover::after {
+      transform: translateY(var(--end));
+    }
+
+    button[data-balloon-pos="down-right"]::before {
+      top: 100%;
+      transform: translateY(var(--start));
+      right: 0%;
+    }
+
+    button[data-balloon-pos="down-right"]::after {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-top-color: transparent;
+      bottom: 0%;
+      transform: translateY(var(--start));
+      right: 6px;
+    }
+
+    button[data-balloon-pos="down-right"]:hover::before,
+    button[data-balloon-pos="down-right"]:hover::after {
+      transform: translateY(var(--end));
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outer text-center">
+    <button aria-label="Whats up!" data-balloon-pos="up">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="left">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="right">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="down">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="up-left">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="up-right">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="down-left">Hover me!</button>
+    <p></p>
+    <button aria-label="Whats up!" data-balloon-pos="down-right">Hover me!</button>
+    <p></p>
+  </div>
+
+</body>
+
+</html>

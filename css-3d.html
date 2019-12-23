@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>使用CSS的3D效果实现旋转正方体</title>
+  <style>
+    body {
+      --width: 250px;
+    }
+
+    @keyframes rotate-fn {
+      form {
+        transform: rotatex(0deg) rotatey(0deg) rotatez(0deg);
+      }
+
+      50% {
+        transform: rotateX(90deg) rotateY(90deg) rotateZ(90deg);
+      }
+
+      to {
+        transform: rotateX(180deg) rotateY(180deg) rotateZ(180deg);
+      }
+    }
+
+    div {
+      width: var(--width);
+      height: var(--width);
+      position: relative;
+      margin: 200px auto;
+      transition: 3s;
+      transform-style: preserve-3d;
+      transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+      animation-name: rotate-fn;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+
+    div:hover {
+      animation-play-state: paused;
+    }
+
+    section {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-size: 100%;
+    }
+
+    section:nth-child(1) {
+      transform: rotatey(90deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to right, red, blue);
+    }
+
+    section:nth-child(2) {
+      transform: rotatey(270deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to right, rgb(204, 204, 56), rgb(12, 236, 199));
+    }
+
+    section:nth-child(3) {
+      transform: rotatex(90deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to right, green, gray);
+    }
+
+    section:nth-child(4) {
+      transform: rotatex(270deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to right, purple, rgb(55, 88, 160));
+    }
+
+    section:nth-child(5) {
+      transform: rotateZ(0deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to right, rgb(255, 0, 157), rgb(116, 199, 123));
+    }
+
+    section:nth-child(6) {
+      transform: rotateZ(180deg) translateZ(calc(var(--width) / 2));
+      background-image: linear-gradient(to bottom, rgb(255, 0, 157), rgb(116, 199, 123));
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <section></section>
+    <section></section>
+    <section></section>
+    <section></section>
+    <section></section>
+    <section></section>
+  </div>
+</body>
+
+</html>

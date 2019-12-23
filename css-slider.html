@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./basic.css">
+  <title>使用CSS3实现轮播图效果</title>
+
+  <style>
+    html {
+      background-color: #eee5e7;
+      --time: .4s;
+    }
+
+    body {
+      padding-top: 35px;
+    }
+
+    body>h1 {
+      font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
+      font-size: 35px;
+      line-height: 35px;
+      font-weight: 400;
+      color: rgba(26, 89, 120, 0.9);
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+      padding: 0px 0px 5px 0px;
+      text-transform: uppercase;
+    }
+
+    .outer {
+      box-sizing: content-box;
+      width: 600px;
+      height: 400px;
+      margin: 100px auto;
+      border: 20px solid white;
+      box-shadow: 0 0 2px 0 rgba(100, 100, 100, .3);
+      color: white;
+      display: none;
+    }
+
+    input {
+      display: none;
+    }
+
+    section {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+      background-size: cover;
+      animation-duration: var(--time);
+      transition-delay: var(--time);
+      transition-duration: 0s;
+      transition-property: left, top;
+    }
+
+    .outer div[class^="btn-"]:not(.last-one):after {
+      content: "";
+      position: absolute;
+      width: 1px;
+      height: 100%;
+      left: 99%;
+      top: 0;
+      z-index: 999;
+      background-image: linear-gradient(to bottom, transparent, white);
+    }
+
+    div>section:nth-of-type(1) {
+      background-image: url("./css-pics/1.jpg");
+    }
+
+    div>section:nth-of-type(2) {
+      background-image: url("./css-pics/2.jpg");
+    }
+
+    div>section:nth-of-type(3) {
+      background-image: url("./css-pics/3.jpg");
+    }
+
+    div>section:nth-of-type(4) {
+      background-image: url("./css-pics/4.jpg");
+    }
+
+    div[class^="btn-"]:nth-of-type(1) section {
+      background-position: 0 0;
+    }
+
+    div[class^="btn-"]:nth-of-type(2) section {
+      background-position: 33.3333% 0;
+    }
+
+    div[class^="btn-"]:nth-of-type(3) section {
+      background-position: 66.6666% 0;
+    }
+
+    div[class^="btn-"]:nth-of-type(4) section {
+      background-position: 100% 0;
+    }
+
+    div[class^="btn-"]>div {
+      width: 100%;
+      height: 100%;
+      left: 0;
+      animation-duration: var(--time);
+    }
+
+    .outer label {
+      width: 36px;
+      height: 36px;
+      background-color: #7db3ca;
+      font-size: 28px;
+      font-style: italic;
+      z-index: 3;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 0 4px rgba(200, 200, 200, .4);
+      cursor: pointer;
+    }
+
+    .outer div[class^="btn-"] {
+      width: 25%;
+      height: 100%;
+    }
+
+    .outer div[class^="btn-"]:nth-of-type(2) {
+      left: 25%;
+    }
+
+    .outer div[class^="btn-"]:nth-of-type(3) {
+      left: 50%;
+    }
+
+    .outer div[class^="btn-"]:nth-of-type(4) {
+      left: 75%;
+    }
+
+    .outer input:checked+*+*+*+*>label {
+      background-color: #fff;
+      color: #7db3ca;
+      box-shadow: 0 0 0 4px rgba(125, 179, 202, .4);
+    }
+
+    .outer .msg {
+      box-sizing: border-box;
+      width: 100%;
+      left: 0;
+      bottom: 78px;
+      z-index: 100;
+    }
+
+    .outer .msg div {
+      width: 100%;
+      bottom: 0px;
+      color: transparent;
+      transition-property: color;
+      transition-delay: calc(var(--time) / 2);
+      transition-duration: calc(var(--time) - calc(var(--time) / 2));
+    }
+
+    .outer .msg div p:nth-child(1) {
+      font-family: 'BebasNeueRegular', 'Arial Narrow', Arial, sans-serif;
+      font-size: 70px;
+      text-transform: uppercase;
+    }
+
+    .outer .msg div p:nth-child(2) {
+      font-family: Cambria, Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+      font-size: 14px;
+      font-style: italic;
+      padding: 10px;
+    }
+
+    .outer .msg div:nth-child(1) p:nth-child(2) {
+      background-color: rgba(104, 171, 194, 0.9);
+    }
+
+    .outer input:nth-child(1):checked~div.msg>div:nth-child(1) {
+      color: white;
+    }
+
+    .outer input:nth-child(2):checked~div.msg>div:nth-child(2) {
+      color: white;
+    }
+
+    .outer input:nth-child(3):checked~div.msg>div:nth-child(3) {
+      color: white;
+    }
+
+    .outer input:nth-child(4):checked~div.msg>div:nth-child(4) {
+      color: white;
+    }
+  </style>
+
+  <style>
+    .panel-menu {
+      width: 280px;
+      height: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .panel-menu label {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      background: rgba(104, 171, 194, 0.5);
+      font-size: 11px;
+      font-style: italic;
+      color: white;
+    }
+
+    .panel-menu label:hover {
+      background: rgba(104, 171, 194, 1);
+    }
+
+    body>input:nth-of-type(1):checked~div>label:nth-child(1) {
+      background-color: white;
+      color: rgb(104, 171, 194);
+    }
+
+    body>input:nth-of-type(2):checked~div>label:nth-child(2) {
+      background-color: white;
+      color: rgb(104, 171, 194);
+    }
+
+    body>input:nth-of-type(3):checked~div>label:nth-child(3) {
+      background-color: white;
+      color: rgb(104, 171, 194);
+    }
+
+    body>input:nth-of-type(4):checked~div>label:nth-child(4) {
+      background-color: white;
+      color: rgb(104, 171, 194);
+    }
+
+    body>input:checked+*+*+*+*+* {
+      display: block;
+    }
+  </style>
+
+  <style>
+    .one div[class^="btn-"]>section {
+      left: -100%;
+    }
+
+    .one div[class^="btn-"]>div {
+      left: 100%;
+      top: 0;
+    }
+
+    .one div[class^="btn-"]>div>section {
+      left: 0;
+    }
+
+    .one input:nth-child(1):checked~div>.right {
+      animation-name: a;
+    }
+
+    .one input:nth-child(2):checked~div>.right {
+      animation-name: b;
+    }
+
+    .one input:nth-child(3):checked~div>.right {
+      animation-name: c;
+    }
+
+    .one input:nth-child(4):checked~div>.right {
+      animation-name: d;
+    }
+
+
+
+    .one input:nth-child(1):checked~div>section:nth-child(1) {
+      animation-name: in;
+    }
+
+    .one input:nth-child(1):checked~div>div>section:nth-child(1) {
+      left: -100%;
+    }
+
+    .one input:nth-child(2):checked~div>section:nth-child(2) {
+      animation-name: in;
+    }
+
+    .one input:nth-child(2):checked~div>div>section:nth-child(2) {
+      left: -100%;
+    }
+
+    .one input:nth-child(3):checked~div>section:nth-child(3) {
+      animation-name: in;
+    }
+
+    .one input:nth-child(3):checked~div>div>section:nth-child(3) {
+      left: -100%;
+    }
+
+    .one input:nth-child(4):checked~div>section:nth-child(4) {
+      animation-name: in;
+    }
+
+    .one input:nth-child(4):checked~div>div>section:nth-child(4) {
+      left: -100%;
+    }
+  </style>
+
+  <style>
+    .two div[class^="btn-"]:nth-of-type(2n + 1)>section {
+      left: -100%;
+    }
+
+    .two div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      left: 100%
+    }
+
+    .two div[class^="btn-"]:nth-of-type(2n)>section {
+      left: 100%;
+    }
+
+    .two div[class^="btn-"]:nth-of-type(2n)>div {
+      left: -100%
+    }
+
+    .two div[class^="btn-"]>div>section {
+      left: 0;
+    }
+
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(1) {
+      animation-name: right;
+    }
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(1) {
+      animation-name: left;
+    }
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: right-1;
+    }
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: left-1;
+    }
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(1) {
+      left: -100%;
+    }
+
+    .two input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(1) {
+      left: 100%;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(2) {
+      animation-name: right;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(2) {
+      animation-name: left;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: right-2;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: left-2;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(2) {
+      left: -100%;
+    }
+
+    .two input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(2) {
+      left: 100%;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(3) {
+      animation-name: right;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(3) {
+      animation-name: left;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: right-3;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: left-3;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(3) {
+      left: -100%;
+    }
+
+    .two input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(3) {
+      left: 100%;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(4) {
+      animation-name: right;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(4) {
+      animation-name: left;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: right-4;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: left-4;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(4) {
+      left: -100%;
+    }
+
+    .two input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(4) {
+      left: 100%;
+    }
+
+    .two.outer .msg div p:nth-child(1) {
+      transform: scale(0);
+      transition-property: transform;
+      transition-duration: var(--time);
+    }
+
+    .two input:nth-child(1):checked~div.msg>div:nth-child(1) p:nth-child(1) {
+      transform: scale(1);
+    }
+
+    .two input:nth-child(2):checked~div.msg>div:nth-child(2) p:nth-child(1) {
+      transform: scale(1);
+    }
+
+    .two input:nth-child(3):checked~div.msg>div:nth-child(3) p:nth-child(1) {
+      transform: scale(1);
+    }
+
+    .two input:nth-child(4):checked~div.msg>div:nth-child(4) p:nth-child(1) {
+      transform: scale(1);
+    }
+  </style>
+
+  <style>
+    .three div[class^="btn-"]:nth-of-type(2n + 1)>section {
+      top: 100%;
+    }
+
+    .three div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      top: -100%
+    }
+
+    .three div[class^="btn-"]:nth-of-type(2n)>section {
+      top: -100%;
+    }
+
+    .three div[class^="btn-"]:nth-of-type(2n)>div {
+      top: 100%
+    }
+
+    .three div[class^="btn-"]>div>section {
+      top: 0;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(1) {
+      animation-name: top;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(1) {
+      animation-name: bottom;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: top-1;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: bottom-1;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(1) {
+      top: 100%;
+    }
+
+    .three input:nth-child(1):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(1) {
+      top: -100%;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(2) {
+      animation-name: top;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(2) {
+      animation-name: bottom;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: top-2;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: bottom-2;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(2) {
+      top: 100%;
+    }
+
+    .three input:nth-child(2):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(2) {
+      top: -100%;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(3) {
+      animation-name: top;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(3) {
+      animation-name: bottom;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: top-3;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: bottom-3;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(3) {
+      top: 100%;
+    }
+
+    .three input:nth-child(3):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(3) {
+      top: -100%;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>section:nth-child(4) {
+      animation-name: top;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>section:nth-child(4) {
+      animation-name: bottom;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div {
+      animation-name: top-4;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>div {
+      animation-name: bottom-4;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n + 1)>div>section:nth-child(4) {
+      top: 100%;
+    }
+
+    .three input:nth-child(4):checked~div[class^="btn-"]:nth-of-type(2n)>div>section:nth-child(4) {
+      top: -100%;
+    }
+
+    .three.outer .msg div p:nth-child(1) {
+      bottom: 125px;
+      transform: scale(0);
+      transition-property: bottom, transform;
+      transition-delay: calc(var(--time) / 10), var(--time);
+      transition-duration: calc(var(--time) - calc(var(--time) / 10)), 0s;
+    }
+
+    .three input:nth-child(1):checked~div.msg>div:nth-child(1) p:nth-child(1) {
+      transition-delay: calc(var(--time) / 10), 0s;
+      transform: scale(1);
+      bottom: 0px;
+    }
+
+    .three input:nth-child(2):checked~div.msg>div:nth-child(2) p:nth-child(1) {
+      transition-delay: calc(var(--time) / 10), 0s;
+      transform: scale(1);
+      bottom: 0px;
+    }
+
+    .three input:nth-child(3):checked~div.msg>div:nth-child(3) p:nth-child(1) {
+      transition-delay: calc(var(--time) / 10), 0s;
+      transform: scale(1);
+      bottom: 0px;
+    }
+
+    .three input:nth-child(4):checked~div.msg>div:nth-child(4) p:nth-child(1) {
+      transition-delay: calc(var(--time) / 10), 0s;
+      transform: scale(1);
+      bottom: 0px;
+    }
+  </style>
+
+  <style>
+    .four div[class^="btn-"]>section {
+      left: -100%;
+    }
+
+    .four div[class^="btn-"]>div {
+      transform-origin: -50% 50%;
+      left: 100%;
+      top: 0;
+    }
+
+    .four div[class^="btn-"]>div>section {
+      left: 0;
+    }
+
+    .four input:nth-child(1):checked~div>.right {
+      animation-name: big-1;
+    }
+
+    .four input:nth-child(2):checked~div>.right {
+      animation-name: big-2;
+    }
+
+    .four input:nth-child(3):checked~div>.right {
+      animation-name: big-3;
+    }
+
+    .four input:nth-child(4):checked~div>.right {
+      animation-name: big-4;
+    }
+
+    .four input:nth-child(1):checked~div>section:nth-child(1) {
+      animation-name: small;
+    }
+
+    .four input:nth-child(1):checked~div>div>section:nth-child(1) {
+      left: -100%;
+    }
+
+    .four input:nth-child(2):checked~div>section:nth-child(2) {
+      animation-name: small;
+    }
+
+    .four input:nth-child(2):checked~div>div>section:nth-child(2) {
+      left: -100%;
+    }
+
+    .four input:nth-child(3):checked~div>section:nth-child(3) {
+      animation-name: small;
+    }
+
+    .four input:nth-child(3):checked~div>div>section:nth-child(3) {
+      left: -100%;
+    }
+
+    .four input:nth-child(4):checked~div>section:nth-child(4) {
+      animation-name: small;
+    }
+
+    .four input:nth-child(4):checked~div>div>section:nth-child(4) {
+      left: -100%;
+    }
+  </style>
+
+  <style>
+    @keyframes small {
+      from {
+        left: 0%;
+        transform: scale(1.5);
+        opacity: 0;
+      }
+
+      to {
+        left: 0%;
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes big-1 {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes big-2 {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes big-3 {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes big-4 {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    @keyframes in {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes a {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes b {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes c {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes d {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes right {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes left {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes right-1 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes right-2 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes right-3 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes right-4 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    @keyframes left-1 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes left-2 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes left-3 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes left-4 {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    @keyframes top {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(-100%);
+      }
+    }
+
+    @keyframes bottom {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(100%);
+      }
+    }
+
+
+    @keyframes bottom-1 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(100%);
+      }
+    }
+
+    @keyframes bottom-2 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(100%);
+      }
+    }
+
+    @keyframes bottom-3 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(100%);
+      }
+    }
+
+    @keyframes bottom-4 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(100%);
+      }
+    }
+
+    @keyframes top-1 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(-100%);
+      }
+    }
+
+    @keyframes top-2 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(-100%);
+      }
+    }
+
+    @keyframes top-3 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(-100%);
+      }
+    }
+
+    @keyframes top-4 {
+      from {
+        transform: translatey(0);
+      }
+
+      to {
+        transform: translatey(-100%);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1 class="text-center">Sliding Image Panels with CSS3</h1>
+  <input name="panel" type="radio" id="panel-1" checked>
+  <input name="panel" type="radio" id="panel-2">
+  <input name="panel" type="radio" id="panel-3">
+  <input name="panel" type="radio" id="panel-4">
+  <div class="panel-menu absolute flex">
+    <label class="flex" for="panel-1">Demo-1</label>
+    <label class="flex" for="panel-2">Demo-2</label>
+    <label class="flex" for="panel-3">Demo-3</label>
+    <label class="flex" for="panel-4">Demo-4</label>
+  </div>
+
+  <div class="one outer relative">
+    <input type="radio" name="switch-1" id="pic-1" checked>
+    <input type="radio" name="switch-1" id="pic-2">
+    <input type="radio" name="switch-1" id="pic-3">
+    <input type="radio" name="switch-1" id="pic-4">
+    <div class="btn-1 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-1">1</label>
+    </div>
+    <div class="btn-2 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-2">2</label>
+    </div>
+    <div class="btn-3 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-3">3</label>
+    </div>
+    <div class="btn-4 absolute overflow last-one">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-4">4</label>
+    </div>
+    <div class="msg absolute text-center">
+      <div class="msg1 absolute">
+        <p>Serendipity</p>
+        <p>What you've been dreaming of</p>
+      </div>
+      <div class="msg2 absolute">
+        <p>Adventure</p>
+        <p>Where the fun begins</p>
+      </div>
+      <div class="msg3 absolute">
+        <p>Nature</p>
+        <p>Unforgettable eperiences</p>
+      </div>x
+      <div class="msg4 absolute">
+        <p>Serenity</p>
+        <p>When silence touches nature</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="two outer relative">
+    <input type="radio" name="switch-2" id="pic-5" checked>
+    <input type="radio" name="switch-2" id="pic-6">
+    <input type="radio" name="switch-2" id="pic-7">
+    <input type="radio" name="switch-2" id="pic-8">
+    <div class="btn-1 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-5">1</label>
+    </div>
+    <div class="btn-2 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-6">2</label>
+    </div>
+    <div class="btn-3 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-7">3</label>
+    </div>
+    <div class="btn-4 absolute overflow last-one">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-8">4</label>
+    </div>
+    <div class="msg absolute text-center">
+      <div class="msg1 absolute">
+        <p>Serendipity</p>
+        <p>What you've been dreaming of</p>
+      </div>
+      <div class="msg2 absolute">
+        <p>Adventure</p>
+        <p>Where the fun begins</p>
+      </div>
+      <div class="msg3 absolute">
+        <p>Nature</p>
+        <p>Unforgettable eperiences</p>
+      </div>x
+      <div class="msg4 absolute">
+        <p>Serenity</p>
+        <p>When silence touches nature</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="three outer relative">
+    <input type="radio" name="switch-3" id="pic-9" checked>
+    <input type="radio" name="switch-3" id="pic-10">
+    <input type="radio" name="switch-3" id="pic-11">
+    <input type="radio" name="switch-3" id="pic-12">
+    <div class="btn-1 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-9">1</label>
+    </div>
+    <div class="btn-2 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-10">2</label>
+    </div>
+    <div class="btn-3 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-11">3</label>
+    </div>
+    <div class="btn-4 absolute overflow last-one">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-12">4</label>
+    </div>
+    <div class="msg absolute text-center">
+      <div class="msg1 absolute">
+        <p class="relative">Serendipity</p>
+        <p>What you've been dreaming of</p>
+      </div>
+      <div class="msg2 absolute">
+        <p class="relative">Adventure</p>
+        <p>Where the fun begins</p>
+      </div>
+      <div class="msg3 absolute">
+        <p class="relative">Nature</p>
+        <p>Unforgettable eperiences</p>
+      </div>x
+      <div class="msg4 absolute">
+        <p class="relative">Serenity</p>
+        <p>When silence touches nature</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="four outer relative">
+    <input type="radio" name="switch-4" id="pic-13" checked>
+    <input type="radio" name="switch-4" id="pic-14">
+    <input type="radio" name="switch-4" id="pic-15">
+    <input type="radio" name="switch-4" id="pic-16">
+    <div class="btn-1 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-13">1</label>
+    </div>
+    <div class="btn-2 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-14">2</label>
+    </div>
+    <div class="btn-3 absolute overflow">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-15">3</label>
+    </div>
+    <div class="btn-4 absolute overflow last-one">
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <section class=""></section>
+      <div class="right absolute">
+        <section></section>
+        <section></section>
+        <section></section>
+        <section></section>
+      </div>
+      <label class="absolute" for="pic-16">4</label>
+    </div>
+    <div class="msg absolute text-center">
+      <div class="msg1 absolute">
+        <p class="relative">Serendipity</p>
+        <p>What you've been dreaming of</p>
+      </div>
+      <div class="msg2 absolute">
+        <p class="relative">Adventure</p>
+        <p>Where the fun begins</p>
+      </div>
+      <div class="msg3 absolute">
+        <p class="relative">Nature</p>
+        <p>Unforgettable eperiences</p>
+      </div>x
+      <div class="msg4 absolute">
+        <p class="relative">Serenity</p>
+        <p>When silence touches nature</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
