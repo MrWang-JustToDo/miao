@@ -10,9 +10,12 @@
   <style>
     html {
       --bgc: red;
-      --time: .4s;
+      --time: .2s;
       --start: 6px;
       --end: 12px;
+      --balloonfont: 12px;
+      --balloonbgc: black;
+      --ballooncolor: white;
     }
 
     div.outer {
@@ -20,7 +23,7 @@
     }
 
     p {
-      margin: 100px;
+      margin: 200px;
     }
 
     button {
@@ -39,28 +42,29 @@
     button[data-balloon-pos] {
       position: relative;
       transition-property: opacity, transform;
-      transition-duration: calc(var(--time) / 1.1);
-      transition-delay: calc(var(--time) - calc(var(--time) / 1.1));
+      transition-duration: calc(var(--time) / 1.2);
+      transition-delay: calc(var(--time) - calc(var(--time) / 1.2));
     }
 
     button[data-balloon-pos]::before {
       position: absolute;
       content: attr(aria-label);
       padding: 6px 12px;
-      background-color: black;
-      color: white;
+      background-color: var(--balloonbgc);
+      color: var(--ballooncolor);
       opacity: 0;
       transition-duration: inherit;
       transition-delay: inherit;
       transition-property: inherit;
       z-index: -1;
       white-space: nowrap;
+      font-size: var(--balloonfont);
     }
 
     button[data-balloon-pos]::after {
       position: absolute;
       content: "";
-      border: var(--start) solid black;
+      border: 6px solid var(--balloonbgc);
       transition-duration: inherit;
       transition-delay: inherit;
       transition-property: inherit;
@@ -69,7 +73,9 @@
     }
 
     button[data-balloon-pos]:hover::before,
-    button[data-balloon-pos]:hover::after {
+    button[data-balloon-pos]:hover::after,
+    button[data-balloon-pos][data-balloon-visible]::before,
+    button[data-balloon-pos][data-balloon-visible]::after {
       transition-delay: 0s;
       opacity: 1;
       z-index: 1;
@@ -91,7 +97,9 @@
     }
 
     button[data-balloon-pos="up"]:hover::before,
-    button[data-balloon-pos="up"]:hover::after {
+    button[data-balloon-pos="up"]:hover::after,
+    button[data-balloon-pos="up"][data-balloon-visible]::before,
+    button[data-balloon-pos="up"][data-balloon-visible]::after {
       transform: translateX(-50%) translateY(calc(0px - var(--end)));
     }
 
@@ -107,11 +115,13 @@
       border-bottom-color: transparent;
       top: 50%;
       transform: translateY(-50%) translateX(calc(0px - var(--start)));
-      right: calc(100% - 6px - 6px);
+      right: calc(100% - var(--start) - var(--start));
     }
 
     button[data-balloon-pos="left"]:hover::before,
-    button[data-balloon-pos="left"]:hover::after {
+    button[data-balloon-pos="left"]:hover::after,
+    button[data-balloon-pos="left"][data-balloon-visible]::before,
+    button[data-balloon-pos="left"][data-balloon-visible]::after {
       transform: translateY(-50%) translateX(calc(0px - var(--end)));
     }
 
@@ -127,11 +137,13 @@
       border-bottom-color: transparent;
       top: 50%;
       transform: translateY(-50%) translateX(var(--start));
-      left: calc(100% - 6px - 6px);
+      left: calc(100% - var(--start) - var(--start));
     }
 
     button[data-balloon-pos="right"]:hover::before,
-    button[data-balloon-pos="right"]:hover::after {
+    button[data-balloon-pos="right"]:hover::after,
+    button[data-balloon-pos="right"][data-balloon-visible]::before,
+    button[data-balloon-pos="right"][data-balloon-visible]::after {
       transform: translateY(-50%) translateX(var(--end));
     }
 
@@ -151,7 +163,9 @@
     }
 
     button[data-balloon-pos="down"]:hover::before,
-    button[data-balloon-pos="down"]:hover::after {
+    button[data-balloon-pos="down"]:hover::after,
+    button[data-balloon-pos="down"][data-balloon-visible]::before,
+    button[data-balloon-pos="down"][data-balloon-visible]::after {
       transform: translateX(-50%) translateY(var(--end));
     }
 
@@ -171,7 +185,9 @@
     }
 
     button[data-balloon-pos="up-left"]:hover::before,
-    button[data-balloon-pos="up-left"]:hover::after {
+    button[data-balloon-pos="up-left"]:hover::after,
+    button[data-balloon-pos="up-left"][data-balloon-visible]::before,
+    button[data-balloon-pos="up-left"][data-balloon-visible]::after {
       transform: translateY(calc(0px - var(--end)));
     }
 
@@ -191,7 +207,9 @@
     }
 
     button[data-balloon-pos="up-right"]:hover::before,
-    button[data-balloon-pos="up-right"]:hover::after {
+    button[data-balloon-pos="up-right"]:hover::after,
+    button[data-balloon-pos="up-right"][data-balloon-visible]::before,
+    button[data-balloon-pos="up-right"][data-balloon-visible]::after {
       transform: translateY(calc(0px - var(--end)));
     }
 
@@ -211,7 +229,9 @@
     }
 
     button[data-balloon-pos="down-left"]:hover::before,
-    button[data-balloon-pos="down-left"]:hover::after {
+    button[data-balloon-pos="down-left"]:hover::after,
+    button[data-balloon-pos="down-left"][data-balloon-visible]::before,
+    button[data-balloon-pos="down-left"][data-balloon-visible]::after {
       transform: translateY(var(--end));
     }
 
@@ -231,8 +251,43 @@
     }
 
     button[data-balloon-pos="down-right"]:hover::before,
-    button[data-balloon-pos="down-right"]:hover::after {
+    button[data-balloon-pos="down-right"]:hover::after,
+    button[data-balloon-pos="down-right"][data-balloon-visible]::before,
+    button[data-balloon-pos="down-right"][data-balloon-visible]::after {
       transform: translateY(var(--end));
+    }
+
+    button[aria-label][data-balloon-length="small"]::before {
+      white-space: normal;
+      width: 80px;
+    }
+
+    button[aria-label][data-balloon-length="medium"]::before {
+      white-space: normal;
+      width: 150px;
+    }
+
+    button[aria-label][data-balloon-length="large"]::before {
+      white-space: normal;
+      width: 260px;
+    }
+
+    button[aria-label][data-balloon-length="xlarge"]::before {
+      white-space: normal;
+      width: 380px;
+    }
+
+    button[aria-label][data-balloon-length="fit"]::before {
+      white-space: normal;
+      width: 100%;
+    }
+
+    button[aria-label][data-balloon-blunt] {
+      --time: 0s;
+    }
+
+    button[aria-label][data-balloon-pos].tooltip-red {
+      --balloonbgc: red;
     }
   </style>
 </head>
@@ -255,6 +310,29 @@
     <p></p>
     <button aria-label="Whats up!" data-balloon-pos="down-right">Hover me!</button>
     <p></p>
+    <button data-balloon-length="small" aria-label="Hi." data-balloon-pos="up">Hover me!</button>
+    <p></p>
+    <button data-balloon-length="medium"
+      aria-label="Now that's a super big text we have over here right? Lorem ipsum dolor sit I'm done."
+      data-balloon-pos="up">I'm a medium tooltip.</button>
+    <p></p>
+    <button data-balloon-length="large"
+      aria-label="What about something really big? This may surpass your window dimensions. Imagine you're on that boring class with that boring teacher and you didn't slept so well last night. Suddenly you're sleeping in class. Can you believe it?!"
+      data-balloon-pos="up">I'm a large tooltip</button>
+    <p></p>
+    <button data-balloon-length="xlarge"
+      aria-label="What about something really big? This may surpass your window dimensions. Imagine you're on that boring class with that boring teacher and you didn't slept so well last night. Suddenly you're sleeping in class. Can you believe it?!"
+      data-balloon-pos="up">I'm a Xlarge tooltip</button>
+    <p></p>
+    <button data-balloon-length="fit"
+      aria-label="What about something really big? This may surpass your window dimensions. Imagine you're on that boring class with that boring teacher and you didn't slept so well last night. Suddenly you're sleeping in class. Can you believe it?!"
+      data-balloon-pos="up">My width will fit to element</button>
+    <p></p>
+    <button data-balloon-blunt aria-label="No animation!" data-balloon-pos="up">No animation!</button>
+    <p></p>
+    <button data-balloon-visible aria-label="I am always visible!" data-balloon-pos="left">Always visible!</button>
+    <p></p>
+    <button aria-label="I am red!" class="tooltip-red" data-balloon-pos="up">I am red!</button>
   </div>
 
 </body>

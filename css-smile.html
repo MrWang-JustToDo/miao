@@ -7,6 +7,10 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
+    h2 {
+      text-align: center;
+    }
+
     div {
       width: 200px;
       height: 200px;
@@ -50,13 +54,36 @@
         transform: rotatez(-360deg);
       }
     }
+
+    span {
+      display: block;
+      margin: 200px auto;
+      width: 100px;
+      height: 100px;
+      background-image: url(https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=160518369,3918021344&fm=26&gp=0.jpg);
+      background-size: contain;
+      animation: all 2s infinite;
+    }
+
+    @keyframes all {
+      from {
+        transform: rotate(0deg) translate(100px) rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg) translate(100px) rotate(-360deg);
+      }
+    }
   </style>
 </head>
 
 <body>
+  <h2>方案一</h2>
   <div>
     <section></section>
   </div>
+  <h2>方案二</h2>
+  <span></span>
 </body>
 
 </html>
