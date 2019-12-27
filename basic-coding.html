@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script id="ch0103/01">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log(a + b);
+  </script>
+
+  <script id="ch0103/02">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    console.log((a + b) * c);
+  </script>
+
+  <script id="ch0103/03">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    console.log(Math.trunc((a + b) / c));
+  </script>
+
+  <script id="ch0103/04">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log(Math.trunc(a / b) + " " + a % b);
+  </script>
+
+  <script id="ch0103/05">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log((a / b).toFixed(9));
+  </script>
+
+  <script id="ch0103/06">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log((b / a / 100).toFixed(3) + "%");
+  </script>
+
+  <script id="ch0103/07">
+    var x = Number(prompt("请输入一个数", "number"));
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    var d = Number(prompt("请输入一个数", "number"));
+    console.log((a * Math.pow(x, 2) + b * x + c) * x + d);
+  </script>
+
+  <script id="ch0103/08">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log((5 * (a - 32) / 9).toFixed(5));
+  </script>
+
+  <script id="ch0103/09">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log((2 * a).toFixed(4) + " " + (2 * Math.PI * a).toFixed(4) + " " + (Math.PI * Math.pow(a, 2).toFixed(4)));
+  </script>
+
+  <script id="ch0103/10">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log((1 / (1 / a + 1 / b)).toFixed(2));
+  </script>
+
+  <script id="ch0103/11">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log(a % b);
+  </script>
+
+  <script id="ch0103/12">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log((4 / 3 * Math.PI * Math.pow(a, 3)).toFixed(2));
+  </script>
+
+  <script id="ch0103/13">
+    var a = Number(prompt("请输入一个数", "number"));
+    var str = "";
+    str += a % 10;
+    a = Math.trunc(a / 10);
+    str += a % 10;
+    a = Math.trunc(a / 10);
+    str += a % 10;
+    console.log(str);
+  </script>
+
+  <script id="ch0103/14">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    console.log(Math.ceil(20 * 1000 / Math.PI * b * b * h));
+  </script>
+
+  <script id="ch0103/15">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    console.log(Math.floor(a - c / 4));
+  </script>
+
+  <script id="ch0103/16">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    var d = Number(prompt("请输入一个数", "number"));
+    console.log(Math.sqrt(Math.pow((c - a), 2) + Math.pow((d - b), 2)).toFixed(3));
+  </script>
+
+  <script id="ch0103/17">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    var d = Number(prompt("请输入一个数", "number"));
+    var e = Number(prompt("请输入一个数", "number"));
+    var f = Number(prompt("请输入一个数", "number"));
+    var l1 = Math.sqrt(Math.pow((c - a), 2) + Math.pow((d - b), 2));
+    var l2 = Math.sqrt(Math.pow((e - a), 2) + Math.pow((f - b), 2));
+    var l3 = Math.sqrt(Math.pow((e - c), 2) + Math.pow((f - d), 2));
+    var p = (l1 + l2 + l3) / 2;
+    console.log(Math.sqrt(p * (p - l1) * (p - l2) * (p - l3)));
+  </script>
+
+  <script id="ch0103/18">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    console.log(a + Math.pow((b - a), c - 1));
+  </script>
+
+  <script id="ch0103/19">
+    var a, b;
+
+    function get(str) {
+      return Number(prompt(str, "number"));
+    }
+
+    function isRight(str, x, fn) {
+      return fn(x) ? x : isRight(str, get(str), fn);
+    }
+
+    a = isRight("请输入大于1的数", get("请输入大于1的数"), function (x1) {
+      return x1 >= 1;
+    });
+
+    b = isRight("请输入小于50000的数", get("请输入小于50000的数"), function (x2) {
+      return x2 <= 50000;
+    })
+
+    console.log(a * b);
+  </script>
+
+  <script id="ch0103/20">
+    var a = Number(prompt("请输入一个数", "number"))
+    console.log(Math.pow(2, a));
+  </script>
+</head>
+
+<body>
+</body>
+
+</html>
