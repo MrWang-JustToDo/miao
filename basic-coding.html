@@ -156,8 +156,229 @@
   </script>
 
   <script id="ch0103/20">
-    var a = Number(prompt("请输入一个数", "number"))
+    var a = Number(prompt("请输入一个数", "number"));
     console.log(Math.pow(2, a));
+  </script>
+
+  <script id="ch0104/01">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a > 0) {
+      console.log("positive");
+    } else if (a == 0) {
+      console.log("zero");
+    } else {
+      console.log("negative");
+    }
+  </script>
+
+  <script id="ch0104/02">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log(Math.abs(a).toFixed(2));
+  </script>
+
+  <script id="ch0104/03">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log(a % 2 == 0 ? 'even' : 'odd');
+  </script>
+
+  <script id="ch0104/04">
+    var a = prompt("请输入一个字符", "char").charCodeAt(0);
+    console.log(a % 2 == 0 ? 'NO' : 'YES');
+  </script>
+
+  <script id="ch0104/05">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    if (a > b) {
+      console.log(">")
+    } else if (a < b) {
+      console.log("<")
+    } else {
+      console.log("=");
+    }
+  </script>
+
+  <script id="ch0104/06">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log(a > 9 && a < 100 ? 1 : 0);
+  </script>
+
+  <script id="ch0104/07">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    if (a >= 10 || b >= 20) {
+      console.log(1);
+    } else {
+      console.log(0);
+    }
+  </script>
+
+  <script id="ch0104/08">
+    var a = Number(prompt("请输入一个数", "number"));
+    console.log(a % 3 == 0 && a % 5 == 0 ? 'YES' : 'NO');
+  </script>
+
+  <script id="ch0104/09">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a % 3 != 0 && a % 5 != 0 && a % 7 != 0) {
+      console.log('n');
+    } else {
+      var s = '';
+      if (a % 3 == 0) {
+        s += 3 + ' ';
+      }
+      if (a % 5 == 0) {
+        s += 5 + ' ';
+      }
+      if (a % 7 == 0) {
+        s += 7 + ' ';
+      }
+      console.log(s);
+    }
+  </script>
+
+  <script id="ch0104/10">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    if (a >= 60) {
+      if (b < 60) {
+        console.log(1);
+      } else {
+        console.log(0);
+      }
+    } else {
+      if (b >= 60) {
+        console.log(1);
+      } else {
+        console.log(0);
+      }
+    }
+  </script>
+
+  <script id="ch0104/11">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a != 1 && a != 3 && a != 5) {
+      console.log("YES");
+    } else {
+      console.log("NO");
+    }
+  </script>
+
+  <script id="ch0104/12">
+    var a = Number(prompt("请输入一个数", "number"));
+    if ((a / 3 + 27 + 23) > a / 1.2) {
+      console.log('Bike');
+    } else if ((a / 3 + 27 + 23) < a / 1.2) {
+      console.log('Walk');
+    } else {
+      console.log('All');
+    }
+  </script>
+
+  <script id="ch0104/13">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a >= 0 && a < 5) {
+      console.log(2.5 - a);
+    } else if (a >= 5 && a < 10) {
+      console.log(2 - 1.5 * (a - 3) * (a - 3));
+    } else if (a >= 10 && x < 20) {
+      console.log(a / 2 - 1.5);
+    }
+  </script>
+
+  <script id="ch0104/14">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = prompt("请选择是否加急", "y / n");
+    var c = 0;
+    if (a < 1000) {
+      c = 8;
+    } else if (a > 1000) {
+      c += 8;
+      a -= 1000;
+      c += Math.ceil(a / 500) * 4;
+    }
+    if (b == y) {
+      console.log(c += 5);
+    } else {
+      console.log(C);
+    }
+  </script>
+
+  <script id="ch0104/15">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    var temp = (a > b ? a : b);
+    console.log(temp > c ? temp : c);
+  </script>
+
+  <script id="ch0104/16">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    if (a + b > c && a + c > b && b + c > a) {
+      console.log('yes');
+    } else {
+      console.log('no');
+    }
+  </script>
+
+  <script id="ch0104/17">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a % 4 == 0 && a % 100 != 0 || a % 400 == 0) {
+      console.log('Y');
+    } else {
+      console.log('N');
+    }
+  </script>
+
+  <script id="ch0104/18">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    if (a >= -1 && a <= 1 && b >= -1 && b <= 1) {
+      console.log('yes');
+    } else {
+      console.log('no');
+    }
+  </script>
+
+  <script id="ch0104/19">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = prompt("请输入运算符", "+ / - / * / /");
+    if (c == '+') {
+      console.log(a + b);
+    } else if (c == '-') {
+      console.log(a - b);
+    } else if (c == '*') {
+      console.log(a * b);
+    } else if (c == '/') {
+      console.log(a / b);
+    }
+  </script>
+
+  <script id="ch0104/20">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    var d = b * b - 4 * a * c;
+    if (d > 0) {
+      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+'(Math.sqrt(d) / 2 * a).toFixed(5) + '; x2 = ' + (-b / 2 * a)
+        .toFixed(5) + '-'(Math.sqrt(d) / 2 * a).toFixed(5));
+    } else if (d == 0) {
+      console.log('x = ' + (-b / 2 * a).toFixed(5));
+    } else {
+      d = Math.abs(d);
+      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+'(Math.sqrt(d) / 2 * a).toFixed(5) + 'i; x2 = ' + (-b / 2 * a)
+        .toFixed(5) + '-'(Math.sqrt(d) / 2 * a).toFixed(5) + 'i');
+    }
+  </script>
+
+  <script id="ch0104/21">
+    var a = Number(prompt("请输入一个数", "number"));
+    var b = Number(prompt("请输入一个数", "number"));
+    var c = Number(prompt("请输入一个数", "number"));
+    console.log(a - Math.ceil(c / b));
   </script>
 </head>
 
