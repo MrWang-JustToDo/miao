@@ -380,6 +380,668 @@
     var c = Number(prompt("请输入一个数", "number"));
     console.log(a - Math.ceil(c / b));
   </script>
+
+  <script id="ch0105/01">
+    var a = Number(prompt("请输入人数", "number"));
+    var count = 0,
+      temp = a;
+    while (temp-- > 0) {
+      count += Number(prompt("请输入成绩", 'number'));
+    }
+    console.log((count / a).toFixed(2));
+  </script>
+
+  <script id="ch0105/02">
+    var count = 0,
+      temp = 0;
+    while (count++ < 12) {
+      temp += Number(prompt("请输入月结余", 'number'));
+    }
+    console.log('$' + (temp / 12).toFixed(2));
+  </script>
+
+  <script id="ch0105/03">
+    var a = Number(prompt("请输入总数", "number"));
+    var count = 0,
+      temp = a;
+    while (temp-- > 0) {
+      count += Number(prompt("请输入数据", 'number'));
+    }
+    console.log((count / a).toFixed(4));
+  </script>
+
+  <script id="ch0105/04">
+    var a = Number(prompt("请输入总数", "number"));
+    var count = 0,
+      temp = a;
+    while (temp-- > 0) {
+      count += Number(prompt("请输入数据", 'number'));
+    }
+    console.log(count + " " + (count / a).toFixed(5));
+  </script>
+
+  <script id="ch0105/05">
+    var a = Number(prompt("请输入总数", "number"));
+    var count = Number(prompt("请输入数据", 'number')),
+      max = count;
+    while (--a > 0) {
+      count = Number(prompt("请输入数据", 'number'));
+      max = max > count ? max : count;
+    }
+    console.log(max);
+  </script>
+
+  <script id="ch0105/06">
+    var a = Number(prompt("请输入总数", "number"));
+    var count = Number(prompt("请输入数据", 'number')),
+      max = count,
+      min = count;
+    while (--a > 0) {
+      count = Number(prompt("请输入数据", 'number'));
+      max = max > count ? max : count;
+      min = min < count ? min : count;
+    }
+    console.log(max - min);
+  </script>
+
+  <script id="ch0105/07">
+    var a = Number(prompt("请输入天数", "number"));
+    var gold = 0,
+      silver = 0,
+      copper = 0;
+    while (a-- > 0) {
+      gold += Number(prompt('输入金牌数量'));
+      silver += Number(prompt('输入银牌数量'));
+      copper += Number(prompt('输入铜牌数量'));
+    }
+    console.log(gold + " " + silver + " " + copper + " " + (gold + silver + copper));
+  </script>
+
+  <script id="ch0105/08">
+    var a = Number(prompt("请输入边数", "number"));
+    var temp = (a - 2) * 180;
+    while (a-- > 0) {
+      temp -= Number(prompt("请输入角度", 'number'));
+    }
+    console.log(temp);
+  </script>
+
+  <script id="ch0105/09">
+    var a = Number(prompt("请输入数据", "number"));
+    var b = Number(prompt("请输入数据", "number"));
+    var temp = 0;
+    while (a <= b) {
+      if (a % 2 != 0) {
+        temp += a;
+      }
+      a++;
+    }
+    console.log(temp);
+  </script>
+
+  <script id="ch0105/10">
+    var a = Number(prompt("请输入数据", "number"));
+    var b = Number(prompt("请输入数据", "number"));
+    var temp = 0;
+    while (a <= b) {
+      if (a % 17 == 0) {
+        temp += a;
+      }
+      a++;
+    }
+    console.log(temp);
+  </script>
+
+  <script id="ch0105/11">
+    var a = Number(prompt("请输入总数", "number"));
+    var num1 = 0,
+      num5 = 0,
+      num10 = 0,
+      temp = 0;
+    while (a-- > 0) {
+      temp = Number(prompt("请输入数据", 'number'));
+      if (temp == 1) {
+        num1++;
+        continue;
+      }
+      if (temp == 5) {
+        num5++;
+        continue;
+      }
+
+      if (temp == 10) {
+        num10++;
+        continue;
+      }
+    }
+    console.log(num1);
+    console.log(num5);
+    console.log(num10);
+  </script>
+
+  <script id="ch0105/12">
+    var a = Number(prompt("请输入总数", "number"));
+    var b = Number(prompt("请输入数据", "number"));
+    var temp = 0,
+      count = 0;
+    while (a-- > 0) {
+      temp = Number(prompt("请输入数据"));
+      if (temp == b) {
+        count++;
+      }
+    }
+    console.log(count);
+  </script>
+
+  <script id="ch0105/13">
+    var a = Number(prompt("请输入底数", "number"));
+    var b = Number(prompt("请输入指数", "number"));
+    var temp = 1;
+    while (b-- > 0) {
+      temp *= a;
+    }
+    console.log(temp);
+  </script>
+
+  <script id="ch0105/14">
+    var a = Number(prompt("请输入人口基数", "number"));
+    var b = Number(prompt("请输入年数", "number"));
+    while (b-- > 0) {
+      // a = a + a * 0.001;
+      a *= 1.001;
+    }
+    console.log(a.toFixed(4));
+  </script>
+
+  <script id="ch0105/15">
+    var a = Number(prompt("请输入复合年利率", "number"));
+    var b = Number(prompt("请输入本金", "number"));
+    var c = Number(prompt("请输入年份", 'number'));
+    while (c-- > 0) {
+      b *= (1 + a / 100);
+    }
+    console.log(Math.floor(b));
+  </script>
+
+  <script id="ch0105/16">
+    var a = Number(prompt("请输入年薪", "number"));
+    var b = Number(prompt("请输入增长率", "number"));
+    var c = 200,
+      year = a,
+      count = 1;
+    while (year < c) {
+      year += a;
+      c *= (1 + b / 100);
+      count++;
+    }
+    if (count < 20) {
+      console.log(count);
+    } else {
+      console.log(Impossible);
+    }
+  </script>
+
+  <script id="ch0105/17">
+    var a = Number(prompt("请输入一个数", "number"));
+    if (a <= 3) {
+      console.log(a < 3 ? 1 : 2);
+    } else {
+      a -= 3;
+      var f1 = 1,
+        f2 = 1,
+        temp = f1 + f2;
+      while (a-- > 0) {
+        f1 = f2;
+        f2 = temp;
+        temp = f1 + f2;
+      }
+      console.log(temp);
+    }
+  </script>
+
+  <script id="ch0105/18">
+    var a = Number(prompt("请输入组数", "number"));
+    var b1 = Number(prompt("请输入总病例数", 'number'));
+    var b2 = Number(prompt("请输入有效病例数", 'number'));
+    var b = b2 / b1,
+      temp1, temp2;
+    while (--a > 0) {
+      temp1 = Number(prompt("请输入中病例数", 'number'));
+      temp2 = Number(prompt("请输入有效病例数", 'number'));
+      if (temp2 / temp1 - b > 0.05) {
+        console.log('better');
+        continue;
+      }
+
+      if (b - temp2 / temp1 > 0.05) {
+        console.log('worse');
+        continue;
+      }
+      console.log('same');
+    }
+  </script>
+
+  <script id="ch0105/19">
+    var a = Number(prompt("请输入屋顶数", "number"));
+    var count = 0,
+      x, y, p;
+    while (a-- > 0) {
+      x = Number(prompt("请输入x座标", 'number'));
+      y = Number(prompt("请输入y座标", 'number'));
+      p = Number(prompt("请输入人数", 'number'));
+      count += Math.sqrt(x * x + y * y) * 2 / 50;
+      count += p * 1.5;
+    }
+    console.log(Math.ceil(count));
+  </script>
+
+  <script id="ch0105/20">
+    var a = Number(prompt("请输入初始高度", "number"));
+    var count = 1,
+      temp = a;
+    while (count++ < 10) {
+      a /= 2;
+      temp += a * 2;
+    }
+    a /= 2;
+    console.log(temp);
+    console.log(a);
+  </script>
+
+  <script id="ch0105/21">
+    var a = Number(prompt("请输入数据", "number"));
+    while (a != 1) {
+      if (a % 2 != 0) {
+        console.log(a + "*3+1=" + (a = a * 3 + 1));
+      } else {
+        console.log(a + "/2=" + (a /= 2));
+      }
+    }
+    console.log("End");
+  </script>
+
+  <script id="ch0105/22">
+    var temp = 0,
+      temp1 = 0,
+      temp2 = 0,
+      year = 0,
+      bool = true;
+    while (year++ < 13) {
+      temp = Number(prompt("请输入当前预算", 'number'));
+      if (300 + temp1 < temp) {
+        bool = false;
+        console.log(-year);
+        break;
+      }
+      temp2 += Math.floor((300 + temp1 - temp) / 100) * 100;
+      temp1 = 300 + temp1 - temp - Math.floor((300 + temp1 - temp) / 100) * 100;
+    }
+    if (bool) {
+      console.log(temp2 * 1.2);
+    }
+  </script>
+
+  <script id="ch0105/23">
+    var a = Number(prompt("请输入药品重量", "number"));
+    var b = Number(prompt("请输入取药人数", "number"));
+    var temp = 0,
+      count = 0;
+    while (b-- > 0) {
+      temp = Number(prompt("请输入取药数量", "number"));
+      if (temp > a) {
+        count++;
+        continue;
+      }
+      a -= temp;
+    }
+    console.log(count);
+  </script>
+
+  <script id="ch0105/24">
+    var a = Number(prompt("请输入测量次数", "number"));
+    var temp = 0,
+      count = 0,
+      b, c;
+    while (a-- > 0) {
+      b = Number(prompt("请输入收缩压"));
+      c = Number(prompt("请输入舒张压"));
+      if ((b >= 90 && b <= 140) && (c >= 60 && c <= 90)) {
+        temp++;
+      } else {
+        count = temp > count ? temp : count;
+        temp = 0;
+      }
+    }
+    console.log(count > temp ? count : temp);
+  </script>
+
+  <script id="ch0105/25">
+    var a, b, c;
+    for (a = 0; a < 10; a++) {
+      for (b = 0; b < 10; b++) {
+        for (c = 0; c < 10; c++) {
+          if (a * 49 + b * 7 + c * 1 == c * 81 + b * 9 + a * 1) {
+            if (a * 49 + b * 7 + c * 1 != 0) {
+              console.log(a * 49 + b * 7 + c * 1);
+              console.log("" + a + b + c);
+              console.log("" + c + b + a);
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script id="ch0105/26">
+    var a = Number(prompt("请输入个数", "number"));
+    var temp, count = 0,
+      temp1;
+    while (a-- > 0) {
+      temp = Number(prompt("请输入四位数", "number"));
+      temp1 = temp % 10;
+      temp = Math.trunc(temp / 10);
+      while (temp > 0) {
+        temp1 -= temp % 10;
+        temp = Math.trunc(temp / 10);
+      }
+      if (temp1 > 0) {
+        count++;
+      }
+    }
+    console.log(count);
+  </script>
+
+  <script id="ch0105/27">
+    var a = Number(prompt("请输入整数", "number"));
+    var s = 0,
+      n = 0;
+    while (s <= a) {
+      n++;
+      s += 1 / n;
+    }
+    console.log(n);
+  </script>
+
+  <script id="ch0105/28">
+    var a = Number(prompt("请输入整数", "number"));
+    while (a > 0) {
+      console.log(a % 10);
+      a = Math.trunc(a / 10);
+    }
+  </script>
+
+  <script id="ch0105/29">
+    var a = Number(prompt("请输入整数", "number"));
+    var temp = Math.abs(a),
+      temp2 = 0;
+    while (temp > 0) {
+      temp2 = temp2 * 10 + temp % 10;
+      temp = Math.trunc(temp / 10);
+    }
+    if (a > 0) {
+      console.log(temp2);
+    } else {
+      console.log(-temp2);
+    }
+  </script>
+
+  <script id="ch0105/30">
+    var a = Number(prompt("请输入整数", "number"));
+    var b = Number(prompt("请输入整数", "number"));
+    var count = 0;
+    if (a % 19 != 0) {
+      console.log("NO");
+    } else {
+      while (a > 0) {
+        if (a % 10 == 3) {
+          count++;
+        }
+        a = Math.trunc(a / 10);
+      }
+      if (count == b) {
+        console.log("YES");
+      } else {
+        console.log("NO");
+      }
+    }
+  </script>
+
+  <script id="ch0105/31">
+    var a = Number(prompt("请输入灯数", "number"));
+    var b = Number(prompt("请输入人数", "number"));
+    var arr = [],
+      temp = 3;
+    for (var i = 1; i <= a; i++) {
+      arr[i] = 0;
+      if (i % 2 == 0) {
+        arr[i] = 1;
+      }
+    }
+
+    while (temp <= b) {
+      for (var i = 1; i <= a; i++) {
+        if (i % temp == 0) {
+          arr[i] = arr[i] == 0 ? 1 : 0;
+        }
+      }
+      temp++;
+    }
+
+    for (var i = 1; i <= a; i++) {
+      if (arr[i] == 0) {
+        console.log(i);
+      }
+    }
+  </script>
+
+  <script id="ch0105/32">
+    var a = Number(prompt("请输入整数", "number"));
+    var p = 1,
+      q = 2,
+      temp = 0,
+      count = 0;
+    while (a-- > 0) {
+      count += q / p;
+      temp = q;
+      q = q + p;
+      p = temp;
+    }
+    console.log(count.toFixed(4));
+  </script>
+
+  <script id="ch0105/33">
+    var a = Number(prompt("请输入整数", "number"));
+    var b = 1;
+    count = 0;
+    while (b <= a) {
+      count += Math.pow(-1, b - 1) * 1 / b;
+      b++;
+    }
+    console.log(count.toFixed(4));
+  </script>
+
+  <script id="ch0105/34">
+    var a = Number(prompt("请输入整数", "number"));
+    var count = 0;
+    while (a > 1) {
+      count = (count + a) * (--a);
+    }
+    console.log(count + 1);
+  </script>
+
+  <script id="ch0105/35">
+    var a = Number(prompt("请输入整数", "number"));
+    var count = 0;
+    while (a > 1) {
+      count = (count + 1 / a) * 1 / --a;
+    }
+    console.log((count + 2).toFixed(10));
+  </script>
+
+  <script id="ch0105/36">
+    var a = Number(prompt("请输入数", "number"));
+    var b = Number(prompt("请输入整数", "number"));
+    var count = 1;
+    while (b > 0) {
+      count += Math.pow(a, b--);
+    }
+    console.log(count.toFixed(2));
+  </script>
+
+  <script id="ch0105/37">
+    var a = Number(prompt("请输入体力值", "number"));
+    var b = Number(prompt("请输入战斗力", "number"));
+    var c = Number(prompt("请输入能量元素", "number"));
+  </script>
+
+  <script id="ch0105/38">
+    var a = Number(prompt("请输入最高次幂", "number"));
+    if (a == 0) {
+      Number(prompt("请输入系数", "number"));
+      console.log(0)
+    } else {
+      while (a + 1 > 0) {
+        if (a == 0) {
+          Number(prompt("请输入系数", "number"));
+        } else {
+          console.log(Number(prompt("请输入系数", "number")) * a);
+        }
+        a--;
+      }
+    }
+  </script>
+
+  <script id="ch0105/39">
+    var a = Number(prompt("请输入正整数", "number"));
+    var count = 0;
+    for (var i = 0; i < a; i++) {
+      if (i % 7 == 0 || ("" + i).split("7").length > 1) {
+        continue;
+      }
+      count += Math.pow(i, 2);
+    }
+  </script>
+
+  <script id="ch0105/40">
+    var a = Number(prompt("请输入正整数", "number"));
+    var count = 0,
+      temp;
+    for (var i = 0; i <= a; i++) {
+      temp = ("" + i).split("1").length;
+      if (temp != 1) {
+        count += temp - 1;
+      }
+    }
+    console.log(count);
+  </script>
+
+  <script id="ch0105/41">
+    var a = Number(prompt("请输入正整数", "number"));
+    var b = Number(prompt("请输入正整数", "number"));
+    var count = 0,
+      temp;
+    for (var i = a; i <= b; i++) {
+      temp = ("" + i).split("2").length;
+      if (temp != 1) {
+        count += temp - 1;
+      }
+    }
+    console.log(count);
+  </script>
+
+  <script id="ch0105/42">
+    var a = Number(prompt("请输入正整数", "number"));
+    var b = Number(prompt("请输入正整数", "number"));
+    var c = prompt("请输入符号");
+    var d = Number(prompt("请输入正整数", "number"));
+    var temp, temp1 = "",
+      temp2 = "",
+      resoult = "";
+    if (d == 1) {
+      temp = b;
+      while (temp-- > 0) {
+        temp1 += c;
+      }
+      temp = a;
+      while (temp-- > 0) {
+        resoult += temp1 + "\n";
+      }
+    } else if (d == 0) {
+      temp = b;
+      while (temp > 0) {
+        if (temp == b || temp == 1) {
+          temp2 += c;
+        } else {
+          temp2 += " ";
+        }
+        temp1 += c;
+        temp--;
+      }
+      temp = a;
+      while (temp > 0) {
+        if (temp == a || temp == 1) {
+          resoult += temp1 + "\n";
+        } else {
+          resoult += temp2 + "\n";
+        }
+        temp--;
+      }
+    }
+    console.log(resoult);
+  </script>
+
+  <script id="ch0105/43">
+    var a = Number(prompt("请输入质数", "number"));
+    var temp = Math.trunc(a / 2);
+    while (temp > 0) {
+      if (a % temp == 0) {
+        console.log(temp);
+        break;
+      }
+      temp--;
+    }
+  </script>
+
+  <script id="ch0105/44">
+    var a = Number(prompt("请输入整数", "number"));
+    var temp = 2,
+      count = 1,
+      temp1, bool;
+    while (count < a) {
+      temp++;
+      bool = false;
+      temp1 = Math.trunc(temp / 2);
+      for (var i = 2; i <= temp1; i++) {
+        if (temp % i == 0) {
+          bool = true;
+          break;
+        }
+      }
+      if (!bool) {
+        count++;
+      }
+    }
+    console.log(temp);
+  </script>
+
+  <script id="ch0105/45">
+    var a = Number(prompt("请输入天数", "number"));
+    var count = 0,
+      temp = 0,
+      countday = 1;
+    while (countday <= a) {
+      temp++;
+      for (var i = 1; i <= temp; i++) {
+        if (countday <= a) {
+          count += temp;
+        } else {
+          break;
+        }
+        countday++;
+      }
+    }
+    console.log(count);
+  </script>
 </head>
 
 <body>
