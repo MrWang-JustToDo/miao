@@ -598,6 +598,18 @@
       }
       console.log(temp);
     }
+    /*
+    var a = Number(prompt("请输入一个数", "number"));
+      var f1 = 0,
+        f2 = 1,
+        temp = 0;
+      while (a-- > 0) {
+        f1 = f2;
+        f2 = temp;
+        temp = f1 + f2;
+      }
+      console.log(temp);
+    */
   </script>
 
   <script id="ch0105/18">
@@ -1048,6 +1060,543 @@
       }
     }
     console.log(count);
+  </script>
+
+  <script id="7">
+    var a = prompt("请输入一个整数", "number");
+    if (a % 7 == 0) {
+      console.log('YES');
+    } else if (a[a.length - 1] == '7') {
+      console.log('YES');
+    } else {
+      console.log('NO');
+    }
+  </script>
+
+  <script id="sort">
+    var min = Infinity,
+      max = -Infinity,
+      m, temp, count = 3;
+    while (count-- > 0) {
+      temp = Number(prompt("请输入数字", 'number'));
+      max = max < temp ? temp : ((m = temp), max);
+      min = min > temp ? temp : ((m = temp), min);
+    }
+    console.log(min);
+    console.log(m);
+    console.log(max);
+  </script>
+
+  <script id="narcissistic">
+    var a = Number(prompt("请输入一个数", 'number')),
+      temp, length = 1,
+      count = 0;
+    temp = a;
+    while (temp > 9) {
+      length++;
+      temp /= 10;
+    }
+    temp = a;
+    while (temp > 0) {
+      count += Math.pow(temp % 10, length);
+      temp = Math.trunc(temp / 10);
+    }
+    if (count == a) {
+      console.log("YES");
+    } else {
+      console.log("NO");
+    }
+  </script>
+
+  <script id="narcissistics">
+    var count = 3,
+      temp, sum, start, end;
+    while (count-- > 0) {
+      start = 1 * Math.pow(10, count), end = 1 * Math.pow(10, count + 1);
+      for (var i = start; i < end; i++) {
+        temp = i, sum = 0;
+        while (temp > 0) {
+          sum += Math.pow(temp % 10, count + 1);
+          temp = Math.trunc(temp / 10);
+        }
+        if (i == sum) {
+          console.log(i);
+        }
+      }
+    }
+    console.log(0);
+  </script>
+
+  <script id="palindrom">
+    var a = Number(prompt("请输入一个数", 'number')),
+      arr = [],
+      temp, bool = true;
+    temp = a;
+    for (var i = 0; temp > 0; i++) {
+      arr[i] = temp % 10;
+      temp = Math.trunc(temp / 10);
+    }
+    for (var i = 0; i < Math.floor(arr.length / 2); i++) {
+      if (arr[i] == arr[arr.length - 1 - i]) {
+        continue;
+      }
+      bool = false;
+      break;
+    }
+
+    if (!bool) {
+      console.log("NO");
+    } else {
+      console.log("YES");
+    }
+  </script>
+
+  <script id="weekday">
+    var year = Number(prompt("请输入年份", 'number')),
+      month = Number(prompt("请输入月份", 'number')),
+      count = 0;
+    // 获取2019年最后一天到指定月份第一天的天数
+    function getDays(year, month) {
+      var count = 0;
+      // 在2019年之后
+      if (year > 2019) {
+        // 判断是否中间有整年
+        if (year - 2019 > 1) {
+          // 有整年
+          for (var i = 2020; i < year; i++) {
+            count += isLeap(i) ? 366 : 365;
+          }
+          // 加上剩余的从年初到指定月份第一天的天数
+          count += getStartYearDays(year, month);
+        } else {
+          // 没有整年
+          count += getStartYearDays(year, month);
+        }
+        // 到下一天
+        count++;
+      } else {
+        // 在2019年之前
+        // 判断是否有整年
+        if (2019 - year > 1) {
+          // 有整年
+          for (var i = 2018; i > year; i--) {
+            count += isLeap(i) ? 366 : 365;
+          }
+          // 加上剩余的从年末到指定月份第一天的天数
+          count += getEndYearDays(year, month);
+        } else {
+          // 没有整年
+          count += getEndYearDays(year, month);
+        }
+      }
+      return count;
+    }
+
+    // 获取指定年从开始到指定月份第一天的天数
+    function getStartYearDays(year, month) {
+      if (isLeap(year)) {
+        switch (month) {
+          case 1:
+            return 0;
+            break;
+          case 2:
+            return 31;
+            break;
+          case 3:
+            return 60;
+            break;
+          case 4:
+            return 91;
+            break;
+          case 5:
+            return 121;
+            break;
+          case 6:
+            return 152;
+            break;
+          case 7:
+            return 182;
+            break;
+          case 8:
+            return 213;
+            break;
+          case 9:
+            return 244;
+            break;
+          case 10:
+            return 274;
+            break;
+          case 11:
+            return 305;
+            break;
+          case 12:
+            return 335;
+            break;
+        }
+      } else {
+        switch (month) {
+          case 1:
+            return 0;
+            break;
+          case 2:
+            return 31;
+            break;
+          case 3:
+            return 60 - 1;
+            break;
+          case 4:
+            return 91 - 1;
+            break;
+          case 5:
+            return 121 - 1;
+            break;
+          case 6:
+            return 152 - 1;
+            break;
+          case 7:
+            return 182 - 1;
+            break;
+          case 8:
+            return 213 - 1;
+            break;
+          case 9:
+            return 244 - 1;
+            break;
+          case 10:
+            return 274 - 1;
+            break;
+          case 11:
+            return 305 - 1;
+            break;
+          case 12:
+            return 335 - 1;
+            break;
+        }
+      }
+
+    }
+
+    // 获取指定年从结束到指定月份第一天的天数
+    function getEndYearDays(year, month) {
+      if (isLeap(year)) {
+        switch (month) {
+          case 12:
+            return 31;
+            break;
+          case 11:
+            return 61;
+            break;
+          case 10:
+            return 92;
+            break;
+          case 9:
+            return 122;
+            break;
+          case 8:
+            return 153;
+            break;
+          case 7:
+            return 184;
+            break;
+          case 6:
+            return 214;
+            break;
+          case 5:
+            return 245;
+            break;
+          case 4:
+            return 275;
+            break;
+          case 3:
+            return 306;
+            break;
+          case 2:
+            return 335;
+            break;
+          case 1:
+            return 366;
+            break;
+        }
+      } else {
+        switch (month) {
+          case 12:
+            return 31;
+            break;
+          case 11:
+            return 61;
+            break;
+          case 10:
+            return 92;
+            break;
+          case 9:
+            return 122;
+            break;
+          case 8:
+            return 153;
+            break;
+          case 7:
+            return 184;
+            break;
+          case 6:
+            return 214;
+            break;
+          case 5:
+            return 245;
+            break;
+          case 4:
+            return 275;
+            break;
+          case 3:
+            return 306;
+            break;
+          case 2:
+            return 334;
+            break;
+          case 1:
+            return 365;
+            break;
+        }
+      }
+    }
+
+    // 判断指定年份是否是闰年
+    function isLeap(year) {
+      if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    count = getDays(year, month);
+
+    if (year > 2019) {
+      switch (count % 7) {
+        case 1:
+          console.log(3);
+          break;
+        case 2:
+          console.log(4);
+          break;
+        case 3:
+          console.log(5);
+          break;
+        case 4:
+          console.log(6);
+          break;
+        case 5:
+          console.log(0);
+          break;
+        case 6:
+          console.log(1);
+          break;
+      }
+    } else {
+      switch (count % 7) {
+        case 1:
+          console.log(1);
+          break;
+        case 2:
+          console.log(0);
+          break;
+        case 3:
+          console.log(6);
+          break;
+        case 4:
+          console.log(5);
+          break;
+        case 5:
+          console.log(4);
+          break;
+        case 6:
+          console.log(3);
+          break;
+      }
+    }
+  </script>
+
+  <script id="complete-number">
+    function isCompleteNumber(num) {
+      var arr = [],
+        sum = 0;
+      for (var i = 0, count = 0; i <= Math.floor(num / 2); i++) {
+        if (num % i == 0 && num != i) {
+          arr[count++] = i;
+        }
+      }
+      for (var i = 0; i < arr.length; i++) {
+        sum += arr[i];
+      }
+      if (sum == num) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    var a = Number(prompt("请输入整数", 'number'));
+    if (isCompleteNumber(a)) {
+      console.log('YES');
+    } else {
+      console.log('NO');
+    }
+  </script>
+
+  <script id="complete-numbers">
+    function isCompleteNumber(num) {
+      var arr = [],
+        sum = 0;
+      for (var i = 0, count = 0; i <= Math.floor(num / 2); i++) {
+        if (num % i == 0 && num != i) {
+          arr[count++] = i;
+        }
+      }
+      for (var i = 0; i < arr.length; i++) {
+        sum += arr[i];
+      }
+      if (sum == num) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    for (var i = 1; i <= 1000; i++) {
+      if (isCompleteNumber(i)) {
+        console.log(i);
+      }
+    }
+  </script>
+
+  <script id="prime">
+    function isPrime(num) {
+      var bool = true;
+      for (var i = 0; i <= Math.floor(num / 2); i++) {
+        if (num % i == 0 && i != 1) {
+          bool = false;
+          break;
+        }
+      }
+      return bool;
+    }
+
+    var a = Number(prompt("请输入一个数", 'number'));
+    if (isPrime(a)) {
+      console.log('YES');
+    } else {
+      console.log('NO');
+    }
+  </script>
+
+  <script id="primes">
+    function isPrime(num) {
+      var bool = true;
+      for (var i = 0; i <= Math.floor(num / 2); i++) {
+        if (num % i == 0 && i != 1) {
+          bool = false;
+          break;
+        }
+      }
+      return bool;
+    }
+    for (var i = 2; i <= 100; i++) {
+      if (isPrime(i)) {
+        console.log(i);
+      }
+    }
+  </script>
+
+  <script id="itob">
+    // 返回一个整数的位数
+    function getLen(num) {
+      var length = 1;
+      while (num > 9) {
+        length += 1;
+        num = Math.trunc(num / 10);
+      }
+      return length;
+    }
+
+    var a = Number(prompt("请输入一个整数", 'number')),
+      temp;
+    temp = Math.abs(a);
+    var str = '',
+      length = getLen(temp);
+    if (a > 0) {
+      while (length > 0) {
+        str += Math.trunc(temp / Math.pow(10, length - 1));
+        temp %= Math.pow(10, length - 1);
+        length--;
+      }
+    } else {
+      str += '-';
+      while (length > 0) {
+        str += Math.trunc(temp / Math.pow(10, length - 1));
+        temp %= Math.pow(10, length - 1);
+        length--;
+      }
+    }
+    console.log(str);
+  </script>
+
+  <script id="lcf&lcm">
+    var a = Number(prompt("请输入整数", 'number')),
+      b = Number(prompt("请输入整数", 'number')),
+      max = 0,
+      min = 0;
+
+    function getArr(num) {
+      var arr = [];
+      for (var i = 0, count = 0; i <= Math.floor(num / 2); i++) {
+        if (num % i == 0) {
+          arr[count++] = i;
+        }
+        if (i == Math.floor(num / 2)) {
+          arr[count] = num;
+        }
+      }
+      return arr;
+    }
+    var arr1 = getArr(a),
+      arr2 = getArr(b);
+    // 最大公约数
+    for (var i = 0; i < arr1.length; i++) {
+      for (var j = 0; j < arr2.length; j++) {
+        if (arr1[i] == arr2[j]) {
+          max = arr1[i];
+          break;
+        }
+      }
+    }
+    console.log(max);
+    // 最小公倍数
+    for (var i = 1;; i++) {
+      var temp = i * max;
+      if (temp % a == 0 && temp % b == 0) {
+        min = temp;
+        break;
+      }
+    }
+    console.log(min);
+  </script>
+
+  <script id="sqrt">
+    var a = Number(prompt("请输入一个整数", 'number')),
+      max = 0,
+      temp;
+    for (var i = 1; i <= Math.floor(a / 2); i++) {
+      if (i * i <= a) {
+        max = i;
+      } else {
+        break;
+      }
+    }
+    temp = max;
+    while (temp < max + 1) {
+      if (temp * temp <= a) {
+        temp += 0.001;
+      } else {
+        break;
+      }
+    }
+    console.log((temp - 0.001).toFixed(3));
   </script>
 </head>
 
