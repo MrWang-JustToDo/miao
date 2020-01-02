@@ -1080,7 +1080,9 @@
     while (count-- > 0) {
       temp = Number(prompt("请输入数字", 'number'));
       max = max < temp ? temp : ((m = temp), max);
+      console.log(max + ":" + m);
       min = min > temp ? temp : ((m = temp), min);
+      console.log(min + ":" + m);
     }
     console.log(min);
     console.log(m);
@@ -1171,9 +1173,9 @@
         } else {
           // 没有整年
           count += getStartYearDays(year, month);
+          // 到下一天
+          count++;
         }
-        // 到下一天
-        count++;
       } else {
         // 在2019年之前
         // 判断是否有整年
@@ -1187,9 +1189,9 @@
         } else {
           // 没有整年
           count += getEndYearDays(year, month);
+          // 到前一天
+          count--;
         }
-        // 到前一天
-        count--;
       }
       return count;
     }
