@@ -41,7 +41,7 @@
   <script id="ch0103/06">
     var a = Number(prompt("请输入一个数", "number"));
     var b = Number(prompt("请输入一个数", "number"));
-    console.log((b / a / 100).toFixed(3) + "%");
+    console.log((b / a * 100).toFixed(3) + "%");
   </script>
 
   <script id="ch0103/07">
@@ -60,7 +60,7 @@
 
   <script id="ch0103/09">
     var a = Number(prompt("请输入一个数", "number"));
-    console.log((2 * a).toFixed(4) + " " + (2 * Math.PI * a).toFixed(4) + " " + (Math.PI * Math.pow(a, 2).toFixed(4)));
+    console.log((2 * a).toFixed(4) + " " + (2 * Math.PI * a).toFixed(4) + " " + (Math.PI * Math.pow(a, 2)).toFixed(4));
   </script>
 
   <script id="ch0103/10">
@@ -72,7 +72,7 @@
   <script id="ch0103/11">
     var a = Number(prompt("请输入一个数", "number"));
     var b = Number(prompt("请输入一个数", "number"));
-    console.log(a % b);
+    console.log((a % b).toFixed(4));
   </script>
 
   <script id="ch0103/12">
@@ -94,7 +94,7 @@
   <script id="ch0103/14">
     var a = Number(prompt("请输入一个数", "number"));
     var b = Number(prompt("请输入一个数", "number"));
-    console.log(Math.ceil(20 * 1000 / Math.PI * b * b * h));
+    console.log(Math.ceil(20 / (Math.PI * a * b * b / 1000)));
   </script>
 
   <script id="ch0103/15">
@@ -123,14 +123,14 @@
     var l2 = Math.sqrt(Math.pow((e - a), 2) + Math.pow((f - b), 2));
     var l3 = Math.sqrt(Math.pow((e - c), 2) + Math.pow((f - d), 2));
     var p = (l1 + l2 + l3) / 2;
-    console.log(Math.sqrt(p * (p - l1) * (p - l2) * (p - l3)));
+    console.log(Math.sqrt(p * (p - l1) * (p - l2) * (p - l3)).toFixed(2));
   </script>
 
   <script id="ch0103/18">
     var a = Number(prompt("请输入一个数", "number"));
     var b = Number(prompt("请输入一个数", "number"));
     var c = Number(prompt("请输入一个数", "number"));
-    console.log(a + Math.pow((b - a), c - 1));
+    console.log(a + (b - a) * (c - 1));
   </script>
 
   <script id="ch0103/19">
@@ -266,9 +266,9 @@
 
   <script id="ch0104/12">
     var a = Number(prompt("请输入一个数", "number"));
-    if ((a / 3 + 27 + 23) > a / 1.2) {
+    if ((a / 3 + 27 + 23) < a / 1.2) {
       console.log('Bike');
-    } else if ((a / 3 + 27 + 23) < a / 1.2) {
+    } else if ((a / 3 + 27 + 23) > a / 1.2) {
       console.log('Walk');
     } else {
       console.log('All');
@@ -278,11 +278,11 @@
   <script id="ch0104/13">
     var a = Number(prompt("请输入一个数", "number"));
     if (a >= 0 && a < 5) {
-      console.log(2.5 - a);
+      console.log((2.5 - a).toFixed(3));
     } else if (a >= 5 && a < 10) {
-      console.log(2 - 1.5 * (a - 3) * (a - 3));
+      console.log((2 - 1.5 * (a - 3) * (a - 3)).toFixed(3));
     } else if (a >= 10 && x < 20) {
-      console.log(a / 2 - 1.5);
+      console.log((a / 2 - 1.5).toFixed(3));
     }
   </script>
 
@@ -297,7 +297,7 @@
       a -= 1000;
       c += Math.ceil(a / 500) * 4;
     }
-    if (b == y) {
+    if (b == 'y') {
       console.log(c += 5);
     } else {
       console.log(C);
@@ -363,14 +363,15 @@
     var c = Number(prompt("请输入一个数", "number"));
     var d = b * b - 4 * a * c;
     if (d > 0) {
-      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+'(Math.sqrt(d) / 2 * a).toFixed(5) + '; x2 = ' + (-b / 2 * a)
-        .toFixed(5) + '-'(Math.sqrt(d) / 2 * a).toFixed(5));
+      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+' + (Math.sqrt(d) / 2 * a).toFixed(5) + '; x2 = ' + (-b / 2 * a)
+        .toFixed(5) + '-' + (Math.sqrt(d) / 2 * a).toFixed(5));
     } else if (d == 0) {
       console.log('x = ' + (-b / 2 * a).toFixed(5));
     } else {
       d = Math.abs(d);
-      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+'(Math.sqrt(d) / 2 * a).toFixed(5) + 'i; x2 = ' + (-b / 2 * a)
-        .toFixed(5) + '-'(Math.sqrt(d) / 2 * a).toFixed(5) + 'i');
+      console.log('x1 = ' + (-b / 2 * a).toFixed(5) + '+' + (Math.sqrt(d) / 2 * a).toFixed(5) + 'i; x2 = ' + (-b / 2 *
+          a)
+        .toFixed(5) + '-' + (Math.sqrt(d) / 2 * a).toFixed(5) + 'i');
     }
   </script>
 
@@ -460,7 +461,7 @@
   <script id="ch0105/08">
     var a = Number(prompt("请输入边数", "number"));
     var temp = (a - 2) * 180;
-    while (a-- > 0) {
+    while (a-- > 1) {
       temp -= Number(prompt("请输入角度", 'number'));
     }
     console.log(temp);
@@ -666,7 +667,7 @@
       temp2 = 0,
       year = 0,
       bool = true;
-    while (year++ < 13) {
+    while (year++ < 12) {
       temp = Number(prompt("请输入当前预算", 'number'));
       if (300 + temp1 < temp) {
         bool = false;
@@ -677,7 +678,7 @@
       temp1 = 300 + temp1 - temp - Math.floor((300 + temp1 - temp) / 100) * 100;
     }
     if (bool) {
-      console.log(temp2 * 1.2);
+      console.log(temp2 * 1.2 + temp1);
     }
   </script>
 
@@ -827,11 +828,13 @@
       temp++;
     }
 
+    temp = "";
     for (var i = 1; i <= a; i++) {
       if (arr[i] == 0) {
-        console.log(i);
+        temp += i + ", ";
       }
     }
+    console.log(temp.substring(0, temp.length - 2));
   </script>
 
   <script id="ch0105/32">
@@ -895,18 +898,21 @@
   </script>
 
   <script id="ch0105/38">
-    var a = Number(prompt("请输入最高次幂", "number"));
-    if (a == 0) {
-      Number(prompt("请输入系数", "number"));
-      console.log(0)
-    } else {
-      while (a + 1 > 0) {
-        if (a == 0) {
-          Number(prompt("请输入系数", "number"));
-        } else {
-          console.log(Number(prompt("请输入系数", "number")) * a);
+    var count = Number(prompt("请输入个数", "number"));
+    while (count-- > 0) {
+      var a = Number(prompt("请输入最高次幂", "number"));
+      if (a == 0) {
+        Number(prompt("请输入系数", "number"));
+        console.log(0)
+      } else {
+        while (a + 1 > 0) {
+          if (a == 0) {
+            Number(prompt("请输入系数", "number"));
+          } else {
+            console.log(Number(prompt("请输入系数", "number")) * a);
+          }
+          a--;
         }
-        a--;
       }
     }
   </script>
@@ -920,6 +926,7 @@
       }
       count += Math.pow(i, 2);
     }
+    console.log(count);
   </script>
 
   <script id="ch0105/40">
