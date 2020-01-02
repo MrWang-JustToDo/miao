@@ -1188,6 +1188,8 @@
           // 没有整年
           count += getEndYearDays(year, month);
         }
+        // 到前一天
+        count--;
       }
       return count;
     }
@@ -1468,13 +1470,13 @@
   <script id="prime">
     function isPrime(num) {
       var bool = true;
-      for (var i = 0; i <= Math.floor(num / 2); i++) {
+      for (var i = 1; i <= Math.floor(num / 2); i++) {
         if (num % i == 0 && i != 1) {
           bool = false;
           break;
         }
       }
-      return bool;
+      return num == 1 ? false : bool;
     }
 
     var a = Number(prompt("请输入一个数", 'number'));
