@@ -1186,12 +1186,14 @@
           }
           // 加上剩余的从年末到指定月份第一天的天数
           count += getEndYearDays(year, month);
-        } else {
+          count += 365;
+        } else if (year == 2019) {
           // 没有整年
           count += getEndYearDays(year, month);
+        } else {
+          count += getEndYearDays(year, month);
+          count += 365;
         }
-        // 到前一天
-        count++;
       }
       return count;
     }
