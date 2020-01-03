@@ -840,10 +840,9 @@
       temp++;
     }
 
-    temp = "";
     for (var i = 1; i <= a; i++) {
       if (arr[i] == 0) {
-        temp += i + ", ";
+        console.log(i);
       }
     }
     console.log(temp.substring(0, temp.length - 2));
@@ -1064,9 +1063,10 @@
 
   <script id="7">
     var a = prompt("请输入一个整数", "number");
+    var str = a + "";
     if (a % 7 == 0) {
       console.log('YES');
-    } else if (a[a.length - 1] == '7') {
+    } else if (str[str.length - 1] == '7') {
       console.log('YES');
     } else {
       console.log('NO');
@@ -1079,10 +1079,7 @@
       m, temp, count = 3;
     while (count-- > 0) {
       temp = Number(prompt("请输入数字", 'number'));
-      max = max < temp ? temp : ((m = temp), max);
-      console.log(max + ":" + m);
-      min = min > temp ? temp : ((m = temp), min);
-      console.log(min + ":" + m);
+      max = max < temp ? ((m = max), temp) : ((min = min > temp ? temp : min), max);
     }
     console.log(min);
     console.log(m);
@@ -1113,7 +1110,7 @@
   <script id="narcissistics">
     var count = 3,
       temp, sum, start, end;
-    while (count-- > 0) {
+    while (count-- > 2) {
       start = 1 * Math.pow(10, count), end = 1 * Math.pow(10, count + 1);
       for (var i = start; i < end; i++) {
         temp = i, sum = 0;
@@ -1126,7 +1123,6 @@
         }
       }
     }
-    console.log(0);
   </script>
 
   <script id="palindrom">
@@ -1577,7 +1573,6 @@
         }
       }
     }
-    console.log(max);
     // 最小公倍数
     for (var i = 1;; i++) {
       var temp = i * max;
@@ -1587,6 +1582,7 @@
       }
     }
     console.log(min);
+    console.log(max);
   </script>
 
   <script id="sqrt">
