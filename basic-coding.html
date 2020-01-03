@@ -1066,10 +1066,20 @@
     var str = a + "";
     if (a % 7 == 0) {
       console.log('YES');
-    } else if (str[str.length - 1] == '7') {
-      console.log('YES');
     } else {
-      console.log('NO');
+      var len = str.length,
+        bool = false;
+      while (len-- > 0) {
+        if (str[len] == '7') {
+          bool = true;
+          break;
+        }
+      }
+      if (bool) {
+        console.log('YES');
+      } else {
+        console.log('NO');
+      }
     }
   </script>
 
