@@ -730,12 +730,12 @@
 
   <script id="ch0105/25">
     var a, b, c;
-    for (a = 0; a < 10; a++) {
-      for (b = 0; b < 10; b++) {
-        for (c = 0; c < 10; c++) {
+    for (a = 0; a < 7; a++) {
+      for (b = 0; b < 7; b++) {
+        for (c = 0; c < 7; c++) {
           if (a * 49 + b * 7 + c * 1 == c * 81 + b * 9 + a * 1) {
             if (a * 49 + b * 7 + c * 1 != 0) {
-              console.log(a * 49 + b * 7 + c * 1);
+              console.log(a * 49 + b * 7 + c * 1 + '');
               console.log("" + a + b + c);
               console.log("" + c + b + a);
             }
@@ -1173,9 +1173,9 @@
         } else {
           // 没有整年
           count += getStartYearDays(year, month);
-          // 到下一天
-          count++;
         }
+        // 到下一天
+        count++;
       } else {
         // 在2019年之前
         // 判断是否有整年
@@ -1189,9 +1189,9 @@
         } else {
           // 没有整年
           count += getEndYearDays(year, month);
-          // 到前一天
-          count--;
         }
+        // 到前一天
+        count++;
       }
       return count;
     }
@@ -1285,79 +1285,79 @@
       if (isLeap(year)) {
         switch (month) {
           case 12:
-            return 31;
+            return 31 - 1;
             break;
           case 11:
-            return 61;
+            return 61 - 1;
             break;
           case 10:
-            return 92;
+            return 92 - 1;
             break;
           case 9:
-            return 122;
+            return 122 - 1;
             break;
           case 8:
-            return 153;
+            return 153 - 1;
             break;
           case 7:
-            return 184;
+            return 184 - 1;
             break;
           case 6:
-            return 214;
+            return 214 - 1;
             break;
           case 5:
-            return 245;
+            return 245 - 1;
             break;
           case 4:
-            return 275;
+            return 275 - 1;
             break;
           case 3:
-            return 306;
+            return 306 - 1;
             break;
           case 2:
-            return 335;
+            return 335 - 1;
             break;
           case 1:
-            return 366;
+            return 366 - 1;
             break;
         }
       } else {
         switch (month) {
           case 12:
-            return 31;
+            return 31 - 1;
             break;
           case 11:
-            return 61;
+            return 61 - 1;
             break;
           case 10:
-            return 92;
+            return 92 - 1;
             break;
           case 9:
-            return 122;
+            return 122 - 1;
             break;
           case 8:
-            return 153;
+            return 153 - 1;
             break;
           case 7:
-            return 184;
+            return 184 - 1;
             break;
           case 6:
-            return 214;
+            return 214 - 1;
             break;
           case 5:
-            return 245;
+            return 245 - 1;
             break;
           case 4:
-            return 275;
+            return 275 - 1;
             break;
           case 3:
-            return 306;
+            return 306 - 1;
             break;
           case 2:
-            return 334;
+            return 334 - 1;
             break;
           case 1:
-            return 365;
+            return 365 - 1;
             break;
         }
       }
@@ -1375,6 +1375,9 @@
 
     if (year > 2019) {
       switch (count % 7) {
+        case 0:
+          console.log(2);
+          break;
         case 1:
           console.log(3);
           break;
@@ -1396,6 +1399,9 @@
       }
     } else {
       switch (count % 7) {
+        case 0:
+          console.log(2);
+          break;
         case 1:
           console.log(1);
           break;
