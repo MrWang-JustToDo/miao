@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>画图</title>
+  <style>
+    canvas {
+      border: 2px solid #f0f;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas width="400" height="300"></canvas>
+</body>
+<script>
+  var canvas = document.querySelector('canvas')
+  canvas.style.imageRendering = 'pixelated'
+  var ctx = canvas.getContext('2d')
+
+  function dot(x, y, color = 'black') {
+    ctx.fillStyle = color
+    ctx.fillRect(x, y, 1, 1)
+  }
+  /**
+   * YOUR TASK
+画图的题：
+画一条实线
+画一条一个实点一个空点的虚线
+画一条两个实点两个空点的虚线
+画一条三个实点两个空点的虚线
+画一条45度的斜线
+画一条跨越画布左上角和右下角的对角线
+画一个空心矩形
+画一个实心矩形
+画一个rgb色彩空间的某一面
+画一个空心的圆
+画一个实心的圆
+画一个大小合适的sin(x)的图像
+   */
+</script>
+<script>
+  // YOUR CODE GOES BELOW
+  // 实线
+  for (var i = 10; i <= 200; i++) {
+    dot(i, 10, 'red');
+    dot(i, 11, 'red');
+  }
+
+  // 虚线
+  for (var i = 10; i <= 200; i++) {
+    if (i % 2 == 0) {
+      dot(i, 25, 'blue');
+    }
+  }
+  // 虚线
+  for (var i = 10, bool = true; i <= 200; i += 2) {
+    if (bool) {
+      dot(i, 40, 'red');
+      dot(i + 1, 40, 'red');
+      bool = false;
+    } else {
+      bool = true;
+    }
+  }
+  // 虚线
+  for (var i = 10, bool = true; i <= 200;) {
+    if (bool) {
+      dot(i, 55, 'blue');
+      dot(i + 1, 55, 'blue');
+      dot(i + 2, 55, 'blue');
+      bool = false;
+      i += 3;
+    } else {
+      bool = true;
+      i += 2;
+    }
+  }
+  // 45度斜线
+  for (var i = 300; i >= 0; i--) {
+    dot(i, 300 - i, 'red');
+  }
+  // 左上到右下对角线
+
+  var temp = 0;
+  while (temp <= 400) {
+    dot(temp, 300 / 400 * temp, 'blue');
+    temp++;
+  }
+
+  // 空心矩形
+  var x1 = 240,
+    y1 = 10,
+    x2 = 380,
+    y2 = 100;
+  for (var i = x1; i <= x2; i++) {
+    dot(i, y1, 'red');
+    dot(i, y2, 'red');
+  }
+  for (var i = y1; i <= y2; i++) {
+    dot(x1, i, 'blue');
+    dot(x2, i, 'blue');
+  }
+
+  // 实心矩形
+  var x3 = 260,
+    y3 = 20,
+    x4 = 360,
+    y4 = 80;
+  for (var i = y3; i <= y4; i++) {
+    for (var j = x3; j <= x4; j++) {
+      dot(j, i, 'purple');
+    }
+  }
+  // 画RGB空间
+  var r = 0,
+    g = 0,
+    b = 0;
+  for (var i = 10; i <= 110; i++) {
+    for (var j = 85; j <= 185; j++) {
+      dot(i, j, 'rgb(' + 2.65 * (i - 10) + ', ' + 2.65 * (j - 85) + ',' + 2.65 / Math.sqrt(2) * Math.sqrt((i - 10) * (
+        i - 10) + (j - 85) * (j - 85)) + ')');
+    }
+  }
+
+  // 画空心圆
+  var x5 = 200,
+    y5 = 150,
+    r1 = 40,
+    temp = 0;
+  while (temp < 360) {
+    dot(x5 + Math.sin(temp) * r1, y5 + Math.cos(temp) * r1, '#ccc');
+    temp++;
+  }
+
+  // 画实心圆
+  var x6 = 290,
+    y6 = 150,
+    r1 = 40,
+    temp1 = 0,
+    temp2 = 0;
+  while (temp1 < 360) {
+    temp2 = 0;
+    while (temp2 < r1) {
+      dot(x6 + Math.sin(temp1) * temp2, y6 + Math.cos(temp1) * temp2, 'skyblue');
+      temp2++;
+    }
+    temp1++;
+  }
+
+  // 画sin(x)图像
+  for (var i = 0; i <= 400; i++) {
+    dot(i, Math.sin(i / 50 * Math.PI) * 40 + 260, 'black');
+  }
+</script>
+
+</html>

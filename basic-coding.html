@@ -1595,8 +1595,9 @@
   </script>
 
   <script id="sqrt">
+    /*
     var a = Number(prompt("请输入一个整数", 'number')),
-      max = 0,
+    max = 0,
       temp;
     for (var i = 1; i <= Math.floor(a / 2); i++) {
       if (i * i <= a) {
@@ -1613,7 +1614,76 @@
         break;
       }
     }
+
     console.log((temp - 0.001).toFixed(3));
+    */
+
+    // 使用二分法进行求解
+    var a = Number(prompt("请输入一个整数", 'number'));
+    var start = 0,
+      mi, end = a;
+    mi = (start + end) / 2;
+    while (Math.abs(mi * mi - a) > 0.0001) {
+      if (mi * mi > a) {
+        end = mi;
+      } else {
+        start = mi;
+      }
+      mi = (start + end) / 2;
+    }
+    console.log(mi);
+  </script>
+
+  <script id="sqrt-1">
+    // 牛顿法求sqrt
+    var a = Number(prompt("请输入数字", 'number')),
+      start = 1,
+      count = 0;
+    var temp = start - (start * start - a) / 2;
+    while (Math.abs(temp * temp - a) > 0.00000000000001) {
+      count++;
+      start = temp;
+      temp = start - (start * start - a) / 2;
+    }
+    console.log(temp);
+    console.log(count);
+  </script>
+
+  <script id="lcf">
+    // 使用辗转相除法求最大公约数
+    var a = Number(prompt("请输入第一个数", 'number'));
+    var b = Number(prompt("请输入第二个数", 'number')),
+      temp;
+    if (a != b) {
+      do {
+        if (a < b) {
+          temp = a;
+          a = b;
+          b = temp;
+        }
+        a - b >= b ? a = a - b : b = a - b;
+      } while (a - b > 0);
+    }
+    console.log(a);
+  </script>
+
+  <script id="pow">
+    // 计算a的n次方
+    var a = Number(prompt("请输入一个数", 'number'));
+    var b = Number(prompt("请输入一个数", 'number'));
+
+    function getPow(a, b) {
+      if (b == 1) {
+        return a;
+      } else {
+        if (b % 2 == 0) {
+          return getPow(a, b / 2) * getPow(a, b / 2);
+        } else {
+          return getPow(a, Math.trunc(b / 2)) * getPow(a, Math.trunc(b / 2)) * a;
+        }
+      }
+    }
+    console.log(getPow(a, b));
   </script>
 </head>
 
