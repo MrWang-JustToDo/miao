@@ -1639,11 +1639,10 @@
     var a = Number(prompt("请输入数字", 'number')),
       start = 1,
       count = 0;
-    var temp = start - (start * start - a) / 2;
-    while (Math.abs(temp * temp - a) > 0.00000000000001) {
-      count++;
+    var temp = (start * start + a) / 2 / start;
+    while(count++ < 8) {
       start = temp;
-      temp = start - (start * start - a) / 2;
+      temp = (start * start + a) / 2 / start;
     }
     console.log(temp);
     console.log(count);
