@@ -1640,7 +1640,7 @@
       start = 1,
       count = 0;
     var temp = (start * start + a) / 2 / start;
-    while(count++ < 8) {
+    while (count++ < 8) {
       start = temp;
       temp = (start * start + a) / 2 / start;
     }
@@ -1649,21 +1649,31 @@
   </script>
 
   <script id="lcf">
-    // 使用辗转相除法求最大公约数
+    // 使用辗转相减法求最大公约数
     var a = Number(prompt("请输入第一个数", 'number'));
-    var b = Number(prompt("请输入第二个数", 'number')),
-      temp;
+    var b = Number(prompt("请输入第二个数", 'number'));
     if (a != b) {
       do {
         if (a < b) {
-          temp = a;
-          a = b;
-          b = temp;
+          a = a + b;
+          b = a - b;
+          a = a - b;
         }
         a - b >= b ? a = a - b : b = a - b;
       } while (a - b > 0);
     }
     console.log(a);
+    // 使用辗转相除法求公约数
+    while (b !== 0 && a !== 0) {
+      if (a < b) {
+        a = a + b;
+        b = a - b;
+        a = a - b;
+      }
+      a = a % b;
+    }
+
+    console.log(a == 0 ? b : a);
   </script>
 
   <script id="pow">

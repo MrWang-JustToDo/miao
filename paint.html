@@ -132,7 +132,7 @@
     r1 = 40,
     temp = 0;
   while (temp < 360) {
-    dot(x5 + Math.sin(temp) * r1, y5 + Math.cos(temp) * r1, '#ccc');
+    dot(x5 + Math.sin(temp) * r1, y5 + Math.cos(temp) * r1, 'red');
     temp++;
   }
 
@@ -148,7 +148,7 @@
       dot(x6 + Math.sin(temp1) * temp2, y6 + Math.cos(temp1) * temp2, 'skyblue');
       temp2++;
     }
-    temp1++;
+    temp1+=.5;
   }
 
   // 画sin(x)图像
