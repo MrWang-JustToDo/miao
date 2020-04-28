@@ -6,7 +6,9 @@ var MrWangJustToDo = {
    * @returns {Array} 返回分割后的数组
    */
   chunk: function (arr, size = 1) {
-    arr = arr || [];
+    if (!Array.isArray(arr) || size < 0) {
+      return [];
+    }
     if (arr.length <= size) {
       return [arr];
     } else {
@@ -26,7 +28,9 @@ var MrWangJustToDo = {
    * @returns {Array} 返回得到的数组
    */
   compact: function (arr) {
-    arr = arr || [];
+    if (!Array.isArray(arr)) {
+      return [];
+    }
     let re = [];
     for (let i = 0; i < arr.length; i++) {
       if (arr[i]) {
@@ -63,8 +67,11 @@ var MrWangJustToDo = {
    * @returns {Array} 返回新的不包含重叠元素的数组
    */
   difference: function (arr, ...values) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
     if (!values) {
-      return arr;
+      return Array.from(arr);
     } else {
       let re = Array.from(arr);
       for (let i = 0; i < values.length; i++) {
@@ -88,7 +95,12 @@ var MrWangJustToDo = {
    * @returns {Array} 返回得到的新数组 
    */
   drop: function (arr, n = 1) {
-    arr = arr || [];
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    if (n < 0) {
+      n = 0;
+    }
     if (n >= arr.length) {
       return [];
     } else {
@@ -104,13 +116,13 @@ var MrWangJustToDo = {
    * @returns {Array} 返回的数组
    */
   fill: function (arr, value, start, end) {
-    if (!arr) {
+    if (!Array.isArray(arr)) {
       return [];
     }
-    if (start < 0 || start == undefined) {
+    if (start < 0 || start === undefined) {
       start = 0;
     }
-    if (end == undefined) {
+    if (end === undefined) {
       end = arr.length;
     }
     if (value === undefined) {
@@ -129,7 +141,6 @@ var MrWangJustToDo = {
    * @returns {any} 返回获取的结果
    */
   head: function (arr) {
-    arr = arr || [];
     if (Array.isArray(arr)) {
       return arr[0];
     } else {
@@ -142,7 +153,6 @@ var MrWangJustToDo = {
    * @returns {Array} 返回展开后的新数组
    */
   flatten: function (arr) {
-    arr = arr || [];
     if (!Array.isArray(arr) || arr.length == 0) {
       return [];
     } else {
@@ -155,6 +165,120 @@ var MrWangJustToDo = {
         }
       }
       return re;
+    }
+  },
+  /**
+   * 
+   * @param {Array} arr 需要查找的数组
+   * @param {*} value 被查找的值
+   * @param {*} fromIndex 查找的起始位置
+   * @returns {Number}  查找到的索引 
+   */
+  indexOf: function (arr, value, fromIndex = 0) {
+    if (!Array.isArray(arr) || value === undefined) {
+      return -1;
+    }
+    return arr.indexOf(value, fromIndex);
+  },
+  /**
+   * 
+   * @param {Array} arr 需要去除末尾的数组
+   * @returns {Array} 返回新的数组
+   */
+  initial: function (arr) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    return arr.slice(0, arr.length - 1);
+  },
+  /**
+   * 
+   * @param  {...Array} arr 需要查找交集的数组
+   * @returns {Array} 返回只包含交集的新数组 
+   */
+  intersection: function (...arr) {
+    if (!arr || arr.length == 0) {
+      return [];
+    } else {
+      let re;
+      if (Array.isArray(arr[0])) {
+        re = Array.from(arr[0]);
+      } else {
+        return [];
+      }
+      let len = 1;
+      while (len < arr.length && re.length > 0) {
+        if (!Array.isArray(arr[len])) {
+          return [];
+        }
+        let next = [];
+        for (let i = 0; i < arr[len].length; i++) {
+          if (re.indexOf(arr[len][i]) != -1) {
+            next.push(arr[len][i]);
+          }
+        }
+        re = next;
+        len++;
+      }
+      return re;
+    }
+  },
+  /**
+   * 
+   * @param {Array} arr 原始数组
+   * @param {*} separator 待拼接的字符
+   * @returns {String} 返回使用字符拼接的字符串
+   */
+  join: function (arr, separator = ',') {
+    if (!Array.isArray(arr) || arr.length == 0) {
+      return '';
+    }
+    return arr.join(separator);
+  },
+  /**
+   * 
+   * @param {Array} arr 原始数组
+   * @returns {*} 返回原始数组的最后一项
+   */
+  last: function (arr) {
+    if (!Array.isArray(arr) || arr.length == 0) {
+      return undefined;
+    }
+    return arr[arr.length - 1];
+  },
+  /**
+   * 
+   * @param {Array} arr 需要查找的数组
+   * @param {*} value 被查找的元素
+   * @param {*} fromIndex 逆序查找开始的索引
+   * @returns {Number}  返回查找到的索引
+   */
+  lastIndexOf: function (arr, value, fromIndex) {
+    if (!Array.isArray(arr) || arr.length == 0) {
+      return -1;
+    }
+    if (value === undefined) {
+      return arr.length;
+    }
+    if (fromIndex == undefined) {
+      fromIndex = arr.length - 1;
+    }
+    return arr.lastIndexOf(value, fromIndex);
+  },
+  /**
+   * 
+   * @param {Array} arr 原始数组
+   * @param {*} n 需要的索引
+   * @returns {*} 返回当前索引的元素
+   */
+  nth: function (arr, n = 0) {
+    if (!Array.isArray(arr) || arr.length == 0) {
+      return undefined;
+    }
+    if (n >= 0) {
+      return arr[n];
+    } else {
+      return arr[arr.length + n];
     }
   }
 }
