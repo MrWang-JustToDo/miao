@@ -27,7 +27,11 @@ var mrwangjusttodo = {
     while (end >= start) {
       let m = (start + end) / 2 | 0;
       if (arr[m] === target) {
-        return m;
+        let t = m - 1;
+        while (t >= 0 && arr[t] == target) {
+          t--;
+        }
+        return t + 1;
       } else if (arr[m] > target) {
         end = m - 1;
       } else {
@@ -227,7 +231,18 @@ var mrwangjusttodo = {
     if (!arr || Array.from(arr).length === 0 || value === undefined) {
       return -1;
     }
-    return arr.indexOf(value, fromIndex);
+    for (let i = fromIndex; i < arr.length; i++) {
+      if (isNaN(value)) {
+        if (isNaN(arr[i])) {
+          return i;
+        }
+      } else {
+        if (arr[i] === value) {
+          return i;
+        }
+      }
+    }
+    return -1;
   },
   /**
    * 
@@ -319,7 +334,7 @@ var mrwangjusttodo = {
     if (fromIndex == undefined) {
       fromIndex = tArr.length - 1;
     }
-    return tArr.lastIndexOf(value, fromIndex);
+    return this.indexOf(arr, value, fromIndex);
   },
   /**
    * 
@@ -483,19 +498,12 @@ var mrwangjusttodo = {
     if (value === undefined) {
       return -1;
     }
-    let start = 0,
-      end = tArr.length - 1;
-    while (end >= start) {
-      let m = (start + end) / 2 | 0;
-      if (tArr[m] === value) {
-        return m;
-      } else if (tArr[m] > value) {
-        end = m - 1;
-      } else {
-        start = m + 1;
-      }
+    let re = this.binarySearch(arr, value);
+    if (arr[re] === value) {
+      return re;
+    } else {
+      return -1;
     }
-    return -1;
   },
   /**
    * 
@@ -536,7 +544,10 @@ var mrwangjusttodo = {
       return [];
     }
     let tArr = Array.from(arr);
-    if (n < 0 || tArr.length - n < 0) {
+    if (tArr.length <= n) {
+      return tArr;
+    }
+    if (n < 0) {
       return [];
     }
     return tArr.slice(tArr.length - n);
@@ -595,24 +606,27 @@ var mrwangjusttodo = {
       return [];
     }
     let re = [];
-    let index = 0;
     let maxLen = 0;
-    while (true) {
+    let maxIndex = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i])) {
+        maxLen++;
+        maxIndex = maxIndex >= arr[i].length ? maxIndex : arr[i].length;
+      }
+    }
+    let index = 0;
+    while (index < maxIndex) {
       let temp = Array(maxLen);
       let iTemp = 0;
       for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i]) && index < arr[i].length) {
+        if (Array.isArray(arr[i])) {
           temp[iTemp++] = arr[i][index];
         }
       }
-      if (iTemp > 0) {
-        maxLen = maxLen > iTemp ? maxLen : iTemp;
-        re.push(temp);
-        index++;
-      } else {
-        return re;
-      }
+      re.push(temp);
+      index++;
     }
+    return re;
   },
   unzip: function (arr) {
     if (!arr || !Array.isArray(arr)) {
@@ -620,26 +634,26 @@ var mrwangjusttodo = {
     }
     let re = [];
     let maxLen = 0;
+    let maxIndex = 0;
     for (let i = 0; i < arr.length; i++) {
       if (Array.isArray(arr[i])) {
         maxLen++;
+        maxIndex = maxIndex >= arr[i].length ? maxIndex : arr[i].length;
       }
     }
     let index = 0;
-    while (true) {
+    while (index < maxIndex) {
       let temp = Array(maxLen);
       let iTemp = 0
       for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i]) && index < arr[i].length) {
+        if (Array.isArray(arr[i])) {
           temp[iTemp++] = arr[i][index];
         }
       }
-      if (iTemp > 0) {
-        re.push(temp);
-        index++;
-      } else {
-        return re;
-      }
+      re.push(temp);
+      index++;
+
     }
+    return re;
   }
 }
