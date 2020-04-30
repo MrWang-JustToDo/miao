@@ -1,4 +1,4 @@
-var MrWangJustToDo = {
+var mrwangjusttodo = {
   /**
    * 
    * @param {Array} arr 待展开的数组
@@ -584,5 +584,62 @@ var MrWangJustToDo = {
       }
     }
     return re;
+  },
+  /**
+   * 
+   * @param  {...Array} arr 传入的数组集合
+   * @returns {Array} 返回新的数组
+   */
+  zip: function (...arr) {
+    if (!arr) {
+      return [];
+    }
+    let re = [];
+    let index = 0;
+    let maxLen = 0;
+    while (true) {
+      let temp = Array(maxLen);
+      let iTemp = 0;
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i]) && index < arr[i].length) {
+          temp[iTemp++] = arr[i][index];
+        }
+      }
+      if (iTemp > 0) {
+        maxLen = maxLen > iTemp ? maxLen : iTemp;
+        re.push(temp);
+        index++;
+      } else {
+        return re;
+      }
+    }
+  },
+  unzip: function (arr) {
+    if (!arr || !Array.isArray(arr)) {
+      return [];
+    }
+    let re = [];
+    let maxLen = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (Array.isArray(arr[i])) {
+        maxLen++;
+      }
+    }
+    let index = 0;
+    while (true) {
+      let temp = Array(maxLen);
+      let iTemp = 0
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i]) && index < arr[i].length) {
+          temp[iTemp++] = arr[i][index];
+        }
+      }
+      if (iTemp > 0) {
+        re.push(temp);
+        index++;
+      } else {
+        return re;
+      }
+    }
   }
 }
