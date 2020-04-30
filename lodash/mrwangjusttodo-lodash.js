@@ -124,7 +124,7 @@ var mrwangjusttodo = {
         if (Array.isArray(values[i])) {
           let temp = [];
           for (let j = 0; j < re.length; j++) {
-            if (values[i].indexOf(re[j]) === -1) {
+            if (this.indexOf(values[i], re[j]) === -1) {
               temp.push(re[j]);
             }
           }
@@ -232,8 +232,8 @@ var mrwangjusttodo = {
       return -1;
     }
     for (let i = fromIndex; i < arr.length; i++) {
-      if (isNaN(value)) {
-        if (isNaN(arr[i])) {
+      if (isNaN(value) && value !== value) {
+        if (isNaN(arr[i] && arr[i] != arr[i])) {
           return i;
         }
       } else {
@@ -278,7 +278,7 @@ var mrwangjusttodo = {
         }
         let next = [];
         for (let i = 0; i < arr[len].length; i++) {
-          if (re.indexOf(arr[len][i]) != -1) {
+          if (this.indexOf(re, arr[len][i]) != -1) {
             next.push(arr[len][i]);
           }
         }
@@ -331,10 +331,28 @@ var mrwangjusttodo = {
     if (value === undefined) {
       return tArr.length;
     }
-    if (fromIndex == undefined) {
+    if (fromIndex === undefined) {
       fromIndex = tArr.length - 1;
     }
-    return this.indexOf(arr, value, fromIndex);
+    if (fromIndex < 0) {
+      if (Math.abs(fromIndex) >= arr.length) {
+        return -1;
+      } else {
+        fromIndex = tArr.length - 1 + fromIndex;
+      }
+    }
+    for (let i = fromIndex; i >= 0; i--) {
+      if (isNaN(value) && value != value) {
+        if (isNaN(arr[i]) && arr[i] != arr[i]) {
+          return i;
+        }
+      } else {
+        if (arr[i] === value) {
+          return i;
+        }
+      }
+    }
+    return -1;
   },
   /**
    * 
@@ -363,10 +381,10 @@ var mrwangjusttodo = {
       return arr;
     } else {
       for (let i = 0; i < values.length; i++) {
-        let index = arr.indexOf(values[i]);
+        let index = this.indexOf(arr, values[i]);
         while (index != -1) {
           arr.splice(index, 1);
-          index = arr.indexOf(values[i]);
+          index = this.indexOf(arr, values[i]);
         }
       }
       return arr;
@@ -375,21 +393,14 @@ var mrwangjusttodo = {
   /**
    * 
    * @param {Array} arr 需要删除元素的数组
-   * @param {*} values 待删除元素的数组
+   * @param {*} value 待删除元素的数组
    * @returns {Array} 返回删除元素后的数组
    */
-  pullAll: function (arr, values) {
+  pullAll: function (arr, value) {
     if (!Array.isArray(arr) || !values) {
       return arr;
     } else {
-      for (let i = 0; i < values.length; i++) {
-        let index = arr.indexOf(values[i]);
-        while (index != -1) {
-          arr.splice(index, 1);
-          index = arr.indexOf(values[i]);
-        }
-      }
-      return arr;
+      return this.pull(arr, ...value);
     }
   },
   /**
@@ -652,8 +663,204 @@ var mrwangjusttodo = {
       }
       re.push(temp);
       index++;
-
     }
     return re;
+  },
+  /**
+   * 
+   * @param {Array} arr 原始需要判断数组
+   * @param  {...any} values 判断数组中是否包含对应的参数
+   * @returns {Array} 返回新的不包含任何指定参数的数组
+   */
+  without: function (arr, ...values) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    let tArr = Array.from(arr);
+    let re = [];
+    for (let i = 0; i < tArr.length; i++) {
+      if (this.indexOf(values, tArr[i]) === -1) {
+        re.push(tArr[i]);
+      }
+    }
+    return re;
+  },
+  /**
+   * 
+   * @param  {...any} values 需要处理的参数
+   * @returns {Array} 返回一个数组包含所有不重复出现的单个数组元素
+   */
+  xor: function (...values) {
+    if (!values) {
+      return [];
+    }
+    let re = [];
+    for (let i = 0; i < values.length; i++) {
+      if (Array.isArray(values[i])) {
+        for (let j = 0; j < values[i].length; j++) {
+          let index = this.indexOf(re, values[i][j]);
+          if (index === -1) {
+            re.push(values[i][j]);
+          } else {
+            re.splice(index, 1);
+          }
+        }
+      }
+    }
+    return re;
+  },
+  /**
+   * 
+   * @param {Array} props 作为对象属性名称的数组
+   * @param {Array} values 作为对象属性值的数组
+   * @returns {Object} 返回包含指定属性的对象
+   */
+  zipObject: function (props, values) {
+    if (!props) {
+      return {};
+    }
+    let tArr = Array.from(props);
+    if (tArr.length == 0) {
+      return {};
+    }
+    let re = {};
+    for (let i = 0; i < tArr.length; i++) {
+      re[tArr[i]] = undefined;
+    }
+    if (!values || Array.from(values).length === 0) {
+      return re;
+    }
+    let index = 0;
+    for (let attr in re) {
+      re[attr] = values[index++];
+    }
+    return re;
+  },
+  /**
+   * 
+   * @param {Array|Object|String} collection 需要查找的元素
+   * @param {*} value 查找的值
+   * @param {*} fromIndex 开始查找的索引
+   * @returns {Boolean} 返回是否存在的布尔值
+   */
+  include: function (collection, value, fromIndex = 0) {
+    if (!collection || !value) {
+      return false;
+    }
+    if (Array.isArray(collection)) {
+      return this.indexOf(collection, value, fromIndex);
+    } else if (typeof (collection) === 'string') {
+      return collection.includes(value, fromIndex);
+    } else if (typeof (collection) === 'object') {
+      for (let attr in collection) {
+        if (isNaN(value) && value != value) {
+          if (isNaN(collection[attr]) && collection[attr] != collection[attr]) {
+            return true;
+          }
+        } else {
+          if (value === collection[attr]) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  },
+  /**
+   * 
+   * @param {Object|Array} collection 可迭代数组/对象
+   * @returns {*} 返回可迭代数组/对象中的随机元素
+   */
+  sample: function (collection) {
+    if (!collection) {
+      return undefined;
+    }
+    let tArr = Array.from(collection);
+    if (tArr.length > 0) {
+      return tArr[Math.floor(Math.random() * tArr.length)];
+    } else if (typeof (collection) === 'object') {
+      tArr = Object.values(collection);
+      return tArr[Math.floor(Math.random() * tArr.length)];
+    }
+    return undefined;
+  },
+  /**
+   * 
+   * @param {Object|Array} collection 可迭代的数组/对象
+   * @param {*} n 返回的数组最大长度
+   * @returns {Array} 返回获取的随机索引元素组成的数组
+   */
+  sampleSize: function (collection, n = 1) {
+    if (!collection || n < 1) {
+      return [];
+    }
+    let tArr = Array.from(collection);
+    let re = [];
+    let len = 0;
+    if (tArr.length > 0) {
+      while (tArr.length > 0 && len++ < n) {
+        let index = Math.floor(Math.random() * tArr.length);
+        re.push(tArr[index]);
+        tArr.splice(index, 1);
+      }
+    } else if (typeof (collection) === 'object') {
+      tArr = Object.values(collection);
+      while (tArr.length > 0 && len++ < n) {
+        let index = Math.floor(Math.random() * tArr.length);
+        re.push(tArr[index]);
+        tArr.splice(index, 1);
+      }
+    }
+    return re;
+  },
+  /**
+   * 
+   * @param {Object|Array} collection 传入的可迭代数组/对象
+   * @returns {Array} 返回一个随机排序的数组
+   */
+  shuffle: function (collection) {
+    if (!collection) {
+      return [];
+    }
+    let tArr = Array.from(collection);
+    if (tArr.length > 0) {
+      tArr.sort(() => Math.random() > 0.5);
+      return tArr;
+    } else if (typeof (collection) === 'object') {
+      tArr = Object.values(collection);
+      tArr.sort(() => Math.random() > 0.5);
+      return tArr;
+    }
+    return [];
+  },
+  /**
+   * 
+   * @param {Object|Array|String} collection 传入的可迭代数组/对象/字符串
+   * @returns {Number} 返回对应的长度
+   */
+  size: function (collection) {
+    if (!collection) {
+      return 0;
+    }
+    let tArr = Array.from(collection);
+    if (tArr.length > 0) {
+      return tArr.length;
+    } else if (typeof (collection) === 'object') {
+      tArr = Object.values(collection);
+      return tArr.length;
+    }
+    return 0;
+  },
+  eq: function (value, other) {
+    if (value === undefined && other === undefined) {
+      return true;
+    }
+    if (value === undefined || other === undefined) {
+      return false;
+    }
+    if (value != value) {
+      return other != other;
+    }
+    return value === other;
   }
 }
