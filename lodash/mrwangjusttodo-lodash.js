@@ -232,8 +232,8 @@ var mrwangjusttodo = {
       return -1;
     }
     for (let i = fromIndex; i < arr.length; i++) {
-      if (isNaN(value) && value !== value) {
-        if (isNaN(arr[i] && arr[i] != arr[i])) {
+      if (Number.isNaN(value)) {
+        if (Number.isNaN(arr[i])) {
           return i;
         }
       } else {
@@ -342,8 +342,8 @@ var mrwangjusttodo = {
       }
     }
     for (let i = fromIndex; i >= 0; i--) {
-      if (isNaN(value) && value != value) {
-        if (isNaN(arr[i]) && arr[i] != arr[i]) {
+      if (Number.isNaN(value)) {
+        if (Number.isNaN(arr[i])) {
           return i;
         }
       } else {
@@ -579,7 +579,7 @@ var mrwangjusttodo = {
             re = Array.from(arr[i]);
           } else {
             for (let j = 0; j < arr[i].length; j++) {
-              if (!re.includes(arr[i][j])) {
+              if (!this.include(re, arr[i][j])) {
                 re.push(arr[i][j]);
               }
             }
@@ -601,7 +601,7 @@ var mrwangjusttodo = {
     let tArr = Array.from(arr);
     let re = [];
     for (let i = 0; i < tArr.length; i++) {
-      if (!re.includes(tArr[i])) {
+      if (!this.include(re, tArr[i])) {
         re.push(tArr[i]);
       }
     }
@@ -753,8 +753,8 @@ var mrwangjusttodo = {
       return collection.includes(value, fromIndex);
     } else if (typeof (collection) === 'object') {
       for (let attr in collection) {
-        if (isNaN(value) && value != value) {
-          if (isNaN(collection[attr]) && collection[attr] != collection[attr]) {
+        if (Number.isNaN(value)) {
+          if (Number.isNaN(collection[attr])) {
             return true;
           }
         } else {
@@ -851,6 +851,12 @@ var mrwangjusttodo = {
     }
     return 0;
   },
+  /**
+   * 
+   * @param {*} value 传入的参数一
+   * @param {*} other 传入的参数二
+   * @returns {Boolean} 返回两个参数是否相同的布尔值
+   */
   eq: function (value, other) {
     if (value === undefined && other === undefined) {
       return true;
