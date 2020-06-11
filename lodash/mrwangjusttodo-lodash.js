@@ -1,38 +1,47 @@
 var mrwangjusttodo = {
+  // 自定义方法
   /**
-   * 
+   *
    * @param {Array} arr 待展开的数组
-   * @returns {Array} 元素展开后的数组
+   * @param {function} test 需要满足的条件
+   * @param {function} action1 判断成功后执行的操作
+   * @param {function} action2 判断失败后执行的操作
+   * @param {Array} init 展开数组开始时的初始值
+   * @returns {Array} 返回展开后的新数组
    */
-  unfoldArr: function (arr) {
-    let re = [];
-    for (let i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i])) {
-        re = re.concat(this.unfoldArr(arr[i]));
+  unfoldArrByJudge: function (
+    arr,
+    test,
+    action1,
+    action2 = (pre) => pre,
+    init = []
+  ) {
+    return arr.reduce((pre, current) => {
+      if (test(current)) {
+        pre = action1(pre, current);
       } else {
-        re.push(arr[i]);
+        pre = action2(pre, current);
       }
-    }
-    return re;
+      return pre;
+    }, init);
   },
   /**
-   * 
+   *
    * @param {Array} arr 查找的原始数组
    * @param {*} target 查找的目标元素
+   * @param {Function} transfer 转换元素的函数
    * @returns {Number} 返回索引
    */
-  binarySearch: function (arr, target) {
+  binarySearch: function (arr, target, transfer = (it) => it) {
     let start = 0;
     let end = arr.length - 1;
     while (end >= start) {
-      let m = (start + end) / 2 | 0;
-      if (arr[m] === target) {
-        let t = m - 1;
-        while (t >= 0 && arr[t] == target) {
-          t--;
-        }
-        return t + 1;
-      } else if (arr[m] > target) {
+      let m = ((start + end) / 2) | 0;
+      let p1 = transfer(arr[m]);
+      let p2 = transfer(target);
+      if (p1 === p2) {
+        return m;
+      } else if (p1 > p2) {
         end = m - 1;
       } else {
         start = m + 1;
@@ -41,10 +50,148 @@ var mrwangjusttodo = {
     return start;
   },
   /**
-   * 
-   * @param {Array} arr 传入的数组 
+   *
+   * @param {Array} arr 原始数组
+   * @returns 返回一个包含数组中信息的对象
+   */
+  matchesProperty: function (arr) {
+    let re = {};
+    for (let i = 0; i < arr.length; i++) {
+      re[arr[i++]] = arr[i];
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Object} obj 根据对象返回一个判断函数
+   */
+  matches: function (obj) {
+    return function (para) {
+      for (let prop in obj) {
+        if (para[prop] != obj[prop]) {
+          return false;
+        }
+      }
+      return true;
+    };
+  },
+  /**
+   *
+   * @param {Array|Function|Object|String} para 传入的元素
+   * @returns 根据传入的元素返回一个判断函数
+   */
+  judegFunByOnePara: function (para) {
+    let re = null;
+    if (typeof para == "object") {
+      if (Array.isArray(para)) {
+        para = this.matchesProperty(para);
+      }
+      re = this.matches(para);
+    } else if (typeof para == "function") {
+      re = para;
+    } else if (typeof para == "string") {
+      re = (it) => it[para];
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {*} para 传入的元素
+   * @returns 返回能转成的数字
+   */
+  paraToNum: function (para) {
+    if (isNaN(para)) {
+      return null;
+    } else {
+      return Number(para);
+    }
+  },
+  /**
+   *
+   * @param {*} para1 参数一
+   * @param {*} para2 参数二
+   * @returns 返回两个参数是否相同
+   */
+  equalsTwoPara: function (para1, para2) {
+    if (Number.isNaN(para1)) {
+      return Number.isNaN(para2);
+    } else {
+      return para1 === para2;
+    }
+  },
+  /**
+   *
+   * @param {*} para1 参数一
+   * @param {*} para2 参数二
+   * @returns 返回两个参数是否不相同
+   */
+  notEqualsTwoPara: function (para1, para2) {
+    if (Number.isNaN(para1)) {
+      return !Number.isNaN(para2);
+    } else {
+      return para2 !== para1;
+    }
+  },
+  /**
+   *
+   * @param {Array} arr1 原始数组
+   * @param {Array} arr2 原始数组
+   * @param {function} action 判断的规则
+   * @returns 返回符合规则的新数组
+   */
+  getArrFromTwoArrBySome: function (arr1, arr2, action, transfer = (it) => it) {
+    if (arr1.length == 0 || arr2.length == 0) {
+      return [];
+    }
+    return arr1.reduce((pre, current) => {
+      if (
+        arr2.some(
+          (item) =>
+            action(transfer(current), transfer(item)) &&
+            (transfer(current) !== undefined || transfer(it) !== undefined)
+        )
+      ) {
+        pre.push(current);
+      }
+      return pre;
+    }, []);
+  },
+  /**
+   *
+   * @param {Array} arr1 原始数组
+   * @param {Array} arr2 原始数组
+   * @param {function} action 判断的规则
+   * @returns 返回符合规则的新数组
+   */
+  getArrFromTwoArrByEvery: function (
+    arr1,
+    arr2,
+    action,
+    transfer = (it) => it
+  ) {
+    if (arr1.length == 0 || arr2.length == 0) {
+      return [];
+    }
+    return arr1.reduce((pre, current) => {
+      if (
+        arr2.every(
+          (item) =>
+            action(transfer(current), transfer(item)) &&
+            (transfer(current) !== undefined || transfer(it) !== undefined)
+        )
+      ) {
+        pre.push(current);
+      }
+      return pre;
+    }, []);
+  },
+
+  // lodash中原始方法
+  /**
+   *
+   * @param {Array} arr 原始数组
    * @param {*} size 分割的长度
-   * @returns {Array} 返回分割后的数组
+   * @returns {Array} 返回分割后的数组集合
    */
   chunk: function (arr, size = 1) {
     if (!arr) {
@@ -68,46 +215,44 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
-   * @param {Array} arr 传入的数组
-   * @returns {Array} 返回得到的数组
+   *
+   * @param {Array} arr 原始数组
+   * @returns {Array} 返回去除false值后的新数组
    */
   compact: function (arr) {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    let re = [];
-    for (let i = 0; i < tArr.length; i++) {
-      if (tArr[i]) {
-        re.push(tArr[i]);
-      }
-    }
-    return re;
+    return this.unfoldArrByJudge(
+      Array.from(arr),
+      (item) => item,
+      (pre, current) => pre.concat(current)
+    );
   },
   /**
-   * 
-   * @param {Array} arr 初始参数
+   *
+   * @param {Array} arr 原始数组
    * @param  {...Array} values 可选数组参数
    * @returns {Array} 拼接后的数组
    */
   concat: function (arr, ...values) {
-    arr = arr || [];
-    let re = [];
-    re = re.concat(arr);
-    if (values) {
-      for (let i = 0; i < values.length; i++) {
-        if (Array.isArray(values[i])) {
-          re = re.concat(values[i]);
-        } else {
-          re.push(values[i]);
-        }
-      }
+    if (arr === undefined) {
+      return [];
     }
-    return re;
+    if (values.length > 0) {
+      return this.unfoldArrByJudge(
+        values,
+        () => true,
+        (pre, current) => pre.concat(current),
+        (pre) => pre,
+        [].concat(arr)
+      );
+    } else {
+      return Array.of(arr);
+    }
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @param  {...Array} values 待查找的数组参数
    * @returns {Array} 返回新的不包含重叠元素的数组
@@ -116,46 +261,199 @@ var mrwangjusttodo = {
     if (!Array.isArray(arr)) {
       return [];
     }
-    if (!values) {
-      return Array.from(arr);
+    let re = Array.from(arr);
+    // 分两步
+    /* if (values.length > 0) {
+      values = this.unfoldArrByJudge(values, Array.isArray, (pre, current) =>
+        pre.concat(current)
+      );
+      return this.unfoldArrByJudge(
+        re,
+        (item) => !values.includes(item),
+        (pre, current) => pre.concat(current)
+      );
     } else {
-      let re = Array.from(arr);
-      for (let i = 0; i < values.length; i++) {
-        if (Array.isArray(values[i])) {
-          let temp = [];
-          for (let j = 0; j < re.length; j++) {
-            if (this.indexOf(values[i], re[j]) === -1) {
-              temp.push(re[j]);
-            }
-          }
-          re = temp;
-        }
-      }
+      return re;
+    } */
+    if (values.length > 0) {
+      return this.unfoldArrByJudge(
+        values,
+        Array.isArray,
+        (pre, current) =>
+          this.getArrFromTwoArrByEvery(pre, current, this.notEqualsTwoPara),
+        (pre) => pre,
+        re
+      );
+    } else {
       return re;
     }
   },
+
   /**
-   * 
-   * @param {Array} arr 元素参数
+   * @param {Array} arr 原始数组
+   * @param {...Array,fucntion} values 待查找的数组以及进行判断时需要的转换条件
+   * @returns {Array} 返回符合条件的新数组
+   */
+  differenceBy: function (arr, ...values) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    if (values.length === 0) {
+      return Array.from(arr);
+    } else if (values.length === 1) {
+      return this.difference(arr, ...values);
+    } else {
+      if (Array.isArray(values[values.length - 1])) {
+        return this.difference(arr, ...values);
+      } else {
+        let last = values.pop();
+        let action = this.judegFunByOnePara(last);
+        if (action === null) {
+          return [];
+        } else {
+          let tempValues = this.unfoldArrByJudge(
+            values,
+            Array.isArray,
+            (pre, current) => pre.concat(current.map(action))
+          );
+          return arr.reduce((pre, current) => {
+            if (!tempValues.includes(action(current))) {
+              pre = pre.concat(current);
+            }
+            return pre;
+          }, []);
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param  {...Array, Function} values 待查找的数组以及比较判断条件
+   */
+  differenceWith: function (arr, ...values) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    if (values.length === 0) {
+      return Array.from(arr);
+    } else if (values.length === 1) {
+      return this.difference(arr, ...values);
+    } else {
+      if (Array.isArray(values[values.length - 1])) {
+        return this.difference(arr, ...values);
+      } else {
+        let last = values.pop();
+        if (typeof last == "function") {
+          let tempValues = this.unfoldArrByJudge(
+            values,
+            Array.isArray,
+            (pre, current) => pre.concat(current)
+          );
+          return arr.reduce((pre, current) => {
+            if (!tempValues.some((item) => last(item, current))) {
+              pre = pre.concat(current);
+            }
+            return pre;
+          }, []);
+        } else {
+          return [];
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
    * @param {Number} n 需要从头去除的元素个数
-   * @returns {Array} 返回得到的新数组 
+   * @returns {Array} 返回得到的新数组
    */
   drop: function (arr, n = 1) {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    if (n < 0) {
-      n = 0;
-    }
-    if (n >= tArr.length) {
-      return [];
+    let re = Array.from(arr);
+    n = this.paraToNum(n);
+    if (n !== null) {
+      if (n <= 0) {
+        return re;
+      } else if (n >= re.length) {
+        return [];
+      } else {
+        return re.slice(n);
+      }
     } else {
-      return tArr.slice(n);
+      return re;
     }
   },
   /**
-   * 
+   *
+   * @param {Array} arr 原始数组
+   * @param {Number} n 需要从尾部去除的元素个数
+   * @returns 返回得到的新数组
+   */
+  dropRight: function (arr, n = 1) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    n = this.paraToNum(n);
+    if (n !== null) {
+      if (n <= 0) {
+        return re;
+      } else if (n >= re.length) {
+        return [];
+      } else {
+        return re.slice(0, re.length - n);
+      }
+    } else {
+      return re;
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {function} predicate 迭代判断条件
+   * @returns 返回新的数组
+   */
+  dropWith: function (arr, predicate) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    let func = this.judegFunByOnePara(predicate);
+    if (func) {
+      while (re[0] && func(re[0])) {
+        re.shift();
+      }
+      return re;
+    } else {
+      return re;
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {function} predicate 迭代判断条件
+   * @returns 返回新的数组
+   */
+  dropRightWith: function (arr, predicate) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    let func = this.judegFunByOnePara(predicate);
+    if (func) {
+      while (re[re.length - 1] && func(re[re.length - 1])) {
+        re.pop();
+      }
+      return re;
+    } else {
+      return re;
+    }
+  },
+  /**
+   *
    * @param {Array} arr 需要填充的数组
    * @param {*} value 待填充的数据
    * @param {Number} start 起始位置
@@ -166,12 +464,12 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    if (typeof (arr) === 'string') {
+    if (typeof arr === "string") {
       return arr;
     }
-    let tArr = Array.from(arr);
-    if (tArr.length == 0) {
-      return tArr;
+    let re = Array.from(arr);
+    if (re.length == 0) {
+      return re;
     }
     if (start < 0 || start === undefined) {
       start = 0;
@@ -179,29 +477,83 @@ var mrwangjusttodo = {
     if (end === undefined) {
       end = arr.length;
     }
-    if (value === undefined) {
-      return tArr;
+    if (value === undefined || end <= start) {
+      return re;
     } else {
       for (let i = start; i < end; i++) {
-        tArr[i] = value;
+        re[i] = value;
       }
-      return tArr;
+      return re;
     }
   },
   /**
-   * 
+   *
+   * @param {Array} arr 原始数组
+   * @param {Array|Function|Object|String} predicate 迭代的判断条件
+   * @param {fromIndex} 查找的初始位置
+   */
+  findIndex: function (arr, predicate, fromIndex = 0) {
+    if (!arr) {
+      return -1;
+    }
+    let r = Array.from(arr);
+    let func = this.judegFunByOnePara(predicate);
+    if (func) {
+      fromIndex = this.paraToNum(fromIndex);
+      if (fromIndex === null) {
+        fromIndex = 0;
+      }
+      for (let i = fromIndex; i < r.length; i++) {
+        if (func(r[i])) {
+          return i;
+        }
+      }
+      return -1;
+    } else {
+      return -1;
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {Array|Function|Object|String} predicate 迭代判断条件
+   * @param {fromIndex} fromIndex 查找的启示位置
+   */
+  findLastIndex: function (arr, predicate, fromIndex = arr.length - 1) {
+    if (!arr) {
+      return -1;
+    }
+    let r = Array.from(arr);
+    let func = this.judegFunByOnePara(predicate);
+    if (func) {
+      fromIndex = this.paraToNum(fromIndex);
+      if (fromIndex === null) {
+        fromIndex = r.length - 1;
+      }
+      for (let i = fromIndex; i >= 0; i--) {
+        if (func(r[i])) {
+          return i;
+        }
+      }
+      return -1;
+    } else {
+      return -1;
+    }
+  },
+  /**
+   *
    * @param {Array} arr 需要获取头部的数组
    * @returns {any} 返回获取的结果
    */
   head: function (arr) {
-    if (Array.isArray(arr) || typeof (arr) === 'string') {
+    if (Array.isArray(arr) || typeof arr === "string") {
       return arr[0];
     } else {
       return undefined;
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要展开的数组
    * @returns {Array} 返回展开后的新数组
    */
@@ -209,43 +561,97 @@ var mrwangjusttodo = {
     if (!arr) {
       return null;
     }
-    let tArr = Array.from(arr);
-    let re = [];
-    for (let i = 0; i < tArr.length; i++) {
-      if (Array.isArray(tArr[i])) {
-        re = re.concat(tArr[i]);
-      } else {
-        re.push(tArr[i]);
-      }
-    }
-    return re;
+    let re = Array.from(arr);
+    return this.unfoldArrByJudge(
+      re,
+      () => true,
+      (pre, current) => pre.concat(current)
+    );
   },
   /**
-   * 
+   *
+   * @param {Array} arr 原始数组
+   * @returns 返回展开所有元素的新数组
+   */
+  flattenDeep: function (arr) {
+    if (!arr) {
+      return null;
+    }
+    let re = Array.from(arr);
+    return this.unfoldArrByJudge(
+      re,
+      Array.isArray,
+      (pre, current) => pre.concat(this.flattenDeep(current)),
+      (pre, current) => pre.concat(current)
+    );
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {number} depth 展开的层数
+   */
+  flattenDepth: function (arr, depth = 1) {
+    if (!arr) {
+      return null;
+    }
+    depth = this.paraToNum(depth);
+    if (depth === null) {
+      depth = 1;
+    }
+    let re = Array.from(arr);
+    return this.unfoldArrByJudge(
+      re,
+      Array.isArray,
+      (pre, current) => {
+        return depth > 1
+          ? pre.concat(this.flattenDepth(current, depth - 1))
+          : pre.concat(current);
+      },
+      (pre, current) => pre.concat(current)
+    );
+  },
+  /**
+   *
+   * @param {Array} pairs 原始数组
+   * @returns 返回能组成的对象
+   */
+  fromPairs: function (pairs) {
+    if (Array.isArray(pairs)) {
+      let re = {};
+      pairs.forEach((item) => {
+        if (Array.isArray(item)) {
+          re[item[0]] = item[1];
+        }
+      });
+      return re;
+    } else {
+      return {};
+    }
+  },
+  /**
+   *
    * @param {Array} arr 需要查找的数组
    * @param {*} value 被查找的值
    * @param {*} fromIndex 查找的起始位置
-   * @returns {Number}  查找到的索引 
+   * @returns {Number}  查找到的索引
    */
   indexOf: function (arr, value, fromIndex = 0) {
-    if (!arr || Array.from(arr).length === 0 || value === undefined) {
+    if (!arr || value === undefined) {
       return -1;
     }
+    fromIndex = this.paraToNum(fromIndex);
+    if (fromIndex === null) {
+      fromIndex = 0;
+    }
     for (let i = fromIndex; i < arr.length; i++) {
-      if (Number.isNaN(value)) {
-        if (Number.isNaN(arr[i])) {
-          return i;
-        }
-      } else {
-        if (arr[i] === value) {
-          return i;
-        }
+      if (this.equalsTwoPara(arr[i], value)) {
+        return i;
       }
     }
     return -1;
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要去除末尾的数组
    * @returns {Array} 返回新的数组
    */
@@ -257,52 +663,110 @@ var mrwangjusttodo = {
     return tArr.slice(0, tArr.length - 1);
   },
   /**
-   * 
+   *
    * @param  {...Array} arr 需要查找交集的数组
-   * @returns {Array} 返回只包含交集的新数组 
+   * @returns {Array} 返回只包含交集的新数组
    */
   intersection: function (...arr) {
-    if (!arr || arr.length == 0) {
+    if (arr.length == 0) {
       return [];
     } else {
-      let re;
       if (Array.isArray(arr[0])) {
-        re = Array.from(arr[0]);
+        let re = arr.shift();
+        return this.unfoldArrByJudge(
+          arr,
+          Array.isArray,
+          (pre, current) =>
+            this.getArrFromTwoArrBySome(pre, current, this.equalsTwoPara),
+          () => [],
+          re
+        );
       } else {
         return [];
       }
-      let len = 1;
-      while (len < arr.length && re.length > 0) {
-        if (!Array.isArray(arr[len])) {
-          return [];
-        }
-        let next = [];
-        for (let i = 0; i < arr[len].length; i++) {
-          if (this.indexOf(re, arr[len][i]) != -1) {
-            next.push(arr[len][i]);
-          }
-        }
-        re = next;
-        len++;
-      }
-      return re;
     }
   },
   /**
-   * 
+   *
+   * @param  {...Array|Object|Function|String} arr 需要查找交集的数组,以及查找的条件
+   * @returns 返回符合要求的交集新数组
+   */
+  intersectionBy: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else {
+      if (arr.length === 1) {
+        return this.intersection(...arr);
+      } else if (arr.length >= 2) {
+        if (Array.isArray(arr[arr.length - 1])) {
+          return this.intersection(...arr);
+        } else {
+          let last = arr.pop();
+          let func = this.judegFunByOnePara(last);
+          if (func === null) {
+            return [];
+          } else {
+            return this.unfoldArrByJudge(
+              arr,
+              Array.isArray,
+              (pre, current) => {
+                return this.getArrFromTwoArrBySome(
+                  pre,
+                  current,
+                  this.equalsTwoPara,
+                  func
+                );
+              },
+              () => [],
+              arr[0]
+            );
+          }
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param  {...Array|Object|Function|String} arr 需要查找交集的数组,以及查找的条件,条件接受两个参数
+   * @returns 返回符合要求的交集新数组
+   */
+  intersectionWith: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length === 1) {
+      return this.intersection(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        return this.intersection(...arr);
+      } else if (typeof arr[arr.length - 1] != "function") {
+        return [];
+      } else {
+        let func = arr.pop();
+        return this.unfoldArrByJudge(
+          arr,
+          Array.isArray,
+          (pre, current) => this.getArrFromTwoArrBySome(pre, current, func),
+          () => [],
+          arr[0]
+        );
+      }
+    }
+  },
+  /**
+   *
    * @param {Array} arr 原始数组
    * @param {*} separator 待拼接的字符
    * @returns {String} 返回使用字符拼接的字符串
    */
-  join: function (arr, separator = ',') {
+  join: function (arr, separator = ",") {
     if (!arr) {
-      return '';
+      return "";
     }
     let tArr = Array.from(arr);
     return tArr.join(separator);
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @returns {*} 返回原始数组的最后一项
    */
@@ -314,7 +778,7 @@ var mrwangjusttodo = {
     return tArr[tArr.length - 1];
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要查找的数组
    * @param {*} value 被查找的元素
    * @param {*} fromIndex 逆序查找开始的索引
@@ -342,20 +806,14 @@ var mrwangjusttodo = {
       }
     }
     for (let i = fromIndex; i >= 0; i--) {
-      if (Number.isNaN(value)) {
-        if (Number.isNaN(arr[i])) {
-          return i;
-        }
-      } else {
-        if (arr[i] === value) {
-          return i;
-        }
+      if (this.equalsTwoPara(arr[i], value)) {
+        return i;
       }
     }
     return -1;
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @param {*} n 需要的索引
    * @returns {*} 返回当前索引的元素
@@ -371,53 +829,97 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
-   * @param {Array} arr 需要删除元素的数组
+   *
+   * @param {Array} arr 需要删除元素的数组,会修改原始数组
    * @param  {...any} values 待删除的元素
    * @returns {Array} 删除元素后的数组
    */
   pull: function (arr, ...values) {
-    if (!Array.isArray(arr) || !values) {
+    if (!Array.isArray(arr) || values.length == 0) {
       return arr;
     } else {
-      for (let i = 0; i < values.length; i++) {
-        let index = this.indexOf(arr, values[i]);
-        while (index != -1) {
-          arr.splice(index, 1);
-          index = this.indexOf(arr, values[i]);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (values.includes(arr[i])) {
+          arr.splice(i, 1);
         }
       }
       return arr;
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要删除元素的数组
-   * @param {*} value 待删除元素的数组
+   * @param {Array} values 待删除元素的数组
    * @returns {Array} 返回删除元素后的数组
    */
-  pullAll: function (arr, value) {
-    if (!Array.isArray(arr) || !values) {
+  pullAll: function (arr, values) {
+    if (!Array.isArray(arr) || values.length === 0) {
       return arr;
     } else {
-      return this.pull(arr, ...value);
+      return this.pull(arr, ...values);
     }
   },
   /**
-   * 
+   *
+   * @param {Array} arr 原始数组
+   * @param {Array} values 需要移除的数组
+   * @param {Array|Object|Function|String} iteratee 迭代调用每个元素
+   * @returns 返回删除元素后的数组
+   */
+  pullAllBy: function (arr, values, iteratee = (it) => it) {
+    if (!Array.isArray(arr) || values.length === 0) {
+      return arr;
+    } else {
+      let func = this.judegFunByOnePara(iteratee);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (
+          values.some((item) => this.equalsTwoPara(func(item), func(arr[i])))
+        ) {
+          arr.splice(i, 1);
+        }
+      }
+      return arr;
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {Array} values 需要移除的数组
+   * @param {Function} comparator 比较函数
+   * @returns 返回删除元素后的数组
+   */
+  pullAllWith: function (arr, values, comparator = this.equalsTwoPara) {
+    if (arr.length == 0 || values.length == 0) {
+      return arr;
+    } else {
+      let func = this.judegFunByOnePara(comparator);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (values.some((item) => func(item, arr[i]))) {
+          arr.splice(i, 1);
+        }
+      }
+      return arr;
+    }
+  },
+  /**
+   *
    * @param {Array} arr 原始数组
    * @param  {...any} indexes 待删除的索引数组
    * @returns {Array} 返回删除的索引元素组成的数组
    */
   pullAt: function (arr, ...indexes) {
-    if (!Array.isArray(arr) || !indexes) {
+    if (!Array.isArray(arr) || indexes.length == 0) {
       return [];
     } else {
       let re = [];
-      indexes = this.unfoldArr(indexes).sort((a, b) => a - b);
-      for (let i = indexes.length - 1; i >= 0; i--) {
+      indexes = this.unfoldArrByJudge(
+        indexes,
+        () => true,
+        (pre, current) => pre.concat(current)
+      );
+      for (let i = 0; i < arr.length; i++) {
         if (arr[indexes[i]]) {
-          re.unshift(arr[indexes[i]]);
+          re.push(arr[indexes[i]]);
           arr.splice(indexes[i], 1);
         }
       }
@@ -425,28 +927,28 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @param {*} fun 判断函数
    * @returns {Array} 返回符合要求的新数组
    */
-  remove: function (arr, fun) {
+  remove: function (arr, predicate = (it) => it) {
     if (!Array.isArray(arr)) {
       return [];
-    }
-    if (typeof (fun) != 'function') {
-      return arr;
-    }
-    let re = [];
-    for (let i = 0; i < arr.length; i++) {
-      if (fun(arr[i])) {
-        re.push(arr[i]);
+    } else {
+      predicate = this.judegFunByOnePara(predicate);
+      let re = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (predicate(arr[i], i, arr)) {
+          re.push(arr[i]);
+          arr.splice(i, 1);
+        }
       }
+      return re;
     }
-    return re;
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @returns {Array} 逆序返回原始数组
    */
@@ -459,44 +961,72 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
-   * @param {*} start 起始索引
-   * @param {*} end 终止索引
+   * @param {Number} start 起始索引
+   * @param {Number} end 终止索引
    * @returns {Array} 返回切下的数组
    */
-  slice: function (arr, start, end) {
+  slice: function (arr, start = 0, end = arr.length) {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    if (start === undefined) {
-      start = 0;
-    }
-    if (end === undefined) {
-      end = tArr.length;
-    }
-    return tArr.slice(start, end);
+    let re = Array.from(arr);
+    return re.slice(start, end);
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始数组
    * @param {*} value 查找的元素
    * @returns {Number} 返回应该插入的索引
    */
   sortedIndex: function (arr, value) {
-    if (!arr) {
+    if (!Array.isArray(arr)) {
       return 0;
     }
-    let tArr = Array.from(arr);
+    let re = Array.from(arr);
     if (value === undefined) {
-      return tArr.length;
+      return re.length;
     } else {
-      return this.binarySearch(tArr, value);
+      let index = this.binarySearch(re, value);
+      if (re[index] == value) {
+        while (re[index] == value) {
+          index--;
+        }
+        return index + 1;
+      } else {
+        return index;
+      }
     }
   },
   /**
-   * 
+   *
+   * @param {Array} arr 原始数组
+   * @param {*} value 判断值
+   * @param {Arrya|Function|Object|String} iteratee 迭代函数，调用每一个元素
+   */
+  sortedIndexBy: function (arr, value, iteratee = (it) => it) {
+    if (!Array.isArray(arr)) {
+      return 0;
+    }
+    let re = Array.from(arr);
+    if (value === undefined) {
+      return re.length;
+    } else {
+      iteratee = this.judegFunByOnePara(iteratee);
+      let index = this.binarySearch(re, value, iteratee);
+      if (iteratee(re[index]) == iteratee(value)) {
+        while (index >= 0 && iteratee(re[index]) == iteratee(value)) {
+          index--;
+        }
+        return index + 1;
+      } else {
+        return index;
+      }
+    }
+  },
+  /**
+   *
    * @param {Array} arr 需要查询的数组
    * @param {*} value 查找的值
    * @returns {Number} 返回索引
@@ -517,7 +1047,7 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要的数组
    * @returns {Array} 返回去除了首位的数组
    */
@@ -529,7 +1059,7 @@ var mrwangjusttodo = {
     return tArr.slice(1);
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要处理的数组
    * @param {*} n 从头开始保留的元素个数
    * @returns {Array} 返回包含保留元素的新数组
@@ -545,7 +1075,7 @@ var mrwangjusttodo = {
     return tArr.slice(0, n);
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要处理的数组
    * @param {*} n 从右开始保留的元素个数
    * @returns {Array} 返回保留元素的新数组
@@ -564,9 +1094,9 @@ var mrwangjusttodo = {
     return tArr.slice(tArr.length - n);
   },
   /**
-   * 
+   *
    * @param  {...Array} arr 需要判断的数组集合
-   * @returns {Array} 返回一个包含所有数组并集的新数组 
+   * @returns {Array} 返回一个包含所有数组并集的新数组
    */
   union: function (...arr) {
     if (!arr) {
@@ -590,7 +1120,7 @@ var mrwangjusttodo = {
     }
   },
   /**
-   * 
+   *
    * @param {Array} arr 需要处理的数组
    * @returns {Array} 返回一个不包含相同元素的新数组
    */
@@ -608,7 +1138,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param  {...Array} arr 传入的数组集合
    * @returns {Array} 返回新的数组
    */
@@ -655,7 +1185,7 @@ var mrwangjusttodo = {
     let index = 0;
     while (index < maxIndex) {
       let temp = Array(maxLen);
-      let iTemp = 0
+      let iTemp = 0;
       for (let i = 0; i < arr.length; i++) {
         if (Array.isArray(arr[i])) {
           temp[iTemp++] = arr[i][index];
@@ -667,7 +1197,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param {Array} arr 原始需要判断数组
    * @param  {...any} values 判断数组中是否包含对应的参数
    * @returns {Array} 返回新的不包含任何指定参数的数组
@@ -686,7 +1216,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param  {...any} values 需要处理的参数
    * @returns {Array} 返回一个数组包含所有不重复出现的单个数组元素
    */
@@ -710,7 +1240,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param {Array} props 作为对象属性名称的数组
    * @param {Array} values 作为对象属性值的数组
    * @returns {Object} 返回包含指定属性的对象
@@ -737,7 +1267,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param {Array|Object|String} collection 需要查找的元素
    * @param {*} value 查找的值
    * @param {*} fromIndex 开始查找的索引
@@ -749,9 +1279,9 @@ var mrwangjusttodo = {
     }
     if (Array.isArray(collection)) {
       return this.indexOf(collection, value, fromIndex);
-    } else if (typeof (collection) === 'string') {
+    } else if (typeof collection === "string") {
       return collection.includes(value, fromIndex);
-    } else if (typeof (collection) === 'object') {
+    } else if (typeof collection === "object") {
       for (let attr in collection) {
         if (Number.isNaN(value)) {
           if (Number.isNaN(collection[attr])) {
@@ -767,7 +1297,7 @@ var mrwangjusttodo = {
     return false;
   },
   /**
-   * 
+   *
    * @param {Object|Array} collection 可迭代数组/对象
    * @returns {*} 返回可迭代数组/对象中的随机元素
    */
@@ -778,14 +1308,14 @@ var mrwangjusttodo = {
     let tArr = Array.from(collection);
     if (tArr.length > 0) {
       return tArr[Math.floor(Math.random() * tArr.length)];
-    } else if (typeof (collection) === 'object') {
+    } else if (typeof collection === "object") {
       tArr = Object.values(collection);
       return tArr[Math.floor(Math.random() * tArr.length)];
     }
     return undefined;
   },
   /**
-   * 
+   *
    * @param {Object|Array} collection 可迭代的数组/对象
    * @param {*} n 返回的数组最大长度
    * @returns {Array} 返回获取的随机索引元素组成的数组
@@ -803,7 +1333,7 @@ var mrwangjusttodo = {
         re.push(tArr[index]);
         tArr.splice(index, 1);
       }
-    } else if (typeof (collection) === 'object') {
+    } else if (typeof collection === "object") {
       tArr = Object.values(collection);
       while (tArr.length > 0 && len++ < n) {
         let index = Math.floor(Math.random() * tArr.length);
@@ -814,7 +1344,7 @@ var mrwangjusttodo = {
     return re;
   },
   /**
-   * 
+   *
    * @param {Object|Array} collection 传入的可迭代数组/对象
    * @returns {Array} 返回一个随机排序的数组
    */
@@ -826,7 +1356,7 @@ var mrwangjusttodo = {
     if (tArr.length > 0) {
       tArr.sort(() => Math.random() > 0.5);
       return tArr;
-    } else if (typeof (collection) === 'object') {
+    } else if (typeof collection === "object") {
       tArr = Object.values(collection);
       tArr.sort(() => Math.random() > 0.5);
       return tArr;
@@ -834,7 +1364,7 @@ var mrwangjusttodo = {
     return [];
   },
   /**
-   * 
+   *
    * @param {Object|Array|String} collection 传入的可迭代数组/对象/字符串
    * @returns {Number} 返回对应的长度
    */
@@ -845,14 +1375,14 @@ var mrwangjusttodo = {
     let tArr = Array.from(collection);
     if (tArr.length > 0) {
       return tArr.length;
-    } else if (typeof (collection) === 'object') {
+    } else if (typeof collection === "object") {
       tArr = Object.values(collection);
       return tArr.length;
     }
     return 0;
   },
   /**
-   * 
+   *
    * @param {*} value 传入的参数一
    * @param {*} other 传入的参数二
    * @returns {Boolean} 返回两个参数是否相同的布尔值
@@ -868,5 +1398,5 @@ var mrwangjusttodo = {
       return other != other;
     }
     return value === other;
-  }
-}
+  },
+};
