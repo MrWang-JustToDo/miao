@@ -3,9 +3,9 @@ var mrwangjusttodo = {
   /**
    *
    * @param {Array} arr 待展开的数组
-   * @param {function} test 需要满足的条件
-   * @param {function} action1 判断成功后执行的操作
-   * @param {function} action2 判断失败后执行的操作
+   * @param {Function} test 需要满足的条件
+   * @param {Function} action1 判断成功后执行的操作
+   * @param {Function} action2 判断失败后执行的操作
    * @param {Array} init 展开数组开始时的初始值
    * @returns {Array} 返回展开后的新数组
    */
@@ -78,7 +78,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param {Array|Function|Object|String} para 传入的元素
-   * @returns 根据传入的元素返回一个判断函数
+   * @returns 根据传入的元素返回一个接受一个参数的判断函数
    */
   judegFunByOnePara: function (para) {
     let re = null;
@@ -136,22 +136,28 @@ var mrwangjusttodo = {
    *
    * @param {Array} arr1 原始数组
    * @param {Array} arr2 原始数组
-   * @param {function} action 判断的规则
+   * @param {Function} judgeFun 判断的规则
+   * @param {Function} transferFun 数组中元素转换的函数
+   * @param {Function} action 判断成功后数组与元素执行的操作
    * @returns 返回符合规则的新数组
    */
-  getArrFromTwoArrBySome: function (arr1, arr2, action, transfer = (it) => it) {
-    if (arr1.length == 0 || arr2.length == 0) {
-      return [];
-    }
+  getArrFromTwoArrBySome: function (
+    arr1,
+    arr2,
+    judgeFun = this.equalsTwoPara,
+    transferFun = (it) => it,
+    action = (arr, item) => arr.push(item)
+  ) {
     return arr1.reduce((pre, current) => {
       if (
         arr2.some(
           (item) =>
-            action(transfer(current), transfer(item)) &&
-            (transfer(current) !== undefined || transfer(it) !== undefined)
+            judgeFun(transferFun(current), transferFun(item)) &&
+            (transferFun(current) !== undefined ||
+              transferFun(it) !== undefined)
         )
       ) {
-        pre.push(current);
+        action(pre, item);
       }
       return pre;
     }, []);
@@ -160,27 +166,30 @@ var mrwangjusttodo = {
    *
    * @param {Array} arr1 原始数组
    * @param {Array} arr2 原始数组
-   * @param {function} action 判断的规则
+   * @param {Function} judgeFun 判断的规则
+   * @param {Function} transferFun 数组中元素转换的函数
+   * @param {Function} action 判断成功后数组与元素执行的操作
    * @returns 返回符合规则的新数组
    */
   getArrFromTwoArrByEvery: function (
     arr1,
     arr2,
-    action,
-    transfer = (it) => it
+    judgeFun = this.equalsTwoPara,
+    transferFun = (it) => it,
+    action = (arr, item) => arr.push(item)
   ) {
-    if (arr1.length == 0 || arr2.length == 0) {
-      return [];
-    }
+    console.log(arr1);
+    console.log(arr2);
     return arr1.reduce((pre, current) => {
       if (
         arr2.every(
           (item) =>
-            action(transfer(current), transfer(item)) &&
-            (transfer(current) !== undefined || transfer(it) !== undefined)
+            judgeFun(transferFun(current), transferFun(item)) &&
+            (transferFun(current) !== undefined ||
+              transferFun(it) !== undefined)
         )
       ) {
-        pre.push(current);
+        action(pre, item);
       }
       return pre;
     }, []);
@@ -892,10 +901,11 @@ var mrwangjusttodo = {
     if (arr.length == 0 || values.length == 0) {
       return arr;
     } else {
-      let func = this.judegFunByOnePara(comparator);
-      for (let i = arr.length - 1; i >= 0; i--) {
-        if (values.some((item) => func(item, arr[i]))) {
-          arr.splice(i, 1);
+      if (typeof comparator == "function") {
+        for (let i = arr.length - 1; i >= 0; i--) {
+          if (values.some((item) => comparator(item, arr[i]))) {
+            arr.splice(i, 1);
+          }
         }
       }
       return arr;
@@ -1032,31 +1042,143 @@ var mrwangjusttodo = {
    * @returns {Number} 返回索引
    */
   sortedIndexOf: function (arr, value) {
-    if (!arr) {
+    if (!Array.isArray(arr)) {
       return -1;
     }
-    let tArr = Array.from(arr);
+    let re = Array.from(arr);
     if (value === undefined) {
       return -1;
     }
-    let re = this.binarySearch(arr, value);
-    if (arr[re] === value) {
-      return re;
+    let index = this.binarySearch(re, value);
+    if (re[index] == value) {
+      while (re[index] == value) {
+        index--;
+      }
+      return index + 1;
     } else {
       return -1;
     }
   },
   /**
    *
-   * @param {Array} arr 需要的数组
-   * @returns {Array} 返回去除了首位的数组
+   * @param {Array} arr 元素数组
+   * @param {*} value 查找的元素
+   * @returns 尽可能大的返回元素的索引
+   */
+  sortedLastIndex: function (arr, value) {
+    if (!Array.isArray(arr)) {
+      return 0;
+    }
+    let re = Array.from(arr);
+    if (value == undefined) {
+      return re.length;
+    } else {
+      let index = this.binarySearch(re, value);
+      if (re[index] === value) {
+        while (re[index] === value) {
+          index++;
+        }
+        return index;
+      } else {
+        return index;
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {*} value 查找的元素
+   * @param {Array|Function|Object|String} iteratee 迭代函数
+   */
+  sortedLastIndexBy: function (arr, value, iteratee = (it) => it) {
+    if (!Array.isArray(arr)) {
+      return 0;
+    }
+    let re = Array.from(arr);
+    if (value == undefined) {
+      return re.length;
+    } else {
+      iteratee = this.judegFunByOnePara(iteratee);
+      let index = this.binarySearch(re, value, iteratee);
+      if (iteratee(re[index]) == iteratee(value)) {
+        while (index < re.length && iteratee(re[index]) == iteratee(value)) {
+          index++;
+        }
+        return index;
+      } else {
+        return index;
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 需要查询的数组
+   * @param {*} value 查找的值
+   * @returns {Number} 返回索引
+   */
+  sortedLastIndexOf: function (arr, value) {
+    if (!Array.isArray(arr)) {
+      return -1;
+    }
+    let re = Array.from(arr);
+    if (value === undefined) {
+      return -1;
+    }
+    let index = this.binarySearch(re, value);
+    if (re[index] === value) {
+      while (re[index] == value) {
+        index++;
+      }
+      return index - 1;
+    } else {
+      return -1;
+    }
+  },
+
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @returns 返回去重并排序的新数组
+   */
+  sortedUniq: function (arr) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    re.sort((o1, o2) => o1 - o2);
+    return this.uniq(re);
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {Function} iteratee 迭代判断元素
+   * @returns 返回排序并且去重后的新数组
+   */
+  sortedUniqBy: function (arr, iteratee = (it) => it) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    re.sort((o1, o2) => o1 - o2);
+    return re.reduce((pre, current) => {
+      let temp = pre.map(iteratee);
+      if (!temp.includes(iteratee(current))) {
+        pre.push(current);
+      }
+      return pre;
+    }, []);
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @returns {Array} 返回除原数组第一个元素以外的其他元素
    */
   tail: function (arr) {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    return tArr.slice(1);
+    let re = Array.from(arr);
+    return re.slice(1);
   },
   /**
    *
@@ -1068,11 +1190,12 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
+    n = this.paraToNum(n);
     if (n < 0) {
       n = 0;
     }
-    let tArr = Array.from(arr);
-    return tArr.slice(0, n);
+    let re = Array.from(arr);
+    return re.slice(0, n);
   },
   /**
    *
@@ -1084,14 +1207,15 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    if (tArr.length <= n) {
-      return tArr;
-    }
+    n = this.paraToNum(n);
     if (n < 0) {
       return [];
     }
-    return tArr.slice(tArr.length - n);
+    let re = Array.from(arr);
+    if (re.length <= n) {
+      return re;
+    }
+    return re.slice(re.length - n);
   },
   /**
    *
@@ -1099,43 +1223,166 @@ var mrwangjusttodo = {
    * @returns {Array} 返回一个包含所有数组并集的新数组
    */
   union: function (...arr) {
-    if (!arr) {
+    if (arr.length == 0) {
       return [];
+    }
+    let obj = {};
+    let re = arr.reduce((pre, current) => {
+      current.forEach((item) => {
+        if (item in obj) {
+          obj[item]++;
+        } else {
+          obj[item] = 1;
+          pre.push(item);
+        }
+      });
+      return pre;
+    }, []);
+    re.sort((key1, key2) => obj[key2] - obj[key1]);
+    return re;
+  },
+  /**
+   *
+   * @param  {...Array|Function} arr 原始数组,迭代判断函数
+   * @returns 返回不包含重复元素并排序的新数组
+   */
+  unionBy: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.union(...arr);
     } else {
-      let re = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i])) {
-          if (re.length == 0) {
-            re = Array.from(arr[i]);
-          } else {
-            for (let j = 0; j < arr[i].length; j++) {
-              if (!this.include(re, arr[i][j])) {
-                re.push(arr[i][j]);
+      if (Array.isArray(arr[arr.length - 1])) {
+        return this.union(...arr);
+      } else {
+        let last = arr.pop();
+        let func = this.judegFunByOnePara(last);
+        if (func) {
+          let obj = {};
+          let re = this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
+            current.forEach((item) => {
+              let temp = func(item);
+              if (temp in obj) {
+                obj[temp]++;
+              } else {
+                obj[temp] = 1;
+                pre.push(item);
               }
-            }
-          }
+            });
+            return pre;
+          });
+          re.sort((o1, o2) => (obj[func(o2)] = obj[func(o1)]));
+          return re;
+        } else {
+          return [];
         }
       }
-      return re;
     }
   },
   /**
    *
-   * @param {Array} arr 需要处理的数组
-   * @returns {Array} 返回一个不包含相同元素的新数组
+   * @param  {...Array|comparator} arr 原始数组,比较函数
+   * @returns 返回一个新的不包含重复元素的数组
+   */
+  unionWith: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.union(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        return this.union(...arr);
+      } else {
+        let last = arr.pop();
+        if (typeof last == "function") {
+          return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
+            current.forEach((item) => {
+              if (!pre.some((it) => last(it, item))) {
+                pre.push(item);
+              }
+            });
+            return pre;
+          });
+        } else {
+          return [];
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @returns {Array} 返回去重后的新数组
    */
   uniq: function (arr) {
     if (!arr) {
       return [];
     }
-    let tArr = Array.from(arr);
-    let re = [];
-    for (let i = 0; i < tArr.length; i++) {
-      if (!this.include(re, tArr[i])) {
-        re.push(tArr[i]);
+    let re = Array.from(arr);
+    return re.reduce((pre, current) => {
+      if (!pre.includes(current)) {
+        pre.push(current);
+      }
+      return pre;
+    }, []);
+  },
+  /**
+   *
+   * @param {...Array|Function|Object|String} arr 原始数组,迭代函数
+   * @returns 返回一个通过迭代比较后的新数组
+   */
+  uniqBy: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.uniq(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        let re = arr.reduce((pre, current) => pre.concat(current), []);
+        return this.uniq(re);
+      } else {
+        let last = arr.pop();
+        let func = this.judegFunByOnePara(last);
+        let re = arr.reduce((pre, current) => pre.concat(current), []);
+        return re.reduce((pre, current) => {
+          if (
+            !pre.some((item) => this.equalsTwoPara(func(item), func(current)))
+          ) {
+            pre.push(current);
+          }
+          return pre;
+        }, []);
       }
     }
-    return re;
+  },
+  /**
+   *
+   * @param  {...any} arr 原始数组,比较函数comparator
+   */
+  uniqWith: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.uniq(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        let re = arr.reduce((pre, current) => pre.concat(current), []);
+        return this.uniq(re);
+      } else {
+        let last = arr.pop();
+        if (typeof last == "function") {
+          let re = arr.reduce((pre, current) => pre.concat(current), []);
+          return re.reduce((pre, current) => {
+            if (!pre.some((item) => last(item, current))) {
+              pre.push(current);
+            }
+            return pre;
+          }, []);
+        } else {
+          return [];
+        }
+      }
+    }
   },
   /**
    *
