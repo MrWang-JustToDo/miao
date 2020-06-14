@@ -1217,6 +1217,49 @@ var mrwangjusttodo = {
   },
   /**
    *
+   * @param {Array} arr 原始数组
+   * @param {Array|Function|Object|String} predicate 迭代判断函数
+   */
+  takeRightWhile: function (arr, predicate = (it) => it) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    re.reverse();
+    predicate = this.judegFunByOnePara(predicate);
+    let flag = true;
+    return re.reduce((pre, current, index, re) => {
+      if (predicate(current, index, re) && flag) {
+        pre.push(current);
+      } else {
+        flag = false;
+      }
+      return pre;
+    }, []);
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {Array|Function|Object|Strin} predicate 迭代函数
+   */
+  takeWhile: function (arr, predicate = (it) => it) {
+    if (!arr) {
+      return [];
+    }
+    let re = Array.from(arr);
+    predicate = this.judegFunByOnePara(predicate);
+    let flag = true;
+    return re.reduce((pre, current, index, re) => {
+      if (predicate(current, index, re) && flag) {
+        pre.push(current);
+      } else {
+        flag = false;
+      }
+      return pre;
+    }, []);
+  },
+  /**
+   *
    * @param  {...Array} arr 需要判断的数组集合
    * @returns {Array} 返回一个包含所有数组并集的新数组
    */
