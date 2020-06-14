@@ -157,7 +157,7 @@ var mrwangjusttodo = {
               transferFun(it) !== undefined)
         )
       ) {
-        action(pre, item);
+        action(pre, current);
       }
       return pre;
     }, []);
@@ -178,8 +178,6 @@ var mrwangjusttodo = {
     transferFun = (it) => it,
     action = (arr, item) => arr.push(item)
   ) {
-    console.log(arr1);
-    console.log(arr2);
     return arr1.reduce((pre, current) => {
       if (
         arr2.every(
@@ -189,7 +187,7 @@ var mrwangjusttodo = {
               transferFun(it) !== undefined)
         )
       ) {
-        action(pre, item);
+        action(pre, current);
       }
       return pre;
     }, []);
