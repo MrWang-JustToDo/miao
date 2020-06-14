@@ -423,7 +423,7 @@ var mrwangjusttodo = {
    * @param {function} predicate 迭代判断条件
    * @returns 返回新的数组
    */
-  dropWith: function (arr, predicate) {
+  dropWhile: function (arr, predicate) {
     if (!arr) {
       return [];
     }
@@ -444,7 +444,7 @@ var mrwangjusttodo = {
    * @param {function} predicate 迭代判断条件
    * @returns 返回新的数组
    */
-  dropRightWith: function (arr, predicate) {
+  dropRightWhile: function (arr, predicate) {
     if (!arr) {
       return [];
     }
