@@ -1225,17 +1225,17 @@ var mrwangjusttodo = {
       return [];
     }
     let re = Array.from(arr);
-    re.reverse();
     predicate = this.judegFunByOnePara(predicate);
     let flag = true;
-    return re.reduce((pre, current, index, re) => {
-      if (predicate(current, index, re) && flag) {
-        pre.push(current);
+    let result = [];
+    for (let i = re.length - 1; i >= 0; i--) {
+      if (predicate(re[i], i, re)) {
+        result.push(re[i]);
       } else {
-        flag = false;
+        break;
       }
-      return pre;
-    }, []);
+    }
+    return result;
   },
   /**
    *
@@ -1399,6 +1399,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param  {...any} arr 原始数组,比较函数comparator
+   * @returns 返回一个通过比较后的新数组
    */
   uniqWith: function (...arr) {
     if (arr.length == 0) {
@@ -1422,6 +1423,123 @@ var mrwangjusttodo = {
         } else {
           return [];
         }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @returns 返回拆分元素后的新数组
+   */
+  unzip: function (arr) {
+    return this.unzipWith(arr);
+  },
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {Function} iteratee 组合重组的值
+   * @returns 返回值重组后的新对象
+   */
+  unzipWith: function (arr, iteratee = (...it) => it) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    let re = [];
+    let maxLen = 0;
+    let maxIndex = 0;
+    arr.forEach((item) => {
+      if (Array.isArray(item)) {
+        maxLen++;
+        maxIndex = Math.max(maxIndex, item.length);
+      }
+    });
+    let index = 0;
+    while (index < maxIndex) {
+      let temp = [];
+      for (let i = 0; i < arr.length; i++) {
+        if (Array.isArray(arr[i])) {
+          temp.push(arr[i][index]);
+        }
+      }
+      re.push(iteratee(...temp));
+      index++;
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array} arr 原始需要判断数组
+   * @param  {...any} values 判断数组中是否包含对应的参数
+   * @returns {Array} 返回新的不包含任何指定参数的数组
+   */
+  without: function (arr, ...values) {
+    if (!Array.isArray(arr)) {
+      return [];
+    }
+    let re = Array.from(arr);
+    let result = [];
+    re.forEach((item) => {
+      if (!values.includes(item)) {
+        result.push(item);
+      }
+    });
+    return result;
+  },
+  /**
+   *
+   * @param  {...any} values 需要处理的参数
+   * @returns {Array} 返回一个数组包含所有不重复出现的单个数组元素
+   */
+  xor: function (...values) {
+    if (values.length == 0) {
+      return [];
+    }
+    let temp = {};
+    return this.unfoldArrByJudge(values, Array.isArray, (pre, current) => {
+      current.forEach((item) => {
+        if (!temp[item]) {
+          let index = this.indexOf(pre, item);
+          if (!temp[item] && index == -1) {
+            temp[item] = 1;
+            pre.push(item);
+          } else {
+            pre.splice(index, 1);
+          }
+        }
+      });
+      return pre;
+    });
+  },
+  /**
+   *
+   * @param {...any|Array|Function|Object|String} arr 原始数组,迭代判断的函数
+   * @returns 返回过滤数值后的新数组
+   */
+  xorBy: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.xor(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        return this.xor(...arr);
+      } else {
+        let last = arr.pop();
+        let func = this.judegFunByOnePara(last);
+        let temp = {};
+        return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
+          current.forEach((item) => {
+            let preTemp = pre.map(func);
+            let index = this.indexOf(preTemp, func(item));
+            if (!temp[func(item)] && index == -1) {
+              temp[func(item)] = 1;
+              pre.push(item);
+            } else {
+              pre.splice(index, 1);
+            }
+          });
+          return pre;
+        });
       }
     }
   },
@@ -1457,76 +1575,7 @@ var mrwangjusttodo = {
     }
     return re;
   },
-  unzip: function (arr) {
-    if (!arr || !Array.isArray(arr)) {
-      return [];
-    }
-    let re = [];
-    let maxLen = 0;
-    let maxIndex = 0;
-    for (let i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i])) {
-        maxLen++;
-        maxIndex = maxIndex >= arr[i].length ? maxIndex : arr[i].length;
-      }
-    }
-    let index = 0;
-    while (index < maxIndex) {
-      let temp = Array(maxLen);
-      let iTemp = 0;
-      for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i])) {
-          temp[iTemp++] = arr[i][index];
-        }
-      }
-      re.push(temp);
-      index++;
-    }
-    return re;
-  },
-  /**
-   *
-   * @param {Array} arr 原始需要判断数组
-   * @param  {...any} values 判断数组中是否包含对应的参数
-   * @returns {Array} 返回新的不包含任何指定参数的数组
-   */
-  without: function (arr, ...values) {
-    if (!Array.isArray(arr)) {
-      return [];
-    }
-    let tArr = Array.from(arr);
-    let re = [];
-    for (let i = 0; i < tArr.length; i++) {
-      if (this.indexOf(values, tArr[i]) === -1) {
-        re.push(tArr[i]);
-      }
-    }
-    return re;
-  },
-  /**
-   *
-   * @param  {...any} values 需要处理的参数
-   * @returns {Array} 返回一个数组包含所有不重复出现的单个数组元素
-   */
-  xor: function (...values) {
-    if (!values) {
-      return [];
-    }
-    let re = [];
-    for (let i = 0; i < values.length; i++) {
-      if (Array.isArray(values[i])) {
-        for (let j = 0; j < values[i].length; j++) {
-          let index = this.indexOf(re, values[i][j]);
-          if (index === -1) {
-            re.push(values[i][j]);
-          } else {
-            re.splice(index, 1);
-          }
-        }
-      }
-    }
-    return re;
-  },
+
   /**
    *
    * @param {Array} props 作为对象属性名称的数组
