@@ -78,7 +78,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param {Array|Function|Object|String} para 传入的元素
-   * @returns 根据传入的元素返回一个接受一个参数的判断函数
+   * @returns 根据传入的元素判断函数
    */
   judegFunByOnePara: function (para) {
     let re = null;
@@ -193,7 +193,30 @@ var mrwangjusttodo = {
     }, []);
   },
 
+  /**
+   *
+   * @param {Array} arr 原始数组
+   * @param {any} target 目标元素
+   * @param {Function} judge 接两个参数的判断函数
+   * @param {Function} transfer 接一个参数的转换函数
+   */
+  myIndexOf: function (
+    arr,
+    target,
+    judge = this.equalsTwoPara,
+    transfer = (it) => it
+  ) {
+    for (let i = 0; i < arr.length; i++) {
+      if (judge(transfer(arr[i]), transfer(target))) {
+        return i;
+      }
+    }
+    return -1;
+  },
+
   // lodash中原始方法
+
+  // Array
   /**
    *
    * @param {Array} arr 原始数组
@@ -427,15 +450,15 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    let re = Array.from(arr);
-    let func = this.judegFunByOnePara(predicate);
-    if (func) {
-      while (re[0] && func(re[0])) {
-        re.shift();
+    predicate = this.judegFunByOnePara(predicate);
+    if (predicate) {
+      for (let i = 0; i < arr.length; i++) {
+        if (!predicate(arr[i], i, arr)) {
+          return arr.splice(i);
+        }
       }
-      return re;
     } else {
-      return re;
+      return arr;
     }
   },
   /**
@@ -448,15 +471,15 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    let re = Array.from(arr);
-    let func = this.judegFunByOnePara(predicate);
-    if (func) {
-      while (re[re.length - 1] && func(re[re.length - 1])) {
-        re.pop();
+    predicatethis.judegFunByOnePara(predicate);
+    if (predicate) {
+      for (let i = 0; i < arr.length; i++) {
+        if (!predicate(arr[i], i, arr)) {
+          return arr.splice(0, i);
+        }
       }
-      return re;
     } else {
-      return re;
+      return arr;
     }
   },
   /**
@@ -504,14 +527,14 @@ var mrwangjusttodo = {
       return -1;
     }
     let r = Array.from(arr);
-    let func = this.judegFunByOnePara(predicate);
-    if (func) {
+    predicate = this.judegFunByOnePara(predicate);
+    if (predicate) {
       fromIndex = this.paraToNum(fromIndex);
       if (fromIndex === null) {
         fromIndex = 0;
       }
       for (let i = fromIndex; i < r.length; i++) {
-        if (func(r[i])) {
+        if (predicate(r[i])) {
           return i;
         }
       }
@@ -531,14 +554,14 @@ var mrwangjusttodo = {
       return -1;
     }
     let r = Array.from(arr);
-    let func = this.judegFunByOnePara(predicate);
-    if (func) {
+    predicate = this.judegFunByOnePara(predicate);
+    if (predicate) {
       fromIndex = this.paraToNum(fromIndex);
       if (fromIndex === null) {
         fromIndex = r.length - 1;
       }
       for (let i = fromIndex; i >= 0; i--) {
-        if (func(r[i])) {
+        if (predicate(r[i])) {
           return i;
         }
       }
@@ -709,8 +732,8 @@ var mrwangjusttodo = {
           return this.intersection(...arr);
         } else {
           let last = arr.pop();
-          let func = this.judegFunByOnePara(last);
-          if (func === null) {
+          let transfer = this.judegFunByOnePara(last);
+          if (transfer === null) {
             return [];
           } else {
             return this.unfoldArrByJudge(
@@ -721,7 +744,7 @@ var mrwangjusttodo = {
                   pre,
                   current,
                   this.equalsTwoPara,
-                  func
+                  transfer
                 );
               },
               () => [],
@@ -748,11 +771,11 @@ var mrwangjusttodo = {
       } else if (typeof arr[arr.length - 1] != "function") {
         return [];
       } else {
-        let func = arr.pop();
+        let judgeFun = arr.pop();
         return this.unfoldArrByJudge(
           arr,
           Array.isArray,
-          (pre, current) => this.getArrFromTwoArrBySome(pre, current, func),
+          (pre, current) => this.getArrFromTwoArrBySome(pre, current, judgeFun),
           () => [],
           arr[0]
         );
@@ -877,10 +900,12 @@ var mrwangjusttodo = {
     if (!Array.isArray(arr) || values.length === 0) {
       return arr;
     } else {
-      let func = this.judegFunByOnePara(iteratee);
+      let transferFun = this.judegFunByOnePara(iteratee);
       for (let i = arr.length - 1; i >= 0; i--) {
         if (
-          values.some((item) => this.equalsTwoPara(func(item), func(arr[i])))
+          values.some((item) =>
+            this.equalsTwoPara(transferFun(item), transferFun(arr[i]))
+          )
         ) {
           arr.splice(i, 1);
         }
@@ -1296,12 +1321,12 @@ var mrwangjusttodo = {
         return this.union(...arr);
       } else {
         let last = arr.pop();
-        let func = this.judegFunByOnePara(last);
-        if (func) {
+        let transferFun = this.judegFunByOnePara(last);
+        if (transferFun) {
           let obj = {};
           let re = this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
             current.forEach((item) => {
-              let temp = func(item);
+              let temp = transferFun(item);
               if (temp in obj) {
                 obj[temp]++;
               } else {
@@ -1311,7 +1336,7 @@ var mrwangjusttodo = {
             });
             return pre;
           });
-          re.sort((o1, o2) => (obj[func(o2)] = obj[func(o1)]));
+          re.sort((o1, o2) => (obj[transferFun(o2)] = obj[transferFun(o1)]));
           return re;
         } else {
           return [];
@@ -1382,11 +1407,13 @@ var mrwangjusttodo = {
         return this.uniq(re);
       } else {
         let last = arr.pop();
-        let func = this.judegFunByOnePara(last);
+        let transferFun = this.judegFunByOnePara(last);
         let re = arr.reduce((pre, current) => pre.concat(current), []);
         return re.reduce((pre, current) => {
           if (
-            !pre.some((item) => this.equalsTwoPara(func(item), func(current)))
+            !pre.some((item) =>
+              this.equalsTwoPara(transferFun(item), transferFun(current))
+            )
           ) {
             pre.push(current);
           }
@@ -1442,28 +1469,27 @@ var mrwangjusttodo = {
   unzipWith: function (arr, iteratee = (...it) => it) {
     if (!Array.isArray(arr)) {
       return [];
-    }
-    let re = [];
-    let maxLen = 0;
-    let maxIndex = 0;
-    arr.forEach((item) => {
-      if (Array.isArray(item)) {
-        maxLen++;
-        maxIndex = Math.max(maxIndex, item.length);
-      }
-    });
-    let index = 0;
-    while (index < maxIndex) {
-      let temp = [];
-      for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i])) {
-          temp.push(arr[i][index]);
+    } else {
+      let re = [];
+      let maxIndex = 0;
+      arr.forEach((item) => {
+        if (Array.isArray(item)) {
+          maxIndex = Math.max(maxIndex, item.length);
         }
+      });
+      let index = 0;
+      while (index < maxIndex) {
+        let temp = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (Array.isArray(arr[i])) {
+            temp.push(arr[i][index]);
+          }
+        }
+        re.push(iteratee(...temp));
+        index++;
       }
-      re.push(iteratee(...temp));
-      index++;
+      return re;
     }
-    return re;
   },
   /**
    *
@@ -1524,15 +1550,19 @@ var mrwangjusttodo = {
         return this.xor(...arr);
       } else {
         let last = arr.pop();
-        let func = this.judegFunByOnePara(last);
+        let transferFun = this.judegFunByOnePara(last);
         let temp = {};
         return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
           current.forEach((item) => {
-            let preTemp = pre.map(func);
-            let index = this.indexOf(preTemp, func(item));
+            let index = this.myIndexOf(
+              pre,
+              item,
+              this.equalsTwoPara,
+              transferFun
+            );
             if (index == -1) {
-              if (!temp[func(item)]) {
-                temp[func(item)] = 1;
+              if (!temp[transferFun(item)]) {
+                temp[transferFun(item)] = 1;
                 pre.push(item);
               }
             } else {
@@ -1546,35 +1576,52 @@ var mrwangjusttodo = {
   },
   /**
    *
-   * @param  {...Array} arr 传入的数组集合
+   * @param  {...any|Function} arr 原始数组,迭代比较函数
+   */
+  xorWith: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return this.xor(...arr);
+    } else {
+      if (Array.isArray(arr[arr.length - 1])) {
+        return this.xor(...arr);
+      } else {
+        let last = arr.pop();
+        if (typeof last == "function") {
+          let del = [];
+          return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
+            current.forEach((item) => {
+              let index = this.myIndexOf(pre, item, last);
+              if (index == -1) {
+                let delIndex = this.myIndexOf(del, item, last);
+                if (delIndex == -1) {
+                  pre.push(item);
+                }
+              } else {
+                let delItem = pre.splice(index, 1);
+                del = del.concat(delItem);
+              }
+            });
+            return pre;
+          });
+        } else {
+          return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
+            pre.push(current);
+            return pre;
+          });
+        }
+      }
+    }
+  },
+
+  /**
+   *
+   * @param  {...Array} arr 原始数组集合
    * @returns {Array} 返回新的数组
    */
   zip: function (...arr) {
-    if (!arr) {
-      return [];
-    }
-    let re = [];
-    let maxLen = 0;
-    let maxIndex = 0;
-    for (let i = 0; i < arr.length; i++) {
-      if (Array.isArray(arr[i])) {
-        maxLen++;
-        maxIndex = maxIndex >= arr[i].length ? maxIndex : arr[i].length;
-      }
-    }
-    let index = 0;
-    while (index < maxIndex) {
-      let temp = Array(maxLen);
-      let iTemp = 0;
-      for (let i = 0; i < arr.length; i++) {
-        if (Array.isArray(arr[i])) {
-          temp[iTemp++] = arr[i][index];
-        }
-      }
-      re.push(temp);
-      index++;
-    }
-    return re;
+    return this.zipWith(...arr);
   },
 
   /**
@@ -1584,23 +1631,261 @@ var mrwangjusttodo = {
    * @returns {Object} 返回包含指定属性的对象
    */
   zipObject: function (props, values) {
-    if (!props) {
+    if (!Array.isArray(props) || !Array.isArray(values)) {
       return {};
-    }
-    let tArr = Array.from(props);
-    if (tArr.length == 0) {
-      return {};
-    }
-    let re = {};
-    for (let i = 0; i < tArr.length; i++) {
-      re[tArr[i]] = undefined;
-    }
-    if (!values || Array.from(values).length === 0) {
+    } else {
+      let temp = Array.from(props);
+      let re = {};
+      temp.forEach((item, index) => {
+        re[item] = values[index];
+      });
       return re;
     }
-    let index = 0;
-    for (let attr in re) {
-      re[attr] = values[index++];
+  },
+  /**
+   *
+   * @param {Array} props 属性标识符
+   * @param {Array} values 属性值
+   * @returns 返回一个新对象
+   */
+  zipObjectDeep: function (props, values) {
+    if (!props || !values) {
+      return {};
+    } else {
+      let next = [];
+      let current = props.map((it) => {
+        let index = it.lastIndexOf(".");
+        next.push(it.substring(0, index));
+        index = index == -1 ? 0 : index + 1;
+        return it.substring(index);
+      });
+      let tIndex = current[0].indexOf("[");
+      let newValues;
+      if (tIndex != -1 || current[0] === current[1]) {
+        newValues = {};
+        tIndex = tIndex == -1 ? current[0].length : tIndex;
+        newValues[current[0].substring(0, tIndex)] = values;
+      } else {
+        newValues = values.map((it, index) => {
+          let newObj = {};
+          newObj[current[index]] = it;
+          return newObj;
+        });
+      }
+      if (next[0].length > 0) {
+        return this.zipObjectDeep(next, newValues);
+      } else {
+        return newValues;
+      }
+    }
+  },
+  /**
+   *
+   * @param  {...any|Function} arr 原始数组,组合分组的函数
+   */
+  zipWith: function (...arr) {
+    if (arr.length == 0) {
+      return [];
+    } else if (arr.length == 1) {
+      return Array.from(...arr);
+    } else {
+      let iteratee = null;
+      if (Array.isArray(arr[arr.length - 1])) {
+        iteratee = (...it) => it;
+      } else {
+        iteratee = arr.pop();
+      }
+      let re = [];
+      let maxIndex = 0;
+      arr.forEach((item) => {
+        if (Array.isArray(item)) {
+          maxIndex = Math.max(maxIndex, item.length);
+        }
+      });
+      let index = 0;
+      while (index < maxIndex) {
+        let temp = [];
+        for (let i = 0; i < arr.length; i++) {
+          if (Array.isArray(arr[i])) {
+            temp.push(arr[i][index]);
+          }
+        }
+        re.push(iteratee(...temp));
+        index++;
+      }
+      return re;
+    }
+  },
+
+  // Collection
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Array|Function|Object|String} iteratee 迭代函数,转换key
+   * @returns 返回新对象
+   */
+  countBy: function (collection, iteratee = (it) => it) {
+    let re = {};
+    iteratee = this.judegFunByOnePara(iteratee);
+    if (typeof collection == "object") {
+      for (let temp in collection) {
+        let key = iteratee(collection[temp]);
+        if (key in re) {
+          re[key]++;
+        } else {
+          re[key] = 1;
+        }
+      }
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   */
+  forEach: function (collection, iteratee = (it) => it) {
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let re = iteratee(collection[key], key, collection);
+        if (re == false) {
+          break;
+        }
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   */
+  forEachRight: function (collection, iteratee = (it) => it) {
+    if (typeof collection == "object") {
+      let keys = Object.keys(collection);
+      keys.reverse();
+      this.forEach(keys, (key) => iteratee(collection[key], key, collection));
+    }
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
+   * @returns 返回断言判断后的值
+   */
+  every: function (collection, predicate = (it) => it) {
+    let re = true;
+    predicate = this.judegFunByOnePara(predicate);
+    if (typeof collection == "object") {
+      for (let key in obj) {
+        re = re && predicate(obj[key], key, collection);
+        if (!re) {
+          break;
+        }
+      }
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
+   * @returns 返回一个新数组
+   */
+  filter: function (collection, predicate = (it) => it) {
+    let re = [];
+    predicate = this.judegFunByOnePara(predicate);
+    if (typeof collection == "object") {
+      for (let key in obj) {
+        if (predicate[(obj[key], key, collection)]) {
+          re.push(boj[key]);
+        }
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
+   * @param {Number} fromIndex 判断起始位置
+   * @returns 返回找到的元素
+   */
+  find: function (collection, predicate = (it) => it, fromIndex = 0) {
+    predicate = this.judegFunByOnePara(predicate);
+    fromIndex = this.paraToNum(fromIndex);
+    if (fromIndex < 0) {
+      fromIndex = 0;
+    }
+    if (typeof collection == "object") {
+      let start = 0;
+      for (let key in collection) {
+        if (start++ >= fromIndex) {
+          if (predicate(collection[key], key, collection)) {
+            return collection[key];
+          }
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
+   * @param {Number} fromIndex 判断起始位置
+   * @returns 返回找到的元素
+   */
+  findLast: function (
+    collection,
+    predicate = (it) => it,
+    fromIndex = collection.length - 1
+  ) {
+    predicate = this.judegFunByOnePara(predicate);
+    fromIndex = this.paraToNum(fromIndex);
+    if (fromIndex > 0) {
+      if (typeof collection == "object") {
+        let temp = Object.keys(collection);
+        for (let i = fromIndex; i >= 0; i--) {
+          if (predicate(collection[temp[i]], temp[i], collection)) {
+            return collection[temp[i]];
+          }
+        }
+      }
+    }
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|string} iteratee 迭代调用函数
+   * @returns 返回一个新数组
+   */
+  flatMap: function (collection, iteratee) {
+    let re = [];
+    iteratee = this.judegFunByOnePara(iteratee);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        re.push(iteratee(collection[key], key, collection));
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|string} iteratee 迭代调用函数
+   * @returns 返回一个原始集合持续扁平后的数组
+   */
+  flatMapDeep: function (collection, iteratee) {
+    let re = [];
+    iteratee = this.judegFunByOnePara(iteratee);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let temp = iteratee(collection[key], key, collection);
+        temp = this.flattenDeep(temp);
+        re = re.concat(temp);
+      }
     }
     return re;
   },
