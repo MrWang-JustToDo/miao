@@ -471,7 +471,7 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    predicatethis.judegFunByOnePara(predicate);
+    predicate = this.judegFunByOnePara(predicate);
     if (predicate) {
       for (let i = 0; i < arr.length; i++) {
         if (!predicate(arr[i], i, arr)) {
