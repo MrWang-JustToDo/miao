@@ -1754,6 +1754,7 @@ var mrwangjusttodo = {
         }
       }
     }
+    return collection;
   },
 
   /**
@@ -1767,6 +1768,7 @@ var mrwangjusttodo = {
       keys.reverse();
       this.forEach(keys, (key) => iteratee(collection[key], key, collection));
     }
+    return collection;
   },
   /**
    *
@@ -1778,8 +1780,8 @@ var mrwangjusttodo = {
     let re = true;
     predicate = this.judegFunByOnePara(predicate);
     if (typeof collection == "object") {
-      for (let key in obj) {
-        re = re && predicate(obj[key], key, collection);
+      for (let key in collection) {
+        re = re && predicate(collection[key], key, collection);
         if (!re) {
           break;
         }
@@ -1798,9 +1800,9 @@ var mrwangjusttodo = {
     let re = [];
     predicate = this.judegFunByOnePara(predicate);
     if (typeof collection == "object") {
-      for (let key in obj) {
-        if (predicate[(obj[key], key, collection)]) {
-          re.push(boj[key]);
+      for (let key in collection) {
+        if (predicate[(collection[key], key, collection)]) {
+          re.push(collection[key]);
         }
       }
     }
@@ -1866,7 +1868,7 @@ var mrwangjusttodo = {
     iteratee = this.judegFunByOnePara(iteratee);
     if (typeof collection == "object") {
       for (let key in collection) {
-        re.push(iteratee(collection[key], key, collection));
+        re = re.concat(iteratee(collection[key], key, collection));
       }
     }
     return re;
