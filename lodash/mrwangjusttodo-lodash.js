@@ -1226,11 +1226,10 @@ var mrwangjusttodo = {
     }
     let re = Array.from(arr);
     predicate = this.judegFunByOnePara(predicate);
-    let flag = true;
     let result = [];
     for (let i = re.length - 1; i >= 0; i--) {
       if (predicate(re[i], i, re)) {
-        result.push(re[i]);
+        result.unshift(re[i]);
       } else {
         break;
       }
@@ -1497,14 +1496,12 @@ var mrwangjusttodo = {
     let temp = {};
     return this.unfoldArrByJudge(values, Array.isArray, (pre, current) => {
       current.forEach((item) => {
-        if (!temp[item]) {
-          let index = this.indexOf(pre, item);
-          if (!temp[item] && index == -1) {
-            temp[item] = 1;
-            pre.push(item);
-          } else {
-            pre.splice(index, 1);
-          }
+        let index = this.indexOf(pre, item);
+        if (!temp[item] && index == -1) {
+          temp[item] = 1;
+          pre.push(item);
+        } else {
+          pre.splice(index, 1);
         }
       });
       return pre;
