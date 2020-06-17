@@ -1497,11 +1497,13 @@ var mrwangjusttodo = {
     return this.unfoldArrByJudge(values, Array.isArray, (pre, current) => {
       current.forEach((item) => {
         let index = this.indexOf(pre, item);
-        if (!temp[item] && index == -1) {
-          temp[item] = 1;
-          pre.push(item);
+        if (index == -1) {
+          if (!temp[item]) {
+            temp[item] = 1;
+            pre.push(item);
+          }
         } else {
-          pre.splice(index, 1);
+          let re = pre.splice(index, 1);
         }
       });
       return pre;
@@ -1528,9 +1530,11 @@ var mrwangjusttodo = {
           current.forEach((item) => {
             let preTemp = pre.map(func);
             let index = this.indexOf(preTemp, func(item));
-            if (!temp[func(item)] && index == -1) {
-              temp[func(item)] = 1;
-              pre.push(item);
+            if (index == -1) {
+              if (!temp[func(item)]) {
+                temp[func(item)] = 1;
+                pre.push(item);
+              }
             } else {
               pre.splice(index, 1);
             }
