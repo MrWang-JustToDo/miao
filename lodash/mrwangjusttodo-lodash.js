@@ -473,9 +473,11 @@ var mrwangjusttodo = {
     }
     predicate = this.judegFunByOnePara(predicate);
     if (predicate) {
-      for (let i = 0; i < arr.length; i++) {
-        if (!predicate(arr[i], i, arr)) {
-          return arr.splice(0, i);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (predicate(arr[i], i, arr)) {
+          arr.splice(i);
+        } else {
+          return arr;
         }
       }
     } else {
@@ -1742,36 +1744,6 @@ var mrwangjusttodo = {
 
   /**
    *
-   * @param {Array|Object} collection 一个用来迭代的集合
-   * @param {Function} iteratee 每次迭代调用的函数
-   */
-  forEach: function (collection, iteratee = (it) => it) {
-    if (typeof collection == "object") {
-      for (let key in collection) {
-        let re = iteratee(collection[key], key, collection);
-        if (re == false) {
-          break;
-        }
-      }
-    }
-    return collection;
-  },
-
-  /**
-   *
-   * @param {Array|Object} collection 一个用来迭代的集合
-   * @param {Function} iteratee 每次迭代调用的函数
-   */
-  forEachRight: function (collection, iteratee = (it) => it) {
-    if (typeof collection == "object") {
-      let keys = Object.keys(collection);
-      keys.reverse();
-      this.forEach(keys, (key) => iteratee(collection[key], key, collection));
-    }
-    return collection;
-  },
-  /**
-   *
    * @param {Array|Object} collection 原始集合
    * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
    * @returns 返回断言判断后的值
@@ -1801,7 +1773,7 @@ var mrwangjusttodo = {
     predicate = this.judegFunByOnePara(predicate);
     if (typeof collection == "object") {
       for (let key in collection) {
-        if (predicate[(collection[key], key, collection)]) {
+        if (predicate((collection[key], key, collection))) {
           re.push(collection[key]);
         }
       }
@@ -1863,7 +1835,7 @@ var mrwangjusttodo = {
    * @param {Array|Function|Object|string} iteratee 迭代调用函数
    * @returns 返回一个新数组
    */
-  flatMap: function (collection, iteratee) {
+  flatMap: function (collection, iteratee = (it) => it) {
     let re = [];
     iteratee = this.judegFunByOnePara(iteratee);
     if (typeof collection == "object") {
@@ -1879,7 +1851,7 @@ var mrwangjusttodo = {
    * @param {Array|Function|Object|string} iteratee 迭代调用函数
    * @returns 返回一个原始集合持续扁平后的数组
    */
-  flatMapDeep: function (collection, iteratee) {
+  flatMapDeep: function (collection, iteratee = (it) => it) {
     let re = [];
     iteratee = this.judegFunByOnePara(iteratee);
     if (typeof collection == "object") {
@@ -1891,35 +1863,194 @@ var mrwangjusttodo = {
     }
     return re;
   },
+
   /**
    *
-   * @param {Array|Object|String} collection 需要查找的元素
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|string} iteratee 迭代调用函数
+   * @param {*} depth 指定扁平化深度
+   * @returns 返回一个扁平化后的数组
+   */
+  flatMapDepth: function (collection, iteratee = (it) => it, depth = 1) {
+    iteratee = this.judegFunByOnePara(iteratee);
+    depth = this.paraToNum(depth);
+    let re = [];
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let temp = iteratee(collection[key], key, collection);
+        if (depth > 1) {
+          temp = this.flattenDepth(temp, depth - 1);
+        }
+        re = re.concat(temp);
+      }
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   */
+  forEach: function (collection, iteratee = (it) => it) {
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let re = iteratee(collection[key], key, collection);
+        if (re == false) {
+          break;
+        }
+      }
+    }
+    return collection;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   */
+  forEachRight: function (collection, iteratee = (it) => it) {
+    if (typeof collection == "object") {
+      let keys = Object.keys(collection);
+      keys.reverse();
+      this.forEach(keys, (key) => iteratee(collection[key], key, collection));
+    }
+    return collection;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 一个用来迭代的集合
+   * @param {Array|Function|Object|String} 转换key的迭代函数
+   * @returns 返回组成的聚合对象
+   */
+  groupBy: function (collection, iteratee = (it) => it) {
+    iteratee = this.judegFunByOnePara(iteratee);
+    let re = {};
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let tKey = iteratee(collection[key]);
+        if (!re[tKey]) {
+          re[tKey] = Array.of(collection[key]);
+        } else {
+          re[tKey].push(collection[key]);
+        }
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object|String} collection 要检索的集合
    * @param {*} value 查找的值
-   * @param {*} fromIndex 开始查找的索引
+   * @param {Number} fromIndex 开始查找的索引
    * @returns {Boolean} 返回是否存在的布尔值
    */
-  include: function (collection, value, fromIndex = 0) {
-    if (!collection || !value) {
+  includes: function (collection, value, fromIndex = 0) {
+    fromIndex = this.paraToNum(fromIndex);
+    if (value === undefined) {
       return false;
-    }
-    if (Array.isArray(collection)) {
-      return this.indexOf(collection, value, fromIndex);
-    } else if (typeof collection === "string") {
-      return collection.includes(value, fromIndex);
-    } else if (typeof collection === "object") {
-      for (let attr in collection) {
-        if (Number.isNaN(value)) {
-          if (Number.isNaN(collection[attr])) {
-            return true;
-          }
+    } else {
+      if (typeof collection == "string") {
+        if (typeof value != "string") {
+          return false;
         } else {
-          if (value === collection[attr]) {
-            return true;
+          for (let i = fromIndex; i < collection.length; i++) {
+            if (collection.substr(i, value.length) === value) {
+              return true;
+            }
           }
+        }
+      } else if (typeof collection == "object") {
+        let index = 0;
+        for (let key in collection) {
+          if (index >= fromIndex) {
+            if (collection[key] === value) {
+              return true;
+            }
+          }
+          index++;
         }
       }
     }
     return false;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 迭代的集合
+   * @param {Array|Function|String} path 用来调用方法的路径或者每次迭代调用的函数
+   * @param  {...any} args 调用每个方法的参数
+   * @returns 返回结果数组
+   */
+  invokeMap: function (collection, path, ...args) {
+    let re = [];
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        if (typeof path == "function") {
+          let temp = path.call(collection[key], ...args);
+          re.push(temp);
+        } else {
+          let temp = this.judegFunByOnePara(path)(collection[key]).call(
+            collection[key],
+            ...args
+          );
+          re.push(temp);
+        }
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始迭代集合
+   * @param {Array|Function|Object|String} iteratee 迭代转换key
+   * @returns 返回新的聚合对象
+   */
+  keyBy: function (collection, iteratee = (it) => it) {
+    let re = {};
+    iteratee = this.judegFunByOnePara(iteratee);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        let temp = iteratee(collection[key]);
+        re[temp] = collection[key];
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} iteratee 每次迭代调用的函数
+   * @returns 返回新的映射后的数组
+   */
+  map: function (collection, iteratee = (it) => it) {
+    let re = [];
+    iteratee = this.judegFunByOnePara(iteratee);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        re.push(iteratee(collection[key]));
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array[]|Function[]|Object[]|String[]} iteratees 排序迭代函数
+   * @param {String[]} orders 排序顺序
+   * @returns 返回排序后的新数组
+   */
+  orderBy: function (collection, iteratees = (it) => it, orders = "asc") {
+    let re = [];
+    if (!Array.isArray(iteratees)) {
+      iteratees = Array.of(iteratees);
+      orders = Array.of(orders);
+    }
+    if (typeof collection == "object") {
+      for (let i = 0; i < iteratees.length; i++) {
+        
+      }
+    }
   },
   /**
    *
