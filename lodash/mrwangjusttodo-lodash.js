@@ -3,7 +3,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param {Array} arr 待展开的数组
-   * @param {Function} test 需要满足的条件
+   * @param {Function} judgeFun 需要满足的条件
    * @param {Function} action1 判断成功后执行的操作
    * @param {Function} action2 判断失败后执行的操作
    * @param {Array} init 展开数组开始时的初始值
@@ -11,13 +11,13 @@ var mrwangjusttodo = {
    */
   unfoldArrByJudge: function (
     arr,
-    test,
+    judgeFun,
     action1,
     action2 = (pre) => pre,
     init = []
   ) {
     return arr.reduce((pre, current) => {
-      if (test(current)) {
+      if (judgeFun(current)) {
         pre = action1(pre, current);
       } else {
         pre = action2(pre, current);
@@ -28,17 +28,17 @@ var mrwangjusttodo = {
   /**
    *
    * @param {Array} arr 查找的原始数组
-   * @param {*} target 查找的目标元素
-   * @param {Function} transfer 转换元素的函数
+   * @param {Number} target 查找的目标元素
+   * @param {Function} transferFun 转换元素的函数
    * @returns {Number} 返回索引
    */
-  binarySearch: function (arr, target, transfer = (it) => it) {
+  binarySearch: function (arr, target, transferFun = (it) => it) {
     let start = 0;
     let end = arr.length - 1;
     while (end >= start) {
       let m = ((start + end) / 2) | 0;
-      let p1 = transfer(arr[m]);
-      let p2 = transfer(target);
+      let p1 = transferFun(arr[m]);
+      let p2 = transferFun(target);
       if (p1 === p2) {
         return m;
       } else if (p1 > p2) {
@@ -65,10 +65,10 @@ var mrwangjusttodo = {
    *
    * @param {Object} obj 根据对象返回一个判断函数
    */
-  matches: function (obj) {
+  matches: function (obj, judgeFun = this.equalsTwoPara) {
     return function (para) {
       for (let prop in obj) {
-        if (para[prop] != obj[prop]) {
+        if (!judgeFun(para[prop], obj[prop])) {
           return false;
         }
       }
@@ -77,10 +77,27 @@ var mrwangjusttodo = {
   },
   /**
    *
-   * @param {Array|Function|Object|String} para 传入的元素
-   * @returns 根据传入的元素判断函数
+   * @param {Object} obj 原始对象
+   * @param {String} str 属性字符串
+   * @returns 返回最终匹配的属性
    */
-  judegFunByOnePara: function (para) {
+  propFromObjByString: function (obj, str) {
+    if (str.length == 0) {
+      return undefined;
+    } else if (!str.includes(".")) {
+      return obj[str];
+    } else {
+      let index = this.includes(str, ".");
+      let current = str.substring(0, index);
+      return this.propFromObjByString(obj[current], str.slice(index + 1));
+    }
+  },
+  /**
+   *
+   * @param {Array|Function|Object|String} para 传入的元素
+   * @returns 根据传入的元素生成对应功能函数
+   */
+  getFunctionByPara: function (para) {
     let re = null;
     if (typeof para == "object") {
       if (Array.isArray(para)) {
@@ -90,7 +107,7 @@ var mrwangjusttodo = {
     } else if (typeof para == "function") {
       re = para;
     } else if (typeof para == "string") {
-      re = (it) => it[para];
+      re = (it) => this.propFromObjByString(it, para);
     }
     return re;
   },
@@ -203,11 +220,11 @@ var mrwangjusttodo = {
   myIndexOf: function (
     arr,
     target,
-    judge = this.equalsTwoPara,
-    transfer = (it) => it
+    judgeFun = this.equalsTwoPara,
+    transferFun = (it) => it
   ) {
     for (let i = 0; i < arr.length; i++) {
-      if (judge(transfer(arr[i]), transfer(target))) {
+      if (judgeFun(transferFun(arr[i]), transferFun(target))) {
         return i;
       }
     }
@@ -337,7 +354,7 @@ var mrwangjusttodo = {
         return this.difference(arr, ...values);
       } else {
         let last = values.pop();
-        let action = this.judegFunByOnePara(last);
+        let action = this.getFunctionByPara(last);
         if (action === null) {
           return [];
         } else {
@@ -450,7 +467,7 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (predicate) {
       for (let i = 0; i < arr.length; i++) {
         if (!predicate(arr[i], i, arr)) {
@@ -471,7 +488,7 @@ var mrwangjusttodo = {
     if (!arr) {
       return [];
     }
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (predicate) {
       for (let i = arr.length - 1; i >= 0; i--) {
         if (predicate(arr[i], i, arr)) {
@@ -529,7 +546,7 @@ var mrwangjusttodo = {
       return -1;
     }
     let r = Array.from(arr);
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (predicate) {
       fromIndex = this.paraToNum(fromIndex);
       if (fromIndex === null) {
@@ -556,7 +573,7 @@ var mrwangjusttodo = {
       return -1;
     }
     let r = Array.from(arr);
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (predicate) {
       fromIndex = this.paraToNum(fromIndex);
       if (fromIndex === null) {
@@ -734,7 +751,7 @@ var mrwangjusttodo = {
           return this.intersection(...arr);
         } else {
           let last = arr.pop();
-          let transfer = this.judegFunByOnePara(last);
+          let transfer = this.getFunctionByPara(last);
           if (transfer === null) {
             return [];
           } else {
@@ -902,7 +919,7 @@ var mrwangjusttodo = {
     if (!Array.isArray(arr) || values.length === 0) {
       return arr;
     } else {
-      let transferFun = this.judegFunByOnePara(iteratee);
+      let transferFun = this.getFunctionByPara(iteratee);
       for (let i = arr.length - 1; i >= 0; i--) {
         if (
           values.some((item) =>
@@ -971,7 +988,7 @@ var mrwangjusttodo = {
     if (!Array.isArray(arr)) {
       return [];
     } else {
-      predicate = this.judegFunByOnePara(predicate);
+      predicate = this.getFunctionByPara(predicate);
       let re = [];
       for (let i = 0; i < arr.length; i++) {
         if (predicate(arr[i], i, arr)) {
@@ -1048,7 +1065,7 @@ var mrwangjusttodo = {
     if (value === undefined) {
       return re.length;
     } else {
-      iteratee = this.judegFunByOnePara(iteratee);
+      iteratee = this.getFunctionByPara(iteratee);
       let index = this.binarySearch(re, value, iteratee);
       if (iteratee(re[index]) == iteratee(value)) {
         while (index >= 0 && iteratee(re[index]) == iteratee(value)) {
@@ -1123,7 +1140,7 @@ var mrwangjusttodo = {
     if (value == undefined) {
       return re.length;
     } else {
-      iteratee = this.judegFunByOnePara(iteratee);
+      iteratee = this.getFunctionByPara(iteratee);
       let index = this.binarySearch(re, value, iteratee);
       if (iteratee(re[index]) == iteratee(value)) {
         while (index < re.length && iteratee(re[index]) == iteratee(value)) {
@@ -1252,7 +1269,7 @@ var mrwangjusttodo = {
       return [];
     }
     let re = Array.from(arr);
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     let result = [];
     for (let i = re.length - 1; i >= 0; i--) {
       if (predicate(re[i], i, re)) {
@@ -1273,7 +1290,7 @@ var mrwangjusttodo = {
       return [];
     }
     let re = Array.from(arr);
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     let flag = true;
     return re.reduce((pre, current, index, re) => {
       if (predicate(current, index, re) && flag) {
@@ -1323,7 +1340,7 @@ var mrwangjusttodo = {
         return this.union(...arr);
       } else {
         let last = arr.pop();
-        let transferFun = this.judegFunByOnePara(last);
+        let transferFun = this.getFunctionByPara(last);
         if (transferFun) {
           let obj = {};
           let re = this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
@@ -1409,7 +1426,7 @@ var mrwangjusttodo = {
         return this.uniq(re);
       } else {
         let last = arr.pop();
-        let transferFun = this.judegFunByOnePara(last);
+        let transferFun = this.getFunctionByPara(last);
         let re = arr.reduce((pre, current) => pre.concat(current), []);
         return re.reduce((pre, current) => {
           if (
@@ -1552,7 +1569,7 @@ var mrwangjusttodo = {
         return this.xor(...arr);
       } else {
         let last = arr.pop();
-        let transferFun = this.judegFunByOnePara(last);
+        let transferFun = this.getFunctionByPara(last);
         let temp = {};
         return this.unfoldArrByJudge(arr, Array.isArray, (pre, current) => {
           current.forEach((item) => {
@@ -1579,6 +1596,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param  {...any|Function} arr 原始数组,迭代比较函数
+   * @returns 返回过滤后的新数组
    */
   xorWith: function (...arr) {
     if (arr.length == 0) {
@@ -1684,6 +1702,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param  {...any|Function} arr 原始数组,组合分组的函数
+   * @returns 返回分组后的新数组
    */
   zipWith: function (...arr) {
     if (arr.length == 0) {
@@ -1720,6 +1739,67 @@ var mrwangjusttodo = {
   },
 
   // Collection
+
+  // 自定义
+  /**
+   *
+   * @param {Array|Object} obj 创建一个对象的复制
+   * @returns 返回复制的对象
+   */
+  cloneObj: function (obj) {
+    if (typeof obj === "string" || typeof obj === "number") {
+      return obj;
+    } else {
+      let re;
+      if (Array.isArray(obj)) {
+        re = [];
+      } else {
+        re = {};
+      }
+      for (let key in obj) {
+        re[key] = this.cloneObj(obj[key]);
+      }
+      return re;
+    }
+  },
+
+  /**
+   *
+   * @param {Object|Array} collection 原始集合
+   * @param {Function} judgeFun 比较函数
+   * @returns 返回排序好的集合
+   */
+  mergeSort: function (collection, judgeFun = (o1, o2) => o1 - o2) {
+    if (!Array.isArray(collection)) {
+      throw new TypeError("当前排序仅支持数组");
+    }
+    if (collection.length < 2) {
+      return collection;
+    } else {
+      let min = (collection.length / 2) | 0;
+      let left = this.mergeSort(collection.slice(0, min), judgeFun);
+      let right = this.mergeSort(collection.slice(min), judgeFun);
+      let re = [];
+      let i = 0,
+        j = 0;
+      while (i < left.length && j < right.length) {
+        if (judgeFun(left[i], right[j]) < 0 || !judgeFun(left[i], right[j])) {
+          re.push(left[i++]);
+        } else {
+          re.push(right[j++]);
+        }
+      }
+      while (i < left.length) {
+        re.push(left[i++]);
+      }
+      while (j < right.length) {
+        re.push(right[j++]);
+      }
+      return re;
+    }
+  },
+
+  // 原生
   /**
    *
    * @param {Array|Object} collection 一个用来迭代的集合
@@ -1728,7 +1808,7 @@ var mrwangjusttodo = {
    */
   countBy: function (collection, iteratee = (it) => it) {
     let re = {};
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     if (typeof collection == "object") {
       for (let temp in collection) {
         let key = iteratee(collection[temp]);
@@ -1750,7 +1830,7 @@ var mrwangjusttodo = {
    */
   every: function (collection, predicate = (it) => it) {
     let re = true;
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (typeof collection == "object") {
       for (let key in collection) {
         re = re && predicate(collection[key], key, collection);
@@ -1770,10 +1850,10 @@ var mrwangjusttodo = {
    */
   filter: function (collection, predicate = (it) => it) {
     let re = [];
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     if (typeof collection == "object") {
       for (let key in collection) {
-        if (predicate((collection[key], key, collection))) {
+        if (predicate(collection[key], key, collection)) {
           re.push(collection[key]);
         }
       }
@@ -1788,7 +1868,7 @@ var mrwangjusttodo = {
    * @returns 返回找到的元素
    */
   find: function (collection, predicate = (it) => it, fromIndex = 0) {
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     fromIndex = this.paraToNum(fromIndex);
     if (fromIndex < 0) {
       fromIndex = 0;
@@ -1816,7 +1896,7 @@ var mrwangjusttodo = {
     predicate = (it) => it,
     fromIndex = collection.length - 1
   ) {
-    predicate = this.judegFunByOnePara(predicate);
+    predicate = this.getFunctionByPara(predicate);
     fromIndex = this.paraToNum(fromIndex);
     if (fromIndex > 0) {
       if (typeof collection == "object") {
@@ -1837,7 +1917,7 @@ var mrwangjusttodo = {
    */
   flatMap: function (collection, iteratee = (it) => it) {
     let re = [];
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     if (typeof collection == "object") {
       for (let key in collection) {
         re = re.concat(iteratee(collection[key], key, collection));
@@ -1853,7 +1933,7 @@ var mrwangjusttodo = {
    */
   flatMapDeep: function (collection, iteratee = (it) => it) {
     let re = [];
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     if (typeof collection == "object") {
       for (let key in collection) {
         let temp = iteratee(collection[key], key, collection);
@@ -1872,7 +1952,7 @@ var mrwangjusttodo = {
    * @returns 返回一个扁平化后的数组
    */
   flatMapDepth: function (collection, iteratee = (it) => it, depth = 1) {
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     depth = this.paraToNum(depth);
     let re = [];
     if (typeof collection == "object") {
@@ -1925,7 +2005,7 @@ var mrwangjusttodo = {
    * @returns 返回组成的聚合对象
    */
   groupBy: function (collection, iteratee = (it) => it) {
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     let re = {};
     if (typeof collection == "object") {
       for (let key in collection) {
@@ -1990,7 +2070,7 @@ var mrwangjusttodo = {
           let temp = path.call(collection[key], ...args);
           re.push(temp);
         } else {
-          let temp = this.judegFunByOnePara(path)(collection[key]).call(
+          let temp = this.getFunctionByPara(path)(collection[key]).call(
             collection[key],
             ...args
           );
@@ -2008,7 +2088,7 @@ var mrwangjusttodo = {
    */
   keyBy: function (collection, iteratee = (it) => it) {
     let re = {};
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     if (typeof collection == "object") {
       for (let key in collection) {
         let temp = iteratee(collection[key]);
@@ -2025,10 +2105,14 @@ var mrwangjusttodo = {
    */
   map: function (collection, iteratee = (it) => it) {
     let re = [];
-    iteratee = this.judegFunByOnePara(iteratee);
+    iteratee = this.getFunctionByPara(iteratee);
     if (typeof collection == "object") {
       for (let key in collection) {
-        re.push(iteratee(collection[key]));
+        if (!isNaN(collection[key]) && !isNaN(key)) {
+          re.push(iteratee(Number(collection[key]), Number(key), collection));
+        } else {
+          re.push(iteratee(collection[key], key, collection));
+        }
       }
     }
     return re;
@@ -2047,96 +2131,198 @@ var mrwangjusttodo = {
       orders = Array.of(orders);
     }
     if (typeof collection == "object") {
+      re = this.cloneObj(collection);
       for (let i = 0; i < iteratees.length; i++) {
-        
-      }
-    }
-  },
-  /**
-   *
-   * @param {Object|Array} collection 可迭代数组/对象
-   * @returns {*} 返回可迭代数组/对象中的随机元素
-   */
-  sample: function (collection) {
-    if (!collection) {
-      return undefined;
-    }
-    let tArr = Array.from(collection);
-    if (tArr.length > 0) {
-      return tArr[Math.floor(Math.random() * tArr.length)];
-    } else if (typeof collection === "object") {
-      tArr = Object.values(collection);
-      return tArr[Math.floor(Math.random() * tArr.length)];
-    }
-    return undefined;
-  },
-  /**
-   *
-   * @param {Object|Array} collection 可迭代的数组/对象
-   * @param {*} n 返回的数组最大长度
-   * @returns {Array} 返回获取的随机索引元素组成的数组
-   */
-  sampleSize: function (collection, n = 1) {
-    if (!collection || n < 1) {
-      return [];
-    }
-    let tArr = Array.from(collection);
-    let re = [];
-    let len = 0;
-    if (tArr.length > 0) {
-      while (tArr.length > 0 && len++ < n) {
-        let index = Math.floor(Math.random() * tArr.length);
-        re.push(tArr[index]);
-        tArr.splice(index, 1);
-      }
-    } else if (typeof collection === "object") {
-      tArr = Object.values(collection);
-      while (tArr.length > 0 && len++ < n) {
-        let index = Math.floor(Math.random() * tArr.length);
-        re.push(tArr[index]);
-        tArr.splice(index, 1);
+        let orderRe = orders[i] == "asc" ? true : false;
+        let transferFun = this.getFunctionByPara(iteratees[i]);
+        re = this.mergeSort(re, (o1, o2) => {
+          if (transferFun(o1) > transferFun(o2)) {
+            return orderRe;
+          } else {
+            return !orderRe;
+          }
+        });
       }
     }
     return re;
   },
   /**
    *
-   * @param {Object|Array} collection 传入的可迭代数组/对象
-   * @returns {Array} 返回一个随机排序的数组
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 每次迭代调用的函数
+   * @returns 返回元素分组后的新数组
    */
-  shuffle: function (collection) {
-    if (!collection) {
-      return [];
+  partition: function (collection, predicate = (it) => it) {
+    let re = [];
+    predicate = this.getFunctionByPara(predicate);
+    if (typeof collection == "object") {
+      re[0] = [];
+      re[1] = [];
+      for (let key in collection) {
+        if (predicate(collection[key])) {
+          re[0].push(collection[key]);
+        } else {
+          re[1].push(collection[key]);
+        }
+      }
     }
-    let tArr = Array.from(collection);
-    if (tArr.length > 0) {
-      tArr.sort(() => Math.random() > 0.5);
-      return tArr;
-    } else if (typeof collection === "object") {
-      tArr = Object.values(collection);
-      tArr.sort(() => Math.random() > 0.5);
-      return tArr;
-    }
-    return [];
+    return re;
   },
   /**
    *
-   * @param {Object|Array|String} collection 传入的可迭代数组/对象/字符串
+   * @param {Array|Object} collection 原始集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   * @returns {*} accumulator 初始值
+   * @returns 返回累计叠加后的值
+   */
+  reduce: function (collection, iteratee = (it) => it, accumulator) {
+    iteratee = this.getFunctionByPara(iteratee);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        if (accumulator === undefined) {
+          accumulator = collection[key];
+        } else {
+          accumulator = iteratee(accumulator, collection[key], key, collection);
+        }
+      }
+    }
+    return accumulator;
+  },
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Function} iteratee 每次迭代调用的函数
+   * @returns {*} accumulator 初始值
+   * @returns 返回累计叠加后的值
+   */
+  reduceRight: function (collection, iteratee = (it) => it, accumulator) {
+    iteratee = this.getFunctionByPara(iteratee);
+    if (typeof collection == "object") {
+      let keys = Object.keys(collection);
+      for (let i = keys.length - 1; i >= 0; i--) {
+        if (accumulator === undefined) {
+          accumulator = collection[keys[i]];
+        } else {
+          accumulator = iteratee(
+            accumulator,
+            collection[keys[i]],
+            keys[i],
+            collection
+          );
+        }
+      }
+    }
+    return accumulator;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 迭代调用的函数
+   * @returns 返回过滤后的新数组,filter的反向方法
+   */
+  reject: function (collection, predicate = (it) => it) {
+    let re = [];
+    predicate = this.getFunctionByPara(predicate);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        if (!predicate(collection[key], key, collection)) {
+          re.push(collection[key]);
+        }
+      }
+    }
+    return re;
+  },
+  /**
+   *
+   * @param {Object|Array} collection 原始集合
+   * @returns {*} 返回可迭代数组/对象中的随机元素
+   */
+  sample: function (collection) {
+    if (typeof collection == "object") {
+      let temp = Object.keys(collection);
+      return collection[temp[(Math.random() * temp.length) | 0]];
+    } else {
+      return undefined;
+    }
+  },
+  /**
+   *
+   * @param {Object|Array} collection 原始集合
+   * @param {Number} n 取样的元素个数
+   * @returns {Array} 返回随机元素组成的数组
+   */
+  sampleSize: function (collection, n = 1) {
+    n = this.paraToNum(n);
+    if (n === null || n < 0) {
+      return [];
+    } else {
+      let re = [];
+      if (typeof collection == "object") {
+        let temp = Object.keys(collection);
+        while (re.length < n && temp.length) {
+          let key = (Math.random() * temp.length) | 0;
+          re.push(collection[temp[key]]);
+          temp.splice(key, 1);
+        }
+      }
+      return re;
+    }
+  },
+  /**
+   *
+   * @param {Object|Array} collection 原始集合
+   * @returns {Array} 返回一个随机排序的数组
+   */
+  shuffle: function (collection) {
+    if (typeof collection == "object") {
+      return this.sampleSize(collection, Object.keys(collection).length);
+    } else {
+      return [];
+    }
+  },
+  /**
+   *
+   * @param {Object|Array|String} collection 原始集合
    * @returns {Number} 返回对应的长度
    */
   size: function (collection) {
-    if (!collection) {
+    if (typeof collection == "object") {
+      return Object.keys(collection).length;
+    } else if (typeof collection == "string") {
+      return collection.length;
+    } else {
       return 0;
     }
-    let tArr = Array.from(collection);
-    if (tArr.length > 0) {
-      return tArr.length;
-    } else if (typeof collection === "object") {
-      tArr = Object.values(collection);
-      return tArr.length;
-    }
-    return 0;
   },
+
+  /**
+   *
+   * @param {Array|Collection} collection 原始集合
+   * @param {Array|Function|Object|String} predicate 迭代判断函数
+   * @returns 如果任意元素经 predicate 检查都为 truthy（真值），返回 true ，否则返回 false 。
+   */
+  some: function (collection, predicate = (it) => it) {
+    let re = false;
+    predicate = this.getFunctionByPara(predicate);
+    if (typeof collection == "object") {
+      for (let key in collection) {
+        re = re || predicate(collection[key], key, collection);
+        if (re) {
+          break;
+        }
+      }
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Array|Object} collection 原始集合
+   * @param {*} iteratees
+   */
+  sortBy: function (collection, iteratees = (it) => it) {},
+  
   /**
    *
    * @param {*} value 传入的参数一
