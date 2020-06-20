@@ -2322,7 +2322,316 @@ var mrwangjusttodo = {
    * @param {*} iteratees
    */
   sortBy: function (collection, iteratees = (it) => it) {},
-  
+
+  /**
+   * @returns 返回Unix纪元到现在的毫秒数
+   */
+  now: function () {
+    return new Date().getTime();
+  },
+
+  // 函数
+
+  /**
+   *
+   * @param {Number} n 方法应该在调用多少次后执行
+   * @param {Function} func 用来限定的函数
+   * @returns 返回新的函数
+   */
+  after: function (n, func) {
+    let count = 0;
+    return (...args) => {
+      count++;
+      if (count >= n) {
+        func(...args);
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要被限制参数个数的函数
+   * @param {Number} n 限制的参数列表数量
+   * @returns 返回新的覆盖函数
+   */
+  ary: function (func, n = func.length) {
+    n = this.paraToNum(n);
+    return function (...args) {
+      return func(...args.slice(0, n));
+    };
+  },
+
+  /**
+   *
+   * @param {Number} n 超过多少次不再调用函数
+   * @param {Function} func 限制执行的函数
+   */
+  before: function (n, func) {
+    let count = 0;
+    let re = null;
+    return (...args) => {
+      count++;
+      if (count <= n) {
+        re = func(...args);
+        return re;
+      } else {
+        return re;
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要绑定参数的函数
+   * @param {*} thisArg 绑定的this对象
+   * @param  {...any} partials 附加的部分参数
+   * @returns 返回新的绑定函数
+   */
+  bind: function (func, thisArg, ...partials) {
+    return (...args) => {
+      let index = -1;
+      while ((index = this.indexOf(partials, "_")) != -1 && args.length > 0) {
+        partials[index] = args.shift();
+      }
+      return func.call(thisArg, ...partials.concat(args));
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要绑定参数的函数
+   * @param {*} thisArg 绑定的this对象
+   * @param  {...any} partials 附加的部分参数
+   * @returns 返回新的绑定函数
+   */
+  bindRight: function (func, thisArg, ...partials) {
+    return (...args) => {
+      let index = -1;
+      while ((index = this.indexOf(partials, "_")) != -1 && args.length > 0) {
+        partials[index] = args.pop();
+      }
+      return func.call(thisArg, ...args.concat(partials));
+    };
+  },
+
+  /**
+   *
+   * @param {Object} obj 需要绑定的对象
+   * @param {String} key 需要绑定的对象的键
+   * @param  {...any} partials 附加的部分参数
+   * @returns 返回新的绑定函数
+   */
+  bindKey: function (obj, key, ...partials) {
+    return (...args) => {
+      let index = -1;
+      while ((index = this.indexOf(partials, "_")) != -1 && args.length > 0) {
+        partials[index] = args.shift();
+      }
+      return obj[key](...partials.concat(args));
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 用来curry的函数
+   * @param {Number} arity 需要提供给func的参数数量
+   * @returns 返回新的curry函数
+   */
+  curry: function (func, arity = func.length) {
+    return (...args) => {
+      if (args.length >= arity) {
+        return func(...args);
+      } else {
+        let last = arity - args.length;
+        return this.curry(this.bind(func, func, ...args), last);
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 用来curry的函数
+   * @param {Number} arity 需要提供给 func 的参数数量
+   * @returns 返回新的curry函数
+   */
+  curryRight: function (func, arity = func.length) {
+    return (...args) => {
+      if (args.length >= arity) {
+        return func(...args);
+      } else {
+        let last = arity - args.length;
+        let arr = Array(last).fill("_");
+        return this.curryRight(
+          this.bind(func, func, ...arr.concat(args)),
+          last
+        );
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要防抖动的函数
+   * @param {NUmber} wait 延迟的毫秒数
+   * @param {Objetc} options 选项对象
+   * [options.leading=false] (boolean): 指定在延迟开始前调用
+   * [options.maxWait] (number): 设置 func 允许被延迟的最大值
+   * [options.trailing=true] (boolean): 指定在延迟结束后调用
+   * @returns 返回新的防抖动函数
+   */
+  debounce: function (func, wait = 0, options = {}) {},
+
+  /**
+   *
+   * @param {Functon} func 需要延迟的函数
+   * @param  {...any} args 调用时传给func的参数
+   * @returns 返回计时器id
+   */
+  defer: function (func, ...args) {
+    return this.delay(func, 4000, ...args);
+  },
+
+  /**
+   *
+   * @param {Function} func 需要延迟的函数
+   * @param {Number} wait 延迟的毫秒数
+   * @param  {...any} args 调用时传给func的函数
+   * @returns 返回定时器id
+   */
+  delay: function (func, wait, ...args) {
+    return setTimeout(
+      (...args) => {
+        func(...args);
+      },
+      wait,
+      ...args
+    );
+  },
+
+  /**
+   *
+   * @param {Function} func 需要翻转参数的函数
+   * @returns 返回新的函数
+   */
+  flip: function (func) {
+    return (...args) => {
+      return func(...this.reverse(args));
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要缓存化的函数
+   * @param {Function} resolver 这个函数的返回值作为key
+   * @returns 返回缓存化后的函数
+   */
+  memoize: function (func, resolver) {},
+
+  /**
+   *
+   * @param {Function} predicate 需要对结果取反的函数
+   * @returns 返回一个新的取反函数
+   */
+  negate: function (predicate) {
+    return (...args) => {
+      return !predicate(...args);
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要限制的函数
+   * @returns 返回新的只能调用一次的函数
+   */
+  once: function (func) {
+    let count = 0;
+    let re = null;
+    return (...args) => {
+      if (count < 1) {
+        count++;
+        re = func(...args);
+        return re;
+      } else {
+        return re;
+      }
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要转换参数的函数
+   * @param {*} transforms 转换参数的函数
+   * @returns 返回新的函数
+   */
+  overArgs: function (func, transforms = (it) => it) {
+    if (!Array.isArray(transforms)) {
+      transforms = Array.of(transforms);
+    }
+    return (...args) => {
+      this.forEach(transforms, (item) => {
+        args = this.map(args, item);
+      });
+      return func(...args);
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要预设的函数
+   * @param {...any} partials 预设的参数
+   * @returns 返回预设参数的函数
+   */
+  partial: function (func, ...partials) {
+    return this.bind(func, func, ...partials);
+  },
+
+  /**
+   *
+   * @param {Function} func 需要预设的函数
+   * @param  {...any} partials 预设的参数
+   * @returns 返回预设参数的函数
+   */
+  partialRight: function (func, ...partials) {
+    return this.bindRight(func, func, ...partials);
+  },
+
+  /**
+   *
+   * @param {Function} func 待调用的函数
+   * @param {Number[]} indexes 排列参数的位置
+   * @returns 返回新的函数
+   */
+  rearg: function (func, indexes) {
+    return (...args) => {
+      let newArgs = [];
+      indexes.forEach((item, index) => {
+        newArgs[index] = args[item];
+      });
+      return func(...newArgs);
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要reset的函数
+   * @param {Number} start reset参数开始的位置
+   * @returns 返回新的函数
+   */
+  rest: function (func, start = func.length - 1) {
+    return function (...args) {
+      let arrPara = args.splice(start, args.length - start);
+      return func(...args, arrPara);
+    };
+  },
+
+  /**
+   *
+   * @param {Function} func 需要spread参数的函数
+   * @param {Number} start 传播参数开始的位置
+   * @returns 返回新的函数
+   */
+  spread: function (func, start = 0) {},
+
   /**
    *
    * @param {*} value 传入的参数一
