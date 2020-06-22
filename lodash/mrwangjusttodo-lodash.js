@@ -1747,7 +1747,11 @@ var mrwangjusttodo = {
    * @returns 返回复制的对象
    */
   cloneObj: function (obj) {
-    if (typeof obj === "string" || typeof obj === "number") {
+    if (
+      typeof obj === "string" ||
+      typeof obj === "number" ||
+      typeof obj === "boolean"
+    ) {
       return obj;
     } else {
       let re;
@@ -2340,10 +2344,10 @@ var mrwangjusttodo = {
    */
   after: function (n, func) {
     let count = 0;
-    return (...args) => {
+    return function (...args) {
       count++;
       if (count >= n) {
-        func(...args);
+        func.call(this, ...args);
       }
     };
   },
@@ -2357,7 +2361,7 @@ var mrwangjusttodo = {
   ary: function (func, n = func.length) {
     n = this.paraToNum(n);
     return function (...args) {
-      return func(...args.slice(0, n));
+      return func.call(this, ...args.slice(0, n));
     };
   },
 
@@ -2369,10 +2373,10 @@ var mrwangjusttodo = {
   before: function (n, func) {
     let count = 0;
     let re = null;
-    return (...args) => {
+    return function (...args) {
       count++;
       if (count <= n) {
-        re = func(...args);
+        re = func.call(this, ...args);
         return re;
       } else {
         return re;
@@ -2438,12 +2442,13 @@ var mrwangjusttodo = {
    * @returns 返回新的curry函数
    */
   curry: function (func, arity = func.length) {
-    return (...args) => {
+    let myLodash = this;
+    return function (...args) {
       if (args.length >= arity) {
-        return func(...args);
+        return func.call(this, ...args);
       } else {
         let last = arity - args.length;
-        return this.curry(this.bind(func, func, ...args), last);
+        return myLodash.curry(func.bind(this, ...args), last);
       }
     };
   },
@@ -2455,14 +2460,14 @@ var mrwangjusttodo = {
    * @returns 返回新的curry函数
    */
   curryRight: function (func, arity = func.length) {
-    return (...args) => {
+    let myLodash = this;
+    return function (...args) {
       if (args.length >= arity) {
-        return func(...args);
+        return func.call(this, ...args);
       } else {
         let last = arity - args.length;
-        let arr = Array(last).fill("_");
-        return this.curryRight(
-          this.bind(func, func, ...arr.concat(args)),
+        return myLodash.curryRight(
+          myLodash.bindRight(func, this, ...args),
           last
         );
       }
@@ -2487,9 +2492,7 @@ var mrwangjusttodo = {
    * @param  {...any} args 调用时传给func的参数
    * @returns 返回计时器id
    */
-  defer: function (func, ...args) {
-    return this.delay(func, 4000, ...args);
-  },
+  defer: function (func, ...args) {},
 
   /**
    *
@@ -2514,8 +2517,8 @@ var mrwangjusttodo = {
    * @returns 返回新的函数
    */
   flip: function (func) {
-    return (...args) => {
-      return func(...this.reverse(args));
+    return function (...args) {
+      return func.call(this, ...args.reverse());
     };
   },
 
@@ -2533,8 +2536,8 @@ var mrwangjusttodo = {
    * @returns 返回一个新的取反函数
    */
   negate: function (predicate) {
-    return (...args) => {
-      return !predicate(...args);
+    return function (...args) {
+      return !predicate.call(this, ...args);
     };
   },
 
@@ -2546,10 +2549,10 @@ var mrwangjusttodo = {
   once: function (func) {
     let count = 0;
     let re = null;
-    return (...args) => {
+    return function (...args) {
       if (count < 1) {
         count++;
-        re = func(...args);
+        re = func.call(this, ...args);
         return re;
       } else {
         return re;
@@ -2567,11 +2570,12 @@ var mrwangjusttodo = {
     if (!Array.isArray(transforms)) {
       transforms = Array.of(transforms);
     }
-    return (...args) => {
-      this.forEach(transforms, (item) => {
-        args = this.map(args, item);
+    let myLodash = this;
+    return function (...args) {
+      myLodash.forEach(transforms, (item) => {
+        args = myLodash.map(args, item);
       });
-      return func(...args);
+      return func.call(this, ...args);
     };
   },
 
@@ -2582,7 +2586,17 @@ var mrwangjusttodo = {
    * @returns 返回预设参数的函数
    */
   partial: function (func, ...partials) {
-    return this.bind(func, func, ...partials);
+    let myLodash = this;
+    return function (...args) {
+      let index = -1;
+      while (
+        (index = myLodash.indexOf(partials, "_")) != -1 &&
+        args.length > 0
+      ) {
+        partials[index] = args.shift();
+      }
+      return func.call(this, ...partials.concat(args));
+    };
   },
 
   /**
@@ -2592,7 +2606,17 @@ var mrwangjusttodo = {
    * @returns 返回预设参数的函数
    */
   partialRight: function (func, ...partials) {
-    return this.bindRight(func, func, ...partials);
+    let myLodash = this;
+    return function (...args) {
+      let index = -1;
+      while (
+        (index = myLodash.indexOf(partials, "_")) != -1 &&
+        args.length > 0
+      ) {
+        partials[index] = args.pop();
+      }
+      return func.call(this, ...args.concat(partials));
+    };
   },
 
   /**
@@ -2602,12 +2626,12 @@ var mrwangjusttodo = {
    * @returns 返回新的函数
    */
   rearg: function (func, indexes) {
-    return (...args) => {
+    return function (...args) {
       let newArgs = [];
       indexes.forEach((item, index) => {
         newArgs[index] = args[item];
       });
-      return func(...newArgs);
+      return func.call(this, ...newArgs);
     };
   },
 
@@ -2620,7 +2644,7 @@ var mrwangjusttodo = {
   rest: function (func, start = func.length - 1) {
     return function (...args) {
       let arrPara = args.splice(start, args.length - start);
-      return func(...args, arrPara);
+      return func.call(this, ...args, arrPara);
     };
   },
 
@@ -2630,7 +2654,135 @@ var mrwangjusttodo = {
    * @param {Number} start 传播参数开始的位置
    * @returns 返回新的函数
    */
-  spread: function (func, start = 0) {},
+  spread: function (func, start = 0) {
+    return function (...args) {
+      let newArgs = args.splice(start, args.length);
+      return func.call(this, ...args, newArgs);
+    };
+  },
+
+  throttle: function (func, wait, options) {},
+
+  /**
+   *
+   * @param {Function} func 需要处理的函数
+   * @returns 返回新的函数
+   */
+  unary: function (func) {
+    return function (...args) {
+      return func.call(this, args[0]);
+    };
+  },
+
+  /**
+   *
+   * @param {*} value 需要包装的值
+   * @param {Function} wrapper 包装的函数
+   * @returns 返回新的函数
+   */
+  wrap: function (value, wrapper) {
+    return function (...args) {
+      return wrapper.call(this, value, ...args);
+    };
+  },
+
+  // Lang
+
+  /**
+   *
+   * @param {*} value 如果value不是数组,强制转换为数组
+   * @returns 返回转换后的数组
+   */
+  castArray: function (value) {
+    if (Array.isArray(value)) {
+      return value;
+    } else {
+      return Array.of(value);
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 创建value的浅拷贝
+   * @returns 返回拷贝后的值
+   */
+  clone: function (value) {
+    if (Array.isArray(value)) {
+      let re = [];
+      value.forEach((it) => {
+        re.push(it);
+      });
+      return re;
+    } else if (typeof value == "object") {
+      let re = {};
+      for (let key in value) {
+        re[key] = value[key];
+      }
+      return re;
+    } else {
+      return value;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要深拷贝的对象
+   * @returns 返回克隆的对象
+   */
+  cloneDeep: function (value) {
+    if (Array.isArray(value)) {
+      let re = [];
+      value.forEach((item) => {
+        re.push(this.cloneDeep(item));
+      });
+      return re;
+    } else if (typeof value == "object") {
+      let re = {};
+      for (let key in value) {
+        re[key] = this.cloneDeep(value[key]);
+      }
+      return re;
+    } else {
+      return value;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要克隆的原始原始
+   * @param {Function} customizer 克隆函数
+   * @returns 返回克隆的对象
+   */
+  cloneDeepWith: function (value, customizer) {},
+
+  /**
+   *
+   * @param {*} value 需要克隆的值
+   * @param {Function} customizer 克隆函数
+   * @returns 返回克隆的值
+   */
+  cloneWith: function (value, customizer) {},
+
+  /**
+   *
+   * @param {Object} object 需要检查的对象
+   * @param {Object} source 要断言属性是否符合的对象
+   * @returns 返回是否符合
+   */
+  conformsTo: function (object, source) {
+    for (let key in source) {
+      if (typeof source[key] == "function") {
+        if (!source[key](object[key])) {
+          return false;
+        }
+      } else {
+        if (source[key] === object[key]) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
 
   /**
    *
@@ -2639,15 +2791,462 @@ var mrwangjusttodo = {
    * @returns {Boolean} 返回两个参数是否相同的布尔值
    */
   eq: function (value, other) {
-    if (value === undefined && other === undefined) {
-      return true;
+    return this.equalsTwoPara(value, other);
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个比较的值
+   * @returns 返回比较的boolean值
+   */
+  qt: function (value, other) {
+    value = this.paraToNum(value);
+    other = this.paraToNum(other);
+    return value > other;
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个要比较的值
+   * @returns 返回比较的boolean值
+   */
+  gte: function (value, other) {
+    value = this.paraToNum(value);
+    other = this.paraToNum(other);
+    return value >= other;
+  },
+
+  /**
+   *
+   * @param {*} value 要检测的对象
+   * @returns 返回是否是一个类数组对象
+   */
+  isArguments: function (value) {
+    if (Array.isArray(value)) {
+      return false;
+    } else if (typeof value != "object") {
+      return false;
+    } else {
     }
-    if (value === undefined || other === undefined) {
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回是否是一个数组
+   */
+  isArray: function (value) {
+    return Array.isArray(value);
+  },
+
+  /**
+   *
+   * @param {*} value 需要判断的对象
+   * @returns 返回判断的boolean值
+   */
+  isArrayBuffer: function (value) {
+    return ArrayBuffer.isView(value);
+  },
+
+  /**
+   *
+   * @param {*} value 需要判断的对象
+   * @returns 返回判断的boolean值
+   */
+  isArrayLike: function (value) {
+    if (Array.isArray(value)) {
+      return true;
+    } else if (Object.prototype.hasOwnProperty.call(value, "length")) {
+      if (
+        parseInt(value.length) == value.length &&
+        value.length >= 0 &&
+        value.length <= Number.MAX_SAFE_INTEGER
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
       return false;
     }
-    if (value != value) {
-      return other != other;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isArrayLikeObject: function (value) {
+    return typeof value == "object" && this.isArrayLike(value);
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的结果
+   */
+  isBoolean: function (value) {
+    return value instanceof Boolean;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isBuffer: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isDate: function (value) {
+    return value instanceof Date;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isElement: function (value) {
+    return value instanceof Node;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isEmpty: function (value) {
+    if (this.isArrayLike(value)) {
+      return value.length == 0;
+    } else {
+      if (Object.prototype.hasOwnProperty.call(value, "size")) {
+        return value.size == 0;
+      } else {
+        let count = 0;
+        for (let key in value) {
+          count++;
+        }
+        return count == 0;
+      }
     }
-    return value === other;
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个比较的值
+   * @returns 返回比较结果
+   */
+  isEqual: function (value, other) {
+    if (typeof value == "object") {
+      for (let key in value) {
+        if (!this.isEqual(value[key], other[key])) {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return this.equalsTwoPara(value, other);
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个比较的值
+   * @param {Function} customizer 如何进行比较的函数
+   * @returns 返回比较结果
+   */
+  isEqualWith: function (value, other, customizer = this.equalsTwoPara) {},
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isError: function (value) {
+    return value instanceof Error;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回是否是否是有限数值的判断值
+   */
+  isFinite: function (value) {
+    if (typeof value === "number") {
+      if (value === Infinity || value === -Infinity) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isFunction: function (value) {
+    return value instanceof Function;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isInteger: function (value) {
+    if (this.isFinite(value)) {
+      return parseInt(value) === value;
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isLength: function (value) {
+    if (this.isInteger(value)) {
+      return value >= 0;
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isMap: function (value) {
+    return value instanceof Map;
+  },
+
+  /**
+   *
+   * @param {*} object
+   * @param {*} source
+   */
+  isMatch: function (object, source) {
+    for (let key in source) {
+      if (!this.isEqual(object[key], source[key])) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  /**
+   *
+   * @param {*} object
+   * @param {*} source
+   */
+  isMatchWith: function (object, source, customizer = this.equalsTwoPara) {
+    for (let key in source) {
+      if (!customizer(object[key], source[key], key, object, source)) {
+        return false;
+      }
+    }
+    return true;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回value是否是NaN
+   */
+  isNaN: function (value) {
+    if (typeof value == "number") {
+      return isNaN(value);
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的函数
+   * @returns 返回被检测的函数是否是一个本地函数
+   */
+  isNative: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回被检测的值是否是一个null或者undifiend
+   */
+  isNil: function (value) {
+    return value === null || value === undefined;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回被检测的值是否是null
+   */
+  isNull: function (value) {
+    return value === null;
+  },
+
+  /**
+   *
+   * @param {*} value 要检查的值
+   * @returns 返回value是否是一个数字
+   */
+  isNumber: function (value) {
+    return typeof value === "number";
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isObject: function (value) {
+    return value instanceof Object;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isObjectLike: function (value) {
+    if (value !== null && value !== undefined) {
+      return typeof value == "object";
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isPlainObject: function (vale) {
+    if (this.isObjectLike(vale)) {
+      return vale.__proto__ === Object.prototype;
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isRegExp: function (value) {
+    return value instanceof RegExp;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isSafeInteger: function (value) {
+    if (this.isInteger(value)) {
+      return (
+        value <= Number.MAX_SAFE_INTEGER && value >= Number.MIN_SAFE_INTEGER
+      );
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isSet: function (value) {
+    return value instanceof Set;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isString: function (value) {
+    return typeof value === "string";
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isSymbol: function (value) {
+    return value instanceof Symbol;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isTypedArray: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isUndefined: function (value) {
+    return value === undefined;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isWeakMap: function (value) {
+    return value instanceof WeakMap;
+  },
+
+  /**
+   *
+   * @param {*} value 需要检测的值
+   * @returns 返回判断的boolean值
+   */
+  isWeakSet: function (value) {
+    return value instanceof WeakSet;
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个比较的值
+   * @returns 返回value是否小于other
+   */
+  lt: function (value, other) {
+    return this.paraToNum(value) < this.paraToNum(other);
+  },
+
+  /**
+   *
+   * @param {*} value 需要比较的值
+   * @param {*} other 另一个比较的值
+   * @returns 返回value是否小于等于other
+   */
+  lte: function (value, other) {
+    return this.paraToNum(value) <= this.paraToNum(other);
   },
 };
