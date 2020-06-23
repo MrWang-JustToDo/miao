@@ -969,10 +969,10 @@ var mrwangjusttodo = {
         () => true,
         (pre, current) => pre.concat(current)
       );
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[indexes[i]]) {
-          re.push(arr[indexes[i]]);
-          arr.splice(indexes[i], 1);
+      for (let i = arr.length - 1; i >= 0; i--) {
+        if (this.includes(indexes, i)) {
+          re.push(arr[i]);
+          arr.splice(i, 1);
         }
       }
       return re;
@@ -2661,6 +2661,13 @@ var mrwangjusttodo = {
     };
   },
 
+  /**
+   *
+   * @param {Function} func 需要节流的函数
+   * @param {Number} wait 需要节流的毫秒
+   * @param {Object} options 选项对象
+   * @returns 返回节流函数
+   */
   throttle: function (func, wait, options) {},
 
   /**
@@ -2694,10 +2701,14 @@ var mrwangjusttodo = {
    * @returns 返回转换后的数组
    */
   castArray: function (value) {
-    if (Array.isArray(value)) {
-      return value;
+    if (value !== undefined) {
+      if (Array.isArray(value)) {
+        return value;
+      } else {
+        return Array.of(value);
+      }
     } else {
-      return Array.of(value);
+      return [];
     }
   },
 
@@ -2737,11 +2748,17 @@ var mrwangjusttodo = {
       });
       return re;
     } else if (typeof value == "object") {
-      let re = {};
-      for (let key in value) {
-        re[key] = this.cloneDeep(value[key]);
+      if (value instanceof RegExp) {
+        return new RegExp(value, value.flags);
+      } else if (value instanceof Error) {
+        return new Error(value.message);
+      } else {
+        let re = {};
+        for (let key in value) {
+          re[key] = this.cloneDeep(value[key]);
+        }
+        return re;
       }
-      return re;
     } else {
       return value;
     }
@@ -2829,6 +2846,11 @@ var mrwangjusttodo = {
     } else if (typeof value != "object") {
       return false;
     } else {
+      if (Object.prototype.hasOwnProperty.call(value, "length")) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
 
@@ -2856,7 +2878,9 @@ var mrwangjusttodo = {
    * @returns 返回判断的boolean值
    */
   isArrayLike: function (value) {
-    if (Array.isArray(value)) {
+    if (value === null || value === undefined) {
+      return false;
+    } else if (Array.isArray(value)) {
       return true;
     } else if (Object.prototype.hasOwnProperty.call(value, "length")) {
       if (
@@ -2888,7 +2912,7 @@ var mrwangjusttodo = {
    * @returns 返回判断的结果
    */
   isBoolean: function (value) {
-    return value instanceof Boolean;
+    return typeof value === "boolean" || value instanceof Boolean;
   },
 
   /**
@@ -2922,7 +2946,9 @@ var mrwangjusttodo = {
    * @returns 返回判断的boolean值
    */
   isEmpty: function (value) {
-    if (this.isArrayLike(value)) {
+    if (value === null || value === undefined) {
+      return true;
+    } else if (this.isArrayLike(value)) {
       return value.length == 0;
     } else {
       if (Object.prototype.hasOwnProperty.call(value, "size")) {
@@ -2945,12 +2971,16 @@ var mrwangjusttodo = {
    */
   isEqual: function (value, other) {
     if (typeof value == "object") {
-      for (let key in value) {
-        if (!this.isEqual(value[key], other[key])) {
-          return false;
+      if (value.__proto__ === other.__proto__) {
+        for (let key in value) {
+          if (!this.isEqual(value[key], other[key])) {
+            return false;
+          }
         }
+        return true;
+      } else {
+        return false;
       }
-      return true;
     } else {
       return this.equalsTwoPara(value, other);
     }
@@ -3069,7 +3099,7 @@ var mrwangjusttodo = {
    * @returns 返回value是否是NaN
    */
   isNaN: function (value) {
-    if (typeof value == "number") {
+    if (typeof value == "number" || value instanceof Number) {
       return isNaN(value);
     } else {
       return false;
@@ -3249,4 +3279,100 @@ var mrwangjusttodo = {
   lte: function (value, other) {
     return this.paraToNum(value) <= this.paraToNum(other);
   },
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 返回转换的数组
+   */
+  toArray: function (value) {
+    if (this.isArrayLikeObject(value)) {
+      let re = [];
+      for (let i = 0; i < value.length; i++) {
+        re[i] = value[i];
+      }
+      return re;
+    } else {
+      let re = [];
+      for (let key in value) {
+        re.push(value[key]);
+      }
+      return re;
+    }
+  },
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toFinite: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toInteger: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toLength: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toNumber: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toPlainObject: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toSafeNumber: function (value) {},
+
+  /**
+   *
+   * @param {*} value 需要转换的值
+   * @returns 转换后的值
+   */
+  toString: function (value) {},
+
+  // Math
+
+  /**
+   *
+   * @param {Number} augend 相加的一个数
+   * @param {Number} addend 相加的另一个数
+   * @returns 返回相加的结果
+   */
+  add: function (augend, addend) {
+    if (typeof augend === "string" || typeof addend === "string") {
+      return augend + addend;
+    } else {
+      augend = this.paraToNum(augend);
+      addend = this.paraToNum(this.addend);
+      return augend + addend;
+    }
+  },
+
+  /**
+   * 
+   * @param {*} number 
+   */
+  ceil: function(number) {
+
+  }
 };
