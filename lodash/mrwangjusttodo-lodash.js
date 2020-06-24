@@ -3354,6 +3354,31 @@ var mrwangjusttodo = {
 
   /**
    *
+   * @param {String} str 将字符串向上舍入一位
+   */
+  upStr: function (str) {
+    let c = 0;
+    str = this.toArray(str).map((it) => this.paraToNum(it));
+    str[str.length - 1] += 1;
+    let re = [];
+    this.forEachRight(str, (it) => {
+      it += c;
+      if (it > 9) {
+        it %= 10;
+        c = 1;
+      } else {
+        c = 0;
+      }
+      re.unshift(it);
+    });
+    if (c != 0) {
+      re.unshift(1);
+    }
+    return re.join("");
+  },
+
+  /**
+   *
    * @param {Number} augend 相加的一个数
    * @param {Number} addend 相加的另一个数
    * @returns 返回相加的结果
@@ -3369,10 +3394,132 @@ var mrwangjusttodo = {
   },
 
   /**
-   * 
-   * @param {*} number 
+   *
+   * @param {Number} number 需要向上舍入的值
+   * @param {Number} precision 向上舍入的精度
+   * @returns 返回结果
    */
-  ceil: function(number) {
+  ceil: function (number, precision = 0) {
+    precision = this.paraToNum(precision);
+    number += "";
+    let index = this.indexOf(number, ".");
+    if (precision == 0) {
+      if (index == -1) {
+        return this.paraToNum(number);
+      } else {
+        number = this.upStr(number.slice(0, index));
+        return this.paraToNum(number);
+      }
+    } else if (precision > 0) {
+      if (index == -1 || number.length - index - 1 <= precision) {
+        return this.paraToNum(number);
+      } else {
+        let stand = number.slice(0, index);
+        let last = this.upStr(number.slice(index + 1, index + 1 + precision));
+        if (last.length + stand.length > stand.length + precision) {
+          stand = this.upStr(stand);
+          return this.paraToNum(stand + "." + last.slice(1));
+        } else {
+          return this.paraToNum(stand + "." + last);
+        }
+      }
+    } else if (precision < 0) {
+      if (index != -1) {
+        number = number.slice(0, index);
+      }
+      let last = Array(-precision).fill(0).join("");
+      let stand = null;
+      if (number.length + precision < 1) {
+        stand = "1";
+      } else {
+        stand = this.upStr(number.slice(0, number.length + precision));
+      }
+      return this.paraToNum(stand + last);
+    }
+  },
 
-  }
+  /**
+   *
+   * @param {Number} dividend 相除的第一个数
+   * @param {NUmber} divisor 相除的第二个数
+   * @returns 返回商数
+   */
+  divide: function (dividend, divisor) {
+    dividend = this.paraToNum(dividend);
+    divisor = this.paraToNum(divisor);
+    return dividend / divisor;
+  },
+
+  /**
+   *
+   * @param {Number} number 需要向下舍入的值
+   * @param {Number} precision 向下舍入的精度
+   * @returns 返回结果
+   */
+  floor: function (number, precision = 0) {
+    precision = this.paraToNum(precision);
+    number += ".";
+    let index = this.indexOf(number, ".");
+    if (precision == 0) {
+      if (index == -1) {
+        return this.paraToNum(number);
+      } else {
+        return this.paraToNum(number.slice(0, index));
+      }
+    } else if (precision > 0) {
+      if (index == -1 || number.length - index - 1 <= precision) {
+        return this.paraToNum(number);
+      } else {
+        let stand = number.slice(0, index);
+        let last = number.slice(index + 1, index + 1 + precision);
+        return this.paraToNum(stand + "." + last);
+      }
+    } else {
+      if (index != -1) {
+        number = number.slice(0, index);
+      }
+      if (-precision >= number.length) {
+        return 0;
+      } else {
+        let last = Array(-precision).fill(0).join("");
+        let stand = number.slice(0, number.length + precision);
+        return this.paraToNum(stand + last);
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Array} array 需要迭代的数组
+   * @returns 返回数组中的最大值
+   */
+  max: function (array) {
+    array = this.toArray(array);
+    if (array.length > 0) {
+      let max = -Infinity;
+      this.forEach(array, (it) => {
+        max = max > it ? max : it;
+      });
+      return max;
+    } else {
+      return undefined;
+    }
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @param {Function} iteratee 调用每个元素的迭代函数
+   */
+  maxBy: function (array, iteratee = (it) => it) {
+    array = this.toArray(array);
+    if (array.length == 0) {
+      return undefined;
+    } else {
+      iteratee = this.getFunctionByPara(iteratee);
+      return this.reduce(array, (pre, current) =>
+        iteratee(pre) > iteratee(current) ? pre : current
+      );
+    }
+  },
 };
