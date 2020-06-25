@@ -92,6 +92,23 @@ var mrwangjusttodo = {
       return this.propFromObjByString(obj[current], str.slice(index + 1));
     }
   },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @param {String} str 下标字符串
+   * @returns 返回匹配的元素
+   */
+  propFromArrayByString: function (array, str) {
+    if (!str || str.length == 0) {
+      return undefined;
+    } else if (str[0] == "[") {
+      let index = this.indexOf(str, "]");
+      return array[str.slice(1, index)];
+    } else {
+      return array[str];
+    }
+  },
   /**
    *
    * @param {Array|Function|Object|String} para 传入的元素
@@ -971,7 +988,7 @@ var mrwangjusttodo = {
       );
       for (let i = arr.length - 1; i >= 0; i--) {
         if (this.includes(indexes, i)) {
-          re.push(arr[i]);
+          re.unshift(arr[i]);
           arr.splice(i, 1);
         }
       }
@@ -1980,7 +1997,7 @@ var mrwangjusttodo = {
     if (typeof collection == "object") {
       for (let key in collection) {
         let re = iteratee(collection[key], key, collection);
-        if (re == false) {
+        if (re === false) {
           break;
         }
       }
@@ -2977,6 +2994,11 @@ var mrwangjusttodo = {
             return false;
           }
         }
+        for (let key in other) {
+          if (!this.isEqual(value[key], other[key])) {
+            return false;
+          }
+        }
         return true;
       } else {
         return false;
@@ -3352,6 +3374,8 @@ var mrwangjusttodo = {
 
   // Math
 
+  // 自定义工具
+
   /**
    *
    * @param {String} str 将字符串向上舍入一位
@@ -3377,6 +3401,8 @@ var mrwangjusttodo = {
     return re.join("");
   },
 
+  // 原生函数
+
   /**
    *
    * @param {Number} augend 相加的一个数
@@ -3388,7 +3414,7 @@ var mrwangjusttodo = {
       return augend + addend;
     } else {
       augend = this.paraToNum(augend);
-      addend = this.paraToNum(this.addend);
+      addend = this.paraToNum(addend);
       return augend + addend;
     }
   },
@@ -3520,6 +3546,417 @@ var mrwangjusttodo = {
       return this.reduce(array, (pre, current) =>
         iteratee(pre) > iteratee(current) ? pre : current
       );
+    }
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @returns 返回数组的平均值
+   */
+  mean: function (array) {
+    array = this.toArray(array);
+    array = array.map(this.paraToNum);
+    return this.reduce(array, (pre, current) => pre + current) / array.length;
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @param {Funtion} iteratee 迭代函数
+   * @returns 返回平均值
+   */
+  meanBy: function (array, iteratee = (it) => it) {
+    array = this.toArray(array);
+    iteratee = this.getFunctionByPara(iteratee);
+    array = array.map(iteratee);
+    return this.mean(array);
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @returns 返回数组中的最小值
+   */
+  min: function (array) {
+    array = this.toArray(array);
+    array = array.map(this.paraToNum);
+    return this.reduce(array, (pre, current) =>
+      pre > current ? current : pre
+    );
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @param {Funtion} iteratee 迭代函数
+   * @returns 返回最小的值
+   */
+  minBy: function (array, iteratee = (it) => it) {
+    array = this.toArray(array);
+    iteratee = this.getFunctionByPara(iteratee);
+    return this.reduce(array, (pre, current) =>
+      iteratee(pre) > iteratee(current) ? current : pre
+    );
+  },
+
+  /**
+   *
+   * @param {Number} augend 相乘的第一个数
+   * @param {Number} addend 相乘的第二个数
+   * @returns 返回结果
+   */
+  multiply: function (augend, addend) {
+    augend = this.paraToNum(augend);
+    addend = this.paraToNum(addend);
+    return augend * addend;
+  },
+
+  /**
+   *
+   * @param {Number} number 根据传入的数字进行四舍五入
+   * @param {Number} precision 精度
+   * @returns 返回结果
+   */
+  round: function (number, precision = 0) {
+    number += "";
+    precision = this.paraToNum(precision);
+    let index = this.indexOf(number, ".");
+    if (precision == 0) {
+      if (index != -1) {
+        let stand = number.slice(0, index);
+        let last = number.slice(index + 1);
+        if (last[0] >= "5") {
+          return this.paraToNum(this.upStr(stand));
+        } else {
+          return this.paraToNum(stand);
+        }
+      } else {
+        return this.paraToNum(number);
+      }
+    } else if (precision > 0) {
+      if (index == -1 || number.length - index - 1 <= precision) {
+        return this.paraToNum(number);
+      } else {
+        let stand = number.slice(0, index);
+        let last = number.slice(index + 1, index + 1 + precision);
+        if (number[index + 1 + precision] >= "5") {
+          last = this.upStr(last);
+          if (last.length > precision) {
+            last = last.slice(1);
+            stand = this.upStr(stand);
+          }
+          return this.paraToNum(stand + "." + last);
+        } else {
+          return this.paraToNum(stand + "." + last);
+        }
+      }
+    } else {
+      if (index != -1) {
+        number = number.slice(0, index);
+      }
+      if (-precision >= number.length) {
+        return 0;
+      } else {
+        let stand = number.slice(0, number.length + precision);
+        let last = number.slice(number.length + precision);
+        let add = Array(-precision).fill(0).join("");
+        if (last[0] >= "5") {
+          stand = this.upStr(stand);
+        }
+        return this.paraToNum(stand + add);
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Number} minuend 相减的第一个数
+   * @param {Number} subtrahend 相减的第二个数
+   * @returns 返回相减的结果
+   */
+  subtract: function (minuend, subtrahend) {
+    return this.paraToNum(minuend) - this.paraToNum(subtrahend);
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @returns 返回总和
+   */
+  sum: function (array) {
+    array = this.toArray(array);
+    return this.reduce(array, (pre, current) => pre + current);
+  },
+
+  /**
+   *
+   * @param {Array} array 原始数组
+   * @param {Funtion} iteratee 迭代函数
+   * @returns 返回相加的结果
+   */
+  sumBy: function (array, iteratee = (it) => it) {
+    array = this.toArray(array);
+    iteratee = this.getFunctionByPara(iteratee);
+    array = array.map(iteratee);
+    return this.sum(array);
+  },
+
+  // Number
+
+  /**
+   *
+   * @param {Number} number 被限制的值
+   * @param {Number} lower 下限
+   * @param {Number} upper 上限
+   */
+  clamp: function (number, lower, upper) {
+    number = this.paraToNum(number);
+    lower = this.paraToNum(lower);
+    upper = this.paraToNum(upper);
+    if (number === null) {
+      throw new Error("参数错误");
+    } else {
+      if (upper == null) {
+        if (lower == null) {
+          return number;
+        } else {
+          return Math.min(number, lower);
+        }
+      } else {
+        if (number >= upper) {
+          return upper;
+        } else if (number >= lower) {
+          return number;
+        } else {
+          return lower;
+        }
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Number} number 需要判断的数字
+   * @param {Number} start 开始的范围
+   * @param {Number} end 结束的范围
+   * @returns 返回boolean
+   */
+  inRange: function (number, start = 0, end) {
+    number = this.paraToNum(number);
+    if (end == undefined) {
+      end = this.paraToNum(start);
+      start = 0;
+    } else {
+      end = this.paraToNum(end);
+      start = this.paraToNum(start);
+    }
+    if (start > end) {
+      let temp = end;
+      end = start;
+      start = temp;
+    }
+    if (number >= start && number < end) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {Number} lower 随机数的下限
+   * @param {Number} upper 随机数的上限
+   * @param {Boolean} floating 返回是否是浮点数
+   * @returns 返回得到的数
+   */
+  random: function (lower = 0, upper = 1, floating = false) {
+    lower = this.paraToNum(lower);
+    upper = this.paraToNum(upper);
+    if (arguments.length == 1) {
+      upper = lower;
+      lower = 0;
+    }
+    let re = Math.random() * (upper - lower) + lower;
+    if (floating || parseInt(lower) != lower || parseInt(upper) != upper) {
+      return re;
+    } else {
+      return parseInt(re);
+    }
+  },
+
+  // Object
+
+  // 自定义工具
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {String} str 属性字符串路径
+   * @returns 返回匹配的属性
+   */
+  getParaFromObjectByString(object, str) {
+    if (!str || str.length == 0) {
+      return undefined;
+    }
+    let index = this.indexOf(str, "[");
+    if (index == -1) {
+      return this.propFromObjByString(object, str);
+    } else {
+      let lastIndex = this.indexOf(str, "]", index);
+      if (index == 0) {
+        return this.getParaFromObjectByString(
+          this.propFromArrayByString(object, str.slice(0, lastIndex + 1)),
+          str.slice(lastIndex + 1)
+        );
+      } else {
+        object = this.propFromObjByString(object, str.slice(0, index));
+        object = this.propFromArrayByString(
+          object,
+          str.slice(index, lastIndex + 1)
+        );
+        str = str.slice(lastIndex + 1);
+        if (str.length > 0) {
+          if (str[0] == ".") {
+            str = str.slice(1);
+          }
+          return this.getParaFromObjectByString(object, str);
+        } else {
+          return object;
+        }
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...any} obj 来源对象
+   * @returns 返回Object
+   */
+  assign: function (object, ...obj) {
+    if (this.isObjectLike(object)) {
+      if (obj.length == 0) {
+        return object;
+      } else {
+        this.forEach(obj, (it) => {
+          this.forEach.call(null, it, (value, key) => {
+            if (Object.prototype.hasOwnProperty.call(it, key)) {
+              object[key] = value;
+            }
+          });
+        });
+        return object;
+      }
+    } else {
+      throw new Error("para type error");
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...any} obj 来源对象
+   * @returns 返回Object
+   */
+  assignIn: function (object, ...obj) {
+    if (this.isObjectLike(object)) {
+      if (obj.length == 0) {
+        return object;
+      } else {
+        this.forEach(obj, (it) => {
+          this.forEach.call(null, it, (value, key) => {
+            object[key] = value;
+          });
+        });
+        return object;
+      }
+    } else {
+      throw new Error("para type error");
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...any} obj 来源对象以及自定义分配值的函数
+   * @returns 返回Object
+   */
+  assignInWith: function (object, ...obj) {
+    if (mrwangjusttodo.isObjectLike(object)) {
+      if (obj.length == 0) {
+        return object;
+      } else if (obj.length == 1) {
+        return mrwangjusttodo.assignIn(object, ...obj);
+      } else {
+        if (mrwangjusttodo.isFunction(obj[obj.length - 1])) {
+          let last = obj.pop();
+          mrwangjusttodo.forEach(obj, (it) => {
+            mrwangjusttodo.forEach.call(null, it, (value, key) => {
+              object[key] = last(object[key], value, key, object, it);
+            });
+          });
+          return object;
+        } else {
+          return mrwangjusttodo.assignIn(object, ...obj);
+        }
+      }
+    } else {
+      throw new Error("para type error");
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...any} obj 来源对象以及自定义分配值的函数
+   * @returns 返回Object
+   */
+  assignWith: function (object, ...obj) {
+    if (this.isObjectLike(object)) {
+      if (obj.length == 0) {
+        return object;
+      } else if (obj.length == 1) {
+        return this.assign(object, ...obj);
+      } else {
+        if (this.isFunction(obj[obj.length - 1])) {
+          let last = obj.pop();
+          this.forEach(obj, (it) => {
+            this.forEach.call(null, it, (value, key) => {
+              if (Object.prototype.hasOwnProperty.call(it, key)) {
+                object[key] = last(object[key], value, key, object, it);
+              }
+            });
+          });
+          return object;
+        } else {
+          return this.assign(object, ...obj);
+        }
+      }
+    } else {
+      throw new Error("para type error");
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 需要迭代的对象
+   * @param  {...any} string 需要获取的对象元素路径
+   * @returns 返回选中值的数组
+   */
+  at: function (object, ...string) {
+    let re = [];
+    if (this.isObjectLike(object)) {
+      this.forEach(string, (it) => {
+        if (this.isArray(it)) {
+          re = re.concat(this.at(object, ...it));
+        } else {
+          re.push(this.getParaFromObjectByString(object, it));
+        }
+      });
+      return re;
+    } else {
+      throw new Error("para type error");
     }
   },
 };
