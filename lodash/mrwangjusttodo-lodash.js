@@ -2153,17 +2153,25 @@ var mrwangjusttodo = {
     }
     if (typeof collection == "object") {
       re = this.cloneObj(collection);
+      let iterateeArr = [];
+      let orderArr = [];
       for (let i = 0; i < iteratees.length; i++) {
-        let orderRe = orders[i] == "asc" ? true : false;
-        let transferFun = this.getFunctionByPara(iteratees[i]);
-        re = this.mergeSort(re, (o1, o2) => {
-          if (transferFun(o1) > transferFun(o2)) {
-            return orderRe;
-          } else {
-            return !orderRe;
-          }
-        });
+        iterateeArr.push(this.getFunctionByPara(iteratees[i]));
+        orderArr.push(orders[i] == "asc" ? true : false);
       }
+      re = this.mergeSort(re, (o1, o2) => {
+        let i = 0;
+        while (i < iterateeArr.length) {
+          if (iterateeArr[i](o1) > iterateeArr[i](o2)) {
+            return orderArr[i];
+          } else if (iterateeArr[i](o1) < iterateeArr[i](o2)) {
+            return !orderArr[i];
+          } else {
+            i++;
+          }
+        }
+        return false;
+      });
     }
     return re;
   },
@@ -2342,7 +2350,32 @@ var mrwangjusttodo = {
    * @param {Array|Object} collection 原始集合
    * @param {*} iteratees
    */
-  sortBy: function (collection, iteratees = (it) => it) {},
+  sortBy: function (collection, iteratees = (it) => it) {
+    let re = [];
+    if (!Array.isArray(iteratees)) {
+      iteratees = Array.of(iteratees);
+    }
+    if (typeof collection == "object") {
+      let iterateeArr = [];
+      for (let i = 0; i < iteratees.length; i++) {
+        iterateeArr.push(this.getFunctionByPara(iteratees[i]));
+      }
+      re = this.mergeSort(collection, (o1, o2) => {
+        let i = 0;
+        while (i < iterateeArr.length) {
+          if (iterateeArr[i](o1) > iterateeArr[i](o2)) {
+            return true;
+          } else if (iterateeArr[i](o1) < iterateeArr[i](o2)) {
+            return false;
+          } else {
+            i++;
+          }
+        }
+        return false;
+      });
+    }
+    return re;
+  },
 
   /**
    * @returns 返回Unix纪元到现在的毫秒数
