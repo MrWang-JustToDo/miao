@@ -1,3 +1,4 @@
+"use strict";
 var mrwangjusttodo = {
   // 自定义方法
   /**
@@ -82,7 +83,7 @@ var mrwangjusttodo = {
    * @returns 返回最终匹配的属性
    */
   propFromObjByString: function (obj, str) {
-    if (str.length == 0) {
+    if (!str || str.length == 0 || !obj) {
       return undefined;
     } else if (!str.includes(".")) {
       return obj[str];
@@ -100,13 +101,15 @@ var mrwangjusttodo = {
    * @returns 返回匹配的元素
    */
   propFromArrayByString: function (array, str) {
-    if (!str || str.length == 0) {
+    if (!str || str.length == 0 || !array) {
       return undefined;
-    } else if (str[0] == "[") {
-      let index = this.indexOf(str, "]");
-      return array[str.slice(1, index)];
+    }
+    let index = this.indexOf(str, "]");
+    let key = str.slice(1, index);
+    if (index == str.length - 1) {
+      return array[key];
     } else {
-      return array[str];
+      return this.propFromArrayByString(array[key], str.slice(index + 1));
     }
   },
   /**
@@ -678,7 +681,7 @@ var mrwangjusttodo = {
   },
   /**
    *
-   * @param {Array} pairs 原始数组
+   * @param {Array} pairs 原始数组    反向函数toPairs
    * @returns 返回能组成的对象
    */
   fromPairs: function (pairs) {
@@ -2011,11 +2014,9 @@ var mrwangjusttodo = {
    * @param {Function} iteratee 每次迭代调用的函数
    */
   forEachRight: function (collection, iteratee = (it) => it) {
-    if (typeof collection == "object") {
-      let keys = Object.keys(collection);
-      keys.reverse();
-      this.forEach(keys, (key) => iteratee(collection[key], key, collection));
-    }
+    let keys = [];
+    this.forEach(collection, (value, key) => keys.unshift(key));
+    this.forEach(keys, (key) => iteratee(collection[key], key, collection));
     return collection;
   },
 
@@ -3824,39 +3825,47 @@ var mrwangjusttodo = {
 
   /**
    *
-   * @param {Object} object 原始对象
-   * @param {String} str 属性字符串路径
-   * @returns 返回匹配的属性
+   * @param {String} str 原始路径字符串
+   * @returns 转换后的路径字符串
    */
-  getParaFromObjectByString(object, str) {
-    if (!str || str.length == 0) {
+  transformPathString: function (str) {
+    let re = "";
+    str = str.split(".");
+    this.forEach(str, (value) => {
+      let index = this.indexOf(value, "[");
+      if (index == -1) {
+        re += `[${value}]`;
+      } else {
+        re += `[${value.slice(0, index)}]`;
+        re += value.slice(index);
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {String} str 路径字符串
+   * @param {Function} judgeFun 判断函数
+   */
+  getParaFromObjectByString(object, str, judgeFun = (it) => it) {
+    if (!str || str.length == 0 || !object) {
       return undefined;
     }
-    let index = this.indexOf(str, "[");
-    if (index == -1) {
-      return this.propFromObjByString(object, str);
+    let index = this.indexOf(str, "]");
+    let key = str.slice(1, index);
+    if (index == str.length - 1) {
+      if (judgeFun(key, object)) {
+        return object[key];
+      }
     } else {
-      let lastIndex = this.indexOf(str, "]", index);
-      if (index == 0) {
+      if (judgeFun(key, object)) {
         return this.getParaFromObjectByString(
-          this.propFromArrayByString(object, str.slice(0, lastIndex + 1)),
-          str.slice(lastIndex + 1)
+          object[key],
+          str.slice(index + 1),
+          judgeFun
         );
-      } else {
-        object = this.propFromObjByString(object, str.slice(0, index));
-        object = this.propFromArrayByString(
-          object,
-          str.slice(index, lastIndex + 1)
-        );
-        str = str.slice(lastIndex + 1);
-        if (str.length > 0) {
-          if (str[0] == ".") {
-            str = str.slice(1);
-          }
-          return this.getParaFromObjectByString(object, str);
-        } else {
-          return object;
-        }
       }
     }
   },
@@ -3926,7 +3935,14 @@ var mrwangjusttodo = {
           let last = obj.pop();
           mrwangjusttodo.forEach(obj, (it) => {
             mrwangjusttodo.forEach.call(null, it, (value, key) => {
-              object[key] = last(object[key], value, key, object, it);
+              object[key] = last(
+                object[key],
+                value,
+                key,
+                object,
+                it,
+                arguments
+              );
             });
           });
           return object;
@@ -3984,6 +4000,7 @@ var mrwangjusttodo = {
         if (this.isArray(it)) {
           re = re.concat(this.at(object, ...it));
         } else {
+          it = this.transformPathString(it);
           re.push(this.getParaFromObjectByString(object, it));
         }
       });
@@ -3991,5 +4008,449 @@ var mrwangjusttodo = {
     } else {
       throw new Error("para type error");
     }
+  },
+
+  /**
+   *
+   * @param {Object} prototype 需要继承的对象
+   * @param {Object} properties 需要分配的属性
+   * @returns 返回新的对象
+   */
+  create: function (prototype, properties) {
+    let re = {};
+    let proto = {};
+    if (this.isFunction(prototype)) {
+      proto.__proto__ = prototype.prototype;
+    } else {
+      proto.__proto__ = prototype;
+    }
+    this.assign(proto, properties);
+    re.__proto__ = proto;
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...Object} sources 来源对象
+   * @returns 返回修改后的对象
+   */
+  defaults: function (object, ...sources) {
+    if (sources.length == 0) {
+      return object;
+    } else {
+      return this.assignWith(object, ...sources, (objValue, sourValue) =>
+        objValue !== undefined ? objValue : sourValue
+      );
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 目标对象
+   * @param  {...any} sources 来源对象
+   * @returns 返回修改后的对象
+   */
+  defaultsDeep: function (object, ...sources) {
+    if (sources.length == 0) {
+      return object;
+    } else {
+      return this.assignWith(object, ...sources, (objValue, sourValue) => {
+        if (this.isObjectLike(objValue)) {
+          return this.defaultsDeep(objValue, sourValue);
+        } else {
+          return objValue !== undefined ? objValue : sourValue;
+        }
+      });
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回键值对数组
+   */
+  toPairs: function (object) {
+    let re = [];
+    if (this.isObjectLike(object)) {
+      this.forEach(object, (value, key) => {
+        if (Object.prototype.hasOwnProperty.call(object, key)) {
+          re.push([key, value]);
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回自身以及继承的键值对数组
+   */
+  toPairsIn: function (object) {
+    let re = [];
+    if (this.isObjectLike(object)) {
+      this.forEach(object, (value, key) => {
+        re.push([key, value]);
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 需要检索的对象
+   * @param {Function} predicate 每次迭代调用的对象
+   * @returns 返回匹配的key
+   */
+  findKey: function (object, predicate = (it) => it) {
+    let re = undefined;
+    predicate = this.getFunctionByPara(predicate);
+    if (this.isObjectLike(object)) {
+      this.forEach(object, (value, key) => {
+        if (predicate(value)) {
+          re = key;
+          return false;
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 需要检索的对象
+   * @param {Function} predicate 每次迭代调用的对象
+   * @returns 返回匹配的key
+   */
+  findLastKey: function (object, predicate = (it) => it) {
+    let re = undefined;
+    predicate = this.getFunctionByPara(predicate);
+    if (this.isObjectLike(object)) {
+      this.forEachRight(object, (value, key) => {
+        if (predicate(value)) {
+          re = key;
+          return false;
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回object
+   */
+  forIn: function (object, iteratee = (it) => it) {
+    iteratee = this.getFunctionByPara(iteratee);
+    if (this.isObjectLike(object) || this.isArrayLike(object)) {
+      for (let key in object) {
+        let re = iteratee(object[key], key, object);
+        if (re === false) {
+          break;
+        }
+      }
+    }
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回object
+   */
+  forInRight: function (object, iteratee = (it) => it) {
+    iteratee = this.getFunctionByPara(iteratee);
+    if (this.isObjectLike(object)) {
+      this.forEachRight(object, iteratee);
+    }
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回对象本身
+   */
+  forOwn: function (object, iteratee = (it) => it) {
+    iteratee = this.getFunctionByPara(iteratee);
+    return this.forIn(object, (value, key, object) => {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        return iteratee(value, key, object);
+      }
+    });
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回对象本身
+   */
+  forOwnRight: function (object, iteratee = (it) => it) {
+    iteratee = this.getFunctionByPara(iteratee);
+    return this.forInRight(object, (value, key, object) => {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        return iteratee(value, key, object);
+      }
+    });
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回函数名数组
+   */
+  functions: function (object) {
+    let re = [];
+    this.forOwn(object, (value, key) => {
+      if (this.isFunction(value)) {
+        re.push(key);
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回函数名数组
+   */
+  functionsIn: function (object) {
+    let re = [];
+    this.forIn(object, (value, key) => {
+      if (this.isFunction(value)) {
+        re.push(key);
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 要获取的属性的路径
+   * @param {*} defaultValue 如果解析为undifined则返回该值
+   * @returns 返回解析的属性值
+   */
+  get: function (object, path, defaultValue) {
+    if (this.isArray(path)) {
+      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
+    } else {
+      path = this.transformPathString(path);
+    }
+    let re = this.getParaFromObjectByString(object, path);
+    return re === undefined ? defaultValue : re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 需要检查的路径
+   * @returns 返回是否存在的判断
+   */
+  has: function (object, path) {
+    if (this.isArray(path)) {
+      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
+    } else {
+      path = this.transformPathString(path);
+    }
+    return (
+      this.getParaFromObjectByString(object, path, (key, object) =>
+        Object.prototype.hasOwnProperty.call(object, key)
+      ) !== undefined
+    );
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 需要检查的路径
+   * @returns 返回是否存在的判断
+   */
+  hasIn: function (object, path) {
+    if (this.isArray(path)) {
+      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
+    } else {
+      path = this.transformPathString(path);
+    }
+    return this.getParaFromObjectByString(object, path) !== undefined;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回键值对倒置的新对象
+   */
+  invert: function (object) {
+    let re = {};
+    this.forOwn(object, (value, key) => {
+      re[value] = key;
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 每次迭代调用的函数
+   * @returns 返回新的键值对倒置的对象
+   */
+  invertBy: function (object, iteratee = (it) => it) {
+    let re = {};
+    iteratee = this.getFunctionByPara(iteratee);
+    this.forOwn(object, (value, key, obj) => {
+      let newKey = iteratee(value, key, obj);
+      if (!re[newKey]) {
+        re[newKey] = [];
+      }
+      re[newKey].push(key);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 可以调用的方法路径
+   * @param  {...any} args 调用的方法参数
+   * @returns 返回调用方法后的结果
+   */
+  invoke: function (object, path, ...args) {
+    if (this.isArray(path)) {
+      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
+    } else {
+      path = this.transformPathString(path);
+    }
+    let index = this.lastIndexOf(path, "[");
+    let funName = path.slice(index + 1, path.length - 1);
+    path = path.slice(0, index);
+    object = this.getParaFromObjectByString(object, path);
+    let func = object[funName];
+    return func.call(object, ...args);
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回包含属性名的新数组
+   */
+  keys: function (object) {
+    let re = [];
+    this.forOwn(object, (value, key) => {
+      re.push(key);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回包含属性名的新数组
+   */
+  keysIn: function (object) {
+    let re = [];
+    this.forIn(object, (value, key) => {
+      re.push(key);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回映射后的新对象
+   */
+  mapKeys: function (object, iteratee = (it) => it) {
+    let re = {};
+    iteratee = this.getFunctionByPara(iteratee);
+    this.forOwn(object, (value, key, obj) => {
+      re[iteratee(value, key, obj)] = value;
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代函数
+   * @returns 返回映射后的新对象
+   */
+  mapValues: function (object, iteratee = (it) => it) {
+    let re = {};
+    iteratee = this.getFunctionByPara(iteratee);
+    this.forOwn(object, (value, key, obj) => {
+      re[key] = iteratee(value, key, obj);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param  {...any} sources 来源对象
+   * @returns 返回递归合并后的新对象
+   */
+  merge: function (object, ...sources) {
+    if (sources.length == 0) {
+      return object;
+    } else {
+      return this.assignInWith(object, ...sources, (objValue, sourValue) => {
+        if (this.isObjectLike(objValue)) {
+          return this.merge(objValue, sourValue);
+        } else {
+          return sourValue === undefined ? objValue : sourValue;
+        }
+      });
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param  {...any} sources 来源对象以及迭代函数
+   * @returns 返回新的对象
+   */
+  mergeWith: function (object, ...sources) {
+    if (sources.length == 0) {
+      return object;
+    } else if (sources.length == 1) {
+      return this.merge(object, ...sources);
+    } else {
+      if (!this.isFunction(sources[sources.length - 1])) {
+        return this.merge(object, ...sources);
+      } else {
+        let last = sources.pop();
+        return this.assignInWith(
+          object,
+          ...sources,
+          (objValue, sourValue, key, object, source, stack) => {
+            return last(objValue, sourValue, key, object, source, stack);
+          }
+        );
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param  {...any} string 需要忽略的属性
+   * @returns 返回新的对象
+   */
+  omit: function (object, ...string) {
+    string = this.flattenDeep(string);
+    let re = {};
+    this.forEach(object, (value, key) => {
+      if (!this.includes(string, key)) {
+        re[key] = value;
+      }
+    });
+    return re;
   },
 };
