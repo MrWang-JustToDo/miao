@@ -1,4 +1,3 @@
-"use strict";
 var mrwangjusttodo = {
   // 自定义方法
   /**
