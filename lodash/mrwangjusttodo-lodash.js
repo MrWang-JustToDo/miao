@@ -1832,7 +1832,10 @@ var mrwangjusttodo = {
   countBy: function (collection, iteratee = (it) => it) {
     let re = {};
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let temp in collection) {
         let key = iteratee(collection[temp]);
         if (key in re) {
@@ -1854,7 +1857,10 @@ var mrwangjusttodo = {
   every: function (collection, predicate = (it) => it) {
     let re = true;
     predicate = this.getFunctionByPara(predicate);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         re = re && predicate(collection[key], key, collection);
         if (!re) {
@@ -1874,7 +1880,10 @@ var mrwangjusttodo = {
   filter: function (collection, predicate = (it) => it) {
     let re = [];
     predicate = this.getFunctionByPara(predicate);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         if (predicate(collection[key], key, collection)) {
           re.push(collection[key]);
@@ -1896,7 +1905,10 @@ var mrwangjusttodo = {
     if (fromIndex < 0) {
       fromIndex = 0;
     }
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       let start = 0;
       for (let key in collection) {
         if (start++ >= fromIndex) {
@@ -1922,7 +1934,10 @@ var mrwangjusttodo = {
     predicate = this.getFunctionByPara(predicate);
     fromIndex = this.paraToNum(fromIndex);
     if (fromIndex > 0) {
-      if (typeof collection == "object") {
+      if (
+        mrwangjusttodo.isObjectLike(collection) ||
+        mrwangjusttodo.isArrayLike(collection)
+      ) {
         let temp = Object.keys(collection);
         for (let i = fromIndex; i >= 0; i--) {
           if (predicate(collection[temp[i]], temp[i], collection)) {
@@ -1941,7 +1956,10 @@ var mrwangjusttodo = {
   flatMap: function (collection, iteratee = (it) => it) {
     let re = [];
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         re = re.concat(iteratee(collection[key], key, collection));
       }
@@ -1957,7 +1975,10 @@ var mrwangjusttodo = {
   flatMapDeep: function (collection, iteratee = (it) => it) {
     let re = [];
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         let temp = iteratee(collection[key], key, collection);
         temp = this.flattenDeep(temp);
@@ -1978,7 +1999,10 @@ var mrwangjusttodo = {
     iteratee = this.getFunctionByPara(iteratee);
     depth = this.paraToNum(depth);
     let re = [];
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         let temp = iteratee(collection[key], key, collection);
         if (depth > 1) {
@@ -1996,7 +2020,10 @@ var mrwangjusttodo = {
    * @param {Function} iteratee 每次迭代调用的函数
    */
   forEach: function (collection, iteratee = (it) => it) {
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         let re = iteratee(collection[key], key, collection);
         if (re === false) {
@@ -2028,7 +2055,10 @@ var mrwangjusttodo = {
   groupBy: function (collection, iteratee = (it) => it) {
     iteratee = this.getFunctionByPara(iteratee);
     let re = {};
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         let tKey = iteratee(collection[key]);
         if (!re[tKey]) {
@@ -2053,28 +2083,22 @@ var mrwangjusttodo = {
       return false;
     } else {
       if (typeof collection == "string") {
-        if (typeof value != "string") {
-          return false;
-        } else {
-          for (let i = fromIndex; i < collection.length; i++) {
-            if (collection.substr(i, value.length) === value) {
-              return true;
-            }
-          }
-        }
+        return collection.includes(value, fromIndex);
       } else if (typeof collection == "object") {
         let index = 0;
-        for (let key in collection) {
-          if (index >= fromIndex) {
-            if (collection[key] === value) {
-              return true;
+        return this.reduce(
+          collection,
+          (pre, current) => {
+            if (index >= fromIndex) {
+              pre = pre || current === value;
             }
-          }
-          index++;
-        }
+            index++;
+            return pre;
+          },
+          false
+        );
       }
     }
-    return false;
   },
   /**
    *
@@ -2085,7 +2109,10 @@ var mrwangjusttodo = {
    */
   invokeMap: function (collection, path, ...args) {
     let re = [];
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         if (typeof path == "function") {
           let temp = path.call(collection[key], ...args);
@@ -2110,7 +2137,10 @@ var mrwangjusttodo = {
   keyBy: function (collection, iteratee = (it) => it) {
     let re = {};
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         let temp = iteratee(collection[key]);
         re[temp] = collection[key];
@@ -2127,7 +2157,10 @@ var mrwangjusttodo = {
   map: function (collection, iteratee = (it) => it) {
     let re = [];
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         if (!isNaN(collection[key]) && !isNaN(key)) {
           re.push(iteratee(Number(collection[key]), Number(key), collection));
@@ -2151,7 +2184,10 @@ var mrwangjusttodo = {
       iteratees = Array.of(iteratees);
       orders = Array.of(orders);
     }
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       re = this.cloneObj(collection);
       let iterateeArr = [];
       let orderArr = [];
@@ -2184,7 +2220,10 @@ var mrwangjusttodo = {
   partition: function (collection, predicate = (it) => it) {
     let re = [];
     predicate = this.getFunctionByPara(predicate);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       re[0] = [];
       re[1] = [];
       for (let key in collection) {
@@ -2206,7 +2245,10 @@ var mrwangjusttodo = {
    */
   reduce: function (collection, iteratee = (it) => it, accumulator) {
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         if (accumulator === undefined) {
           accumulator = collection[key];
@@ -2226,7 +2268,10 @@ var mrwangjusttodo = {
    */
   reduceRight: function (collection, iteratee = (it) => it, accumulator) {
     iteratee = this.getFunctionByPara(iteratee);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       let keys = Object.keys(collection);
       for (let i = keys.length - 1; i >= 0; i--) {
         if (accumulator === undefined) {
@@ -2253,7 +2298,10 @@ var mrwangjusttodo = {
   reject: function (collection, predicate = (it) => it) {
     let re = [];
     predicate = this.getFunctionByPara(predicate);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         if (!predicate(collection[key], key, collection)) {
           re.push(collection[key]);
@@ -2268,7 +2316,10 @@ var mrwangjusttodo = {
    * @returns {*} 返回可迭代数组/对象中的随机元素
    */
   sample: function (collection) {
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       let temp = Object.keys(collection);
       return collection[temp[(Math.random() * temp.length) | 0]];
     } else {
@@ -2287,7 +2338,10 @@ var mrwangjusttodo = {
       return [];
     } else {
       let re = [];
-      if (typeof collection == "object") {
+      if (
+        mrwangjusttodo.isObjectLike(collection) ||
+        mrwangjusttodo.isArrayLike(collection)
+      ) {
         let temp = Object.keys(collection);
         while (re.length < n && temp.length) {
           let key = (Math.random() * temp.length) | 0;
@@ -2304,7 +2358,10 @@ var mrwangjusttodo = {
    * @returns {Array} 返回一个随机排序的数组
    */
   shuffle: function (collection) {
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       return this.sampleSize(collection, Object.keys(collection).length);
     } else {
       return [];
@@ -2316,10 +2373,11 @@ var mrwangjusttodo = {
    * @returns {Number} 返回对应的长度
    */
   size: function (collection) {
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       return Object.keys(collection).length;
-    } else if (typeof collection == "string") {
-      return collection.length;
     } else {
       return 0;
     }
@@ -2334,7 +2392,10 @@ var mrwangjusttodo = {
   some: function (collection, predicate = (it) => it) {
     let re = false;
     predicate = this.getFunctionByPara(predicate);
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       for (let key in collection) {
         re = re || predicate(collection[key], key, collection);
         if (re) {
@@ -2355,7 +2416,10 @@ var mrwangjusttodo = {
     if (!Array.isArray(iteratees)) {
       iteratees = Array.of(iteratees);
     }
-    if (typeof collection == "object") {
+    if (
+      mrwangjusttodo.isObjectLike(collection) ||
+      mrwangjusttodo.isArrayLike(collection)
+    ) {
       let iterateeArr = [];
       for (let i = 0; i < iteratees.length; i++) {
         iterateeArr.push(this.getFunctionByPara(iteratees[i]));
@@ -2751,14 +2815,10 @@ var mrwangjusttodo = {
    * @returns 返回转换后的数组
    */
   castArray: function (value) {
-    if (value !== undefined) {
-      if (Array.isArray(value)) {
-        return value;
-      } else {
-        return Array.of(value);
-      }
+    if (Array.isArray(value)) {
+      return value;
     } else {
-      return [];
+      return Array.of(value);
     }
   },
 
@@ -3048,7 +3108,28 @@ var mrwangjusttodo = {
    * @param {Function} customizer 如何进行比较的函数
    * @returns 返回比较结果
    */
-  isEqualWith: function (value, other, customizer = this.equalsTwoPara) {},
+  isEqualWith: function (value, other, customizer = this.equalsTwoPara) {
+    customizer = this.getFunctionByPara(customizer);
+    if (typeof value == "object") {
+      if (value.__proto__ === other.__proto__) {
+        for (let key in value) {
+          if (!this.isEqualWith(value[key], other[key], customizer)) {
+            return false;
+          }
+        }
+        for (let key in other) {
+          if (!this.isEqualWith(value[key], other[key], customizer)) {
+            return false;
+          }
+        }
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return this.equalsTwoPara(value, other) || customizer(value, other);
+    }
+  },
 
   /**
    *
@@ -3403,7 +3484,23 @@ var mrwangjusttodo = {
    * @param {*} value 需要转换的值
    * @returns 转换后的值
    */
-  toString: function (value) {},
+  toString: function (value) {
+    if (value === null || value === undefined) {
+      return "";
+    } else if (this.isNumber(value)) {
+      if (1 / value === -Infinity) {
+        return "-0";
+      } else {
+        return value + "";
+      }
+    } else if (this.isArray(value)) {
+      return this.reduce(value, (pre, current) => pre + "," + current);
+    } else if (this.isString(value)) {
+      return value;
+    } else {
+      return Object.prototype.toString.call(value);
+    }
+  },
 
   // Math
 
@@ -3804,12 +3901,15 @@ var mrwangjusttodo = {
    * @returns 返回得到的数
    */
   random: function (lower = 0, upper = 1, floating = false) {
+    if (upper === true) {
+      floating = true;
+    }
     lower = this.paraToNum(lower);
-    upper = this.paraToNum(upper);
-    if (arguments.length == 1) {
+    if (arguments.length == 1 || upper === true) {
       upper = lower;
       lower = 0;
     }
+    upper = this.paraToNum(upper);
     let re = Math.random() * (upper - lower) + lower;
     if (floating || parseInt(lower) != lower || parseInt(upper) != upper) {
       return re;
@@ -3829,13 +3929,18 @@ var mrwangjusttodo = {
    */
   transformPathString: function (str) {
     let re = "";
+    if (str.length < 1) {
+      return "";
+    }
     str = str.split(".");
     this.forEach(str, (value) => {
       let index = this.indexOf(value, "[");
       if (index == -1) {
         re += `[${value}]`;
       } else {
-        re += `[${value.slice(0, index)}]`;
+        if (index != 0) {
+          re += `[${value.slice(0, index)}]`;
+        }
         re += value.slice(index);
       }
     });
@@ -3844,30 +3949,73 @@ var mrwangjusttodo = {
 
   /**
    *
+   * @param {String} str 转换后的路径字符串
+   * @returns 返回路径数组
+   */
+  transformPathArray: function (str) {
+    let re = [];
+    while (str.length > 0) {
+      let index = this.indexOf(str, "]");
+      re.push(str.slice(1, index));
+      str = str.slice(index + 1);
+    }
+    return re;
+  },
+
+  /**
+   *
    * @param {Object} object 原始对象
-   * @param {String} str 路径字符串
+   * @param {Array} path 路径数组
    * @param {Function} judgeFun 判断函数
    */
-  getParaFromObjectByString(object, str, judgeFun = (it) => it) {
-    if (!str || str.length == 0 || !object) {
+  getParaFromObjectByArray(object, path, judgeFun = (it) => it) {
+    if (!path || path.length == 0 || !object) {
       return undefined;
     }
-    let index = this.indexOf(str, "]");
-    let key = str.slice(1, index);
-    if (index == str.length - 1) {
+    let key = path.shift();
+    if (path.length == 0) {
       if (judgeFun(key, object)) {
         return object[key];
       }
     } else {
       if (judgeFun(key, object)) {
-        return this.getParaFromObjectByString(
-          object[key],
-          str.slice(index + 1),
-          judgeFun
-        );
+        return this.getParaFromObjectByArray(object[key], path, judgeFun);
       }
     }
   },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array} arr 路径数组
+   * @param {*} targetValue 目标属性值
+   * @param {Function} customizer 生成值的方法
+   */
+  setParaFromObjectByArray: function (
+    object,
+    arr,
+    targetValue,
+    customizer = (value, key) => {
+      if (this.paraToNum(key) !== null) {
+        return [];
+      } else {
+        return {};
+      }
+    }
+  ) {
+    let index = 0;
+    while (arr.length - index > 1) {
+      let key = arr[index];
+      if (object[key] == undefined) {
+        object[key] = customizer(object[key], arr[index + 1], object);
+      }
+      object = object[key];
+      index++;
+    }
+    object[arr[index]] = targetValue;
+  },
+
+  // 原始函数
 
   /**
    *
@@ -4000,7 +4148,8 @@ var mrwangjusttodo = {
           re = re.concat(this.at(object, ...it));
         } else {
           it = this.transformPathString(it);
-          re.push(this.getParaFromObjectByString(object, it));
+          it = this.transformPathArray(it);
+          re.push(this.getParaFromObjectByArray(object, it));
         }
       });
       return re;
@@ -4237,12 +4386,11 @@ var mrwangjusttodo = {
    * @returns 返回解析的属性值
    */
   get: function (object, path, defaultValue) {
-    if (this.isArray(path)) {
-      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
-    } else {
+    if (!this.isArray(path)) {
       path = this.transformPathString(path);
+      path = this.transformPathArray(path);
     }
-    let re = this.getParaFromObjectByString(object, path);
+    let re = this.getParaFromObjectByArray(object, path);
     return re === undefined ? defaultValue : re;
   },
 
@@ -4253,13 +4401,12 @@ var mrwangjusttodo = {
    * @returns 返回是否存在的判断
    */
   has: function (object, path) {
-    if (this.isArray(path)) {
-      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
-    } else {
+    if (!this.isArray(path)) {
       path = this.transformPathString(path);
+      path = this.transformPathArray(path);
     }
     return (
-      this.getParaFromObjectByString(object, path, (key, object) =>
+      this.getParaFromObjectByArray(object, path, (key, object) =>
         Object.prototype.hasOwnProperty.call(object, key)
       ) !== undefined
     );
@@ -4272,12 +4419,11 @@ var mrwangjusttodo = {
    * @returns 返回是否存在的判断
    */
   hasIn: function (object, path) {
-    if (this.isArray(path)) {
-      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
-    } else {
+    if (!this.isArray(path)) {
       path = this.transformPathString(path);
+      path = this.transformPathArray(path);
     }
-    return this.getParaFromObjectByString(object, path) !== undefined;
+    return this.getParaFromObjectByArray(object, path) !== undefined;
   },
 
   /**
@@ -4320,15 +4466,12 @@ var mrwangjusttodo = {
    * @returns 返回调用方法后的结果
    */
   invoke: function (object, path, ...args) {
-    if (this.isArray(path)) {
-      path = this.reduce(path, (pre, current) => (pre += `[${current}]`), "");
-    } else {
+    if (!this.isArray(path)) {
       path = this.transformPathString(path);
+      path = this.transformPathArray(path);
     }
-    let index = this.lastIndexOf(path, "[");
-    let funName = path.slice(index + 1, path.length - 1);
-    path = path.slice(0, index);
-    object = this.getParaFromObjectByString(object, path);
+    let funName = path.pop();
+    object = this.getParaFromObjectByArray(object, path);
     let func = object[funName];
     return func.call(object, ...args);
   },
@@ -4451,5 +4594,562 @@ var mrwangjusttodo = {
       }
     });
     return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} predicate 调用每一个属性的函数
+   * @returns 返回新的对象
+   */
+  omitBy: function (object, predicate = (it) => it) {
+    let re = {};
+    predicate = this.getFunctionByPara(predicate);
+    this.forIn(object, (value, key) => {
+      if (!predicate(value, key)) {
+        re[key] = value;
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param  {...any} string 需要选中的属性
+   * @returns 返回新的对象
+   */
+  pick: function (object, ...string) {
+    string = this.flattenDeep(string);
+    let re = {};
+    this.forEach(object, (value, key) => {
+      if (this.includes(string, key)) {
+        re[key] = value;
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} predicate 调用每一个属性的函数
+   * @returns 返回新的对象
+   */
+  pickBy: function (object, predicate = (it) => it) {
+    let re = {};
+    predicate = this.getFunctionByPara(predicate);
+    this.forIn(object, (value, key) => {
+      if (predicate(value, key)) {
+        re[key] = value;
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 需要检索的对象
+   * @param {Array|String} path 需要解析的属性路径
+   * @param {*} defaultValue 如果解析值为undifined则返回该值
+   * @returns 返回解析后的值
+   */
+  result: function (object, path, defaultValue) {
+    if (!this.isArray(path)) {
+      path = this.transformPathString(path);
+      path = this.transformPathArray(path);
+    }
+    let re = this.getParaFromObjectByArray(object, path);
+    if (re === undefined) {
+      if (this.isFunction(defaultValue)) {
+        return defaultValue();
+      } else {
+        return defaultValue;
+      }
+    } else {
+      if (this.isFunction(re)) {
+        return re();
+      } else {
+        return re;
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 属性路径
+   * @param {*} value 需要设置的值
+   */
+  set: function (object, path, value) {
+    if (this.isObjectLike(object)) {
+      if (!this.isArray(path)) {
+        path = this.transformPathString(path);
+        path = this.transformPathArray(path);
+      }
+      this.setParaFromObjectByArray(object, path, value);
+    }
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 属性路径
+   * @param {*} value 需要设置的值
+   * @param {Function} customizer 定制分配的值
+   */
+  setWith: function (object, path, value, customizer) {
+    if (this.isObjectLike(object)) {
+      if (!this.isArray(path)) {
+        path = this.transformPathString(path);
+        path = this.transformPathArray(path);
+      }
+      customizer = this.getFunctionByPara(customizer);
+      this.setParaFromObjectByArray(object, path, value, customizer);
+    }
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Function} iteratee 迭代调用函数
+   * @param {*} accumulator 初始值
+   * @returns 返回叠加后的值
+   */
+  transform: function (object, iteratee = (it) => it, accumulator) {
+    if (this.isObjectLike(object)) {
+      if (accumulator === undefined) {
+        if (this.isArray(object)) {
+          accumulator = [];
+        } else {
+          accumulator = {};
+        }
+      }
+      iteratee = this.getFunctionByPara(iteratee);
+      this.forEach(object, (value, key, object) => {
+        return iteratee(accumulator, value, key, object);
+      });
+      return accumulator;
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 需要移除的属性路径
+   * @returns 返回是否移除成功
+   */
+  unset: function (object, path) {
+    if (!this.isArray(path)) {
+      path = this.transformPathString(path);
+      path = this.transformPathArray(path);
+    }
+    let key = path.pop();
+    let re = this.getParaFromObjectByArray(object, path);
+    if (re) {
+      return delete re[key];
+    } else {
+      return false;
+    }
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 属性路径
+   * @param {Function} updater 生成设置值
+   */
+  update: function (object, path, updater) {
+    if (!this.isArray(path)) {
+      path = this.transformPathString(path);
+      path = this.transformPathArray(path);
+    }
+    updater = this.getFunctionByPara(updater);
+    this.setParaFromObjectByArray(
+      object,
+      path,
+      updater(this.getParaFromObjectByArray(object, this.toArray(path)))
+    );
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @param {Array|String} path 属性路径
+   * @param {Function} updater 设置生成值
+   * @param {FUnction} customizer 自定义分配值
+   */
+  updateWith: function (object, path, updater, customizer) {
+    if (!this.isArray(path)) {
+      path = this.transformPathString(path);
+      path = this.transformPathArray(path);
+    }
+    updater = this.getFunctionByPara(updater);
+    customizer = this.getFunctionByPara(customizer);
+    let targetValue = updater(
+      this.getParaFromObjectByArray(object, this.toArray(path))
+    );
+    this.setParaFromObjectByArray(object, path, targetValue, customizer);
+    return object;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回对象的属性值数组
+   */
+  values: function (object) {
+    let re = [];
+    this.forOwn(object, (value) => {
+      re.push(value);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {Object} object 原始对象
+   * @returns 返回对象属性(继承)值数组
+   */
+  valuesIn: function (object) {
+    let re = [];
+    this.forIn(object, (value) => {
+      re.push(value);
+    });
+    return re;
+  },
+
+  // String
+
+  /**
+   *
+   * @param {String} str 原始字符串
+   */
+  splitString: function (str) {
+    let re = [];
+    if (this.isString(str)) {
+      str = str.trim();
+      str = str.replace(/(?=[a-zA-Z])(.)([^a-zA-Z]+)/g, "$1-");
+      str = str.replace(/[^a-zA-Z-]/g, "");
+      if (this.includes(str, "-")) {
+        re = str.split("-");
+      } else {
+        re = str.split(/(?=[A-Z])/);
+      }
+      return this.filter(re, (item) => item.length > 0).map((it) =>
+        it.toLowerCase()
+      );
+    } else {
+      return re;
+    }
+  },
+
+  /**
+   *
+   * @param {String} value 需要转换的字符串
+   * @returns 返回驼峰写法的字符串
+   */
+  camelCase: function (value) {
+    value = this.splitString(value);
+    return this.reduce(
+      value,
+      (pre, current, index) => {
+        if (index != 0) {
+          pre += this.capitalize(current);
+        } else {
+          pre += current;
+        }
+        return pre;
+      },
+      ""
+    );
+  },
+
+  /**
+   *
+   * @param {String} value 原始字符串
+   * @returns 返回转换后的字符串
+   */
+  capitalize: function (value) {
+    if (this.isString(value)) {
+      return this.reduce(
+        value,
+        (pre, current, index) => {
+          if (index == 0) {
+            pre += current.toUpperCase();
+          } else {
+            pre += current.toLowerCase();
+          }
+          return pre;
+        },
+        ""
+      );
+    } else {
+      return "";
+    }
+  },
+
+  /**
+   *
+   * @param {String} value 原始字符串
+   * @returns 返回处理后的字符串
+   */
+  deburr: function (value) {},
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @param {String} target 需要检索的字符
+   * @param {Number} position 需要检索的位置
+   * @returns 返回boolean值
+   */
+  endsWith: function (string, target, position = string.length) {
+    if (!this.isString(string) || !this.isString(target)) {
+      return false;
+    } else {
+      position = this.paraToNum(position);
+      return string.slice(position - target.length, position) === target;
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要转义的字符串
+   * @returns 返回转义后的字符串
+   */
+  escape: function (string) {
+    function getRe(char) {
+      switch (char) {
+        case "&":
+          return "&amp;";
+        case "<":
+          return "&lt;";
+        case ">":
+          return "&gt;";
+        case "'":
+          return "&#39;";
+        case '"':
+          return "&quot;";
+        default:
+          return char;
+      }
+    }
+
+    let re = "";
+    this.forEach(string, (value) => {
+      re += getRe(value);
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {String} string 需要转义的正则字符串
+   * @returns 返回转义后的字符串
+   */
+  escapeRegExp: function (string) {
+    function getRe(char) {
+      return (
+        char == "^" ||
+        char == "$" ||
+        char == "." ||
+        char == "*" ||
+        char == "+" ||
+        char == "?" ||
+        char == "(" ||
+        char == ")" ||
+        char == "[" ||
+        char == "]" ||
+        char == "{" ||
+        char == "}" ||
+        char == "|"
+      );
+    }
+
+    let re = "";
+    this.forEach(string, (value) => {
+      if (getRe(value)) {
+        re += `\\${value}`;
+      } else {
+        re += value;
+      }
+    });
+    return re;
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 转换后的字符串
+   */
+  kebabCase: function (string) {
+    string = this.splitString(string);
+    return this.reduce(
+      string,
+      (pre, current) => (pre += "-" + current.toLowerCase())
+    );
+  },
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @returns 返回转换后的字符串
+   */
+  lowerCase: function (string) {
+    return this.splitString(string).join(" ");
+  },
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @returns 返回转换后的字符串
+   */
+  lowerFirst: function (string) {
+    let re = "";
+    if (this.isString(string)) {
+      this.forEach(string, (value, index) => {
+        if (index == 0) {
+          re += value.toLowerCase();
+        } else {
+          re += value;
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {String} string 需要填充的字符串
+   * @param {NUmber} length 填充的长度
+   * @param {string} chars 填充的字符
+   * @returns 返回填充后的字符串
+   */
+  pad: function (string, length = 0, chars = " ") {
+    if (this.isString(string)) {
+      length = this.paraToNum(length);
+      if (length <= string.length) {
+        return string;
+      } else {
+        let last = length - string.length;
+        let left = (last / chars.length) | 0;
+        let right = last - left;
+        let letfStr = Array(left).fill(chars).join("").slice(0, left);
+        let rightStr = Array(right).fill(chars).join("").slice(0, right);
+        return letfStr + string + rightStr;
+      }
+    } else {
+      return "";
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @param {Number} length 填充的长度
+   * @param {String} chars 填充的字符
+   * @returns 返回填充后的字符串
+   */
+  padEnd: function (string, length = 0, chars = " ") {
+    if (this.isString(string)) {
+      length = this.paraToNum(length);
+      if (length <= string.length) {
+        return string;
+      } else {
+        let last = Array(length - string.length)
+          .fill(chars)
+          .join("")
+          .slice(0, length - string.length);
+        return string + last;
+      }
+    } else {
+      return "";
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @param {Number} length 填充的长度
+   * @param {String} chars 填充的字符
+   * @returns 返回填充后的字符串
+   */
+  padStart: function (string, length = 0, chars = " ") {
+    if (this.isString(string)) {
+      length = this.paraToNum(length);
+      if (length <= string.length) {
+        return string;
+      } else {
+        let last = Array(length - string.length)
+          .fill(chars)
+          .join("")
+          .slice(0, length - string.length);
+        return last + string;
+      }
+    } else {
+      return "";
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @param {Number} radix 转换的基数
+   * @returns 返回转换后的整数
+   */
+  parseInt: function (string, radix = 10) {
+    function getRe(char) {
+      switch (char) {
+        case 10:
+          return "";
+        case 16:
+          return "0x";
+        case 8:
+          return "0o";
+        case 2:
+          return "0b";
+        default:
+          return "";
+      }
+    }
+
+    if (string === undefined) {
+      return 0;
+    } else {
+      radix = this.paraToNum(radix);
+      if (radix == null) {
+        if (this.includes(string, "a") || this.includes(string, "A")) {
+          radix = 16;
+        }
+      }
+      if (radix == null || radix == 0) {
+        radix = 10;
+      }
+      string = getRe(radix) + string;
+      return Number(string);
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要重复的字符串
+   * @param {Number} n 重复的次数
+   * @returns 返回重复后的字符串
+   */
+  repeat: function (string, n = 1) {
+    n = this.paraToNum(n);
+    if (n == 0 || n == null) {
+      return "";
+    } else {
+      string = this.toString(string);
+      let re = string;
+      while (n-- > 1) {
+        re += string;
+      }
+      return re;
+    }
   },
 };
