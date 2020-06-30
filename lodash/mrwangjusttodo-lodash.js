@@ -2818,7 +2818,11 @@ var mrwangjusttodo = {
     if (Array.isArray(value)) {
       return value;
     } else {
-      return Array.of(value);
+      if (arguments.length == 0) {
+        return [];
+      } else {
+        return Array.of(value);
+      }
     }
   },
 
@@ -2927,7 +2931,7 @@ var mrwangjusttodo = {
    * @param {*} other 另一个比较的值
    * @returns 返回比较的boolean值
    */
-  qt: function (value, other) {
+  gt: function (value, other) {
     value = this.paraToNum(value);
     other = this.paraToNum(other);
     return value > other;
@@ -5035,7 +5039,7 @@ var mrwangjusttodo = {
         return string;
       } else {
         let last = length - string.length;
-        let left = (last / chars.length) | 0;
+        let left = (last / 2) | 0;
         let right = last - left;
         let letfStr = Array(left).fill(chars).join("").slice(0, left);
         let rightStr = Array(right).fill(chars).join("").slice(0, right);
