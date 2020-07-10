@@ -711,9 +711,17 @@ var mrwangjusttodo = {
     if (fromIndex === null) {
       fromIndex = 0;
     }
-    for (let i = fromIndex; i < arr.length; i++) {
-      if (this.equalsTwoPara(arr[i], value)) {
-        return i;
+    if (value.length == 1) {
+      for (let i = fromIndex; i < arr.length; i++) {
+        if (this.equalsTwoPara(arr[i], value)) {
+          return i;
+        }
+      }
+    } else {
+      for (let i = fromIndex; i < arr.length - value.length + 1; i++) {
+        if (this.equalsTwoPara(arr.slice(i, i + value.length), value)) {
+          return i;
+        }
       }
     }
     return -1;
@@ -4831,8 +4839,10 @@ var mrwangjusttodo = {
   /**
    *
    * @param {String} str 原始字符串
+   * @param {Function} transfer 対每一个元素进行转换
+   * @returns 返回各部分组成的数组
    */
-  splitString: function (str) {
+  splitString: function (str, transfer = (it) => it) {
     let re = [];
     if (this.isString(str)) {
       str = str.trim();
@@ -4843,9 +4853,7 @@ var mrwangjusttodo = {
       } else {
         re = str.split(/(?=[A-Z])/);
       }
-      return this.filter(re, (item) => item.length > 0).map((it) =>
-        it.toLowerCase()
-      );
+      return this.filter(re, (item) => item.length > 0).map(transfer);
     } else {
       return re;
     }
@@ -4857,7 +4865,7 @@ var mrwangjusttodo = {
    * @returns 返回驼峰写法的字符串
    */
   camelCase: function (value) {
-    value = this.splitString(value);
+    value = this.splitString(value, (it) => it.toLowerCase());
     return this.reduce(
       value,
       (pre, current, index) => {
@@ -4875,7 +4883,7 @@ var mrwangjusttodo = {
   /**
    *
    * @param {String} value 原始字符串
-   * @returns 返回转换后的字符串
+   * @returns 返回转换后的字符串(首字母大写,其他小写)
    */
   capitalize: function (value) {
     if (this.isString(value)) {
@@ -4990,11 +4998,8 @@ var mrwangjusttodo = {
    * @returns 转换后的字符串
    */
   kebabCase: function (string) {
-    string = this.splitString(string);
-    return this.reduce(
-      string,
-      (pre, current) => (pre += "-" + current.toLowerCase())
-    );
+    string = this.splitString(string, (it) => it.toLowerCase());
+    return this.reduce(string, (pre, current) => (pre += "-" + current));
   },
 
   /**
@@ -5003,7 +5008,7 @@ var mrwangjusttodo = {
    * @returns 返回转换后的字符串
    */
   lowerCase: function (string) {
-    return this.splitString(string).join(" ");
+    return this.splitString(string, (it) => it.toLowerCase()).join(" ");
   },
 
   /**
@@ -5155,5 +5160,307 @@ var mrwangjusttodo = {
       }
       return re;
     }
+  },
+
+  /**
+   *
+   * @param {String} string 需要替换的字符串
+   * @param {RegExp|String} pattern 需要匹配的内容
+   * @param {Function|String} replacement 替换的内容
+   * @returns 返回替换后的字符串
+   */
+  replace: function (string, pattern, replacement) {
+    if (this.isRegExp(pattern)) {
+      return string.replace(new RegExp(pattern, pattern.flags), replacement);
+    } else {
+      if (this.includes(string, pattern)) {
+        return string.replace(pattern, replacement);
+      } else {
+        return string;
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  snakeCase: function (string) {
+    string = this.splitString(string, (it) => it.toLowerCase());
+    return this.reduce(string, (pre, current) => (pre += "_" + current));
+  },
+
+  /**
+   *
+   * @param {String} string 需要拆分的字符串
+   * @param {RegExp|String} separator 拆分的分隔符
+   * @param {Number} number 限制结果的数量
+   */
+  split: function (string, separator, number) {
+    if (!this.isUndefined(separator)) {
+      string = string.split(separator);
+      if (this.isUndefined(number)) {
+        return string;
+      } else {
+        return this.filter(string, (it, index) => index < number);
+      }
+    } else {
+      return this.toArray(string);
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  startCase: function (string) {
+    return this.splitString(string, (it) => this.upperFirst(it)).join(" ");
+  },
+
+  /**
+   *
+   * @param {String} string 需要检索的字符串
+   * @param {String} target 目标字符串
+   * @param {Number} position 检索起始位置
+   * @returns 返回是否一目标字符串开始的boolean值
+   */
+  startsWith(string, target, position = 0) {
+    position = this.paraToNum(position);
+    string = this.toString(string);
+    target = this.toString(target);
+    return this.equalsTwoPara(
+      string.slice(position, position + target.length),
+      target
+    );
+  },
+
+  /**
+   *
+   * @param {String} string 模板字符串
+   * @param {Object} options 选项对象
+   * [options.escape=_.templateSettings.escape] (RegExp): "escape" 分隔符.
+   * [options.evaluate=_.templateSettings.evaluate] (RegExp): "evaluate" 分隔符.
+   * [options.imports=_.templateSettings.imports] (Object): 导入对象到模板中作为自由变量。
+   * [options.interpolate=_.templateSettings.interpolate] (RegExp): "interpolate" 分隔符。
+   * [options.sourceURL='lodash.templateSources[n]'] (string): 模板编译的来源URL。
+   * [options.variable='obj'] (string): 数据对象的变量名。
+   * @returns 返回编译后的模板函数
+   */
+  template(string, options) {},
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  toLower: function (string) {
+    let re = "";
+    if (this.isString(string)) {
+      this.forEach(string, (it) => {
+        if (/[a-zA-Z]/.test(it)) {
+          re += it.toLowerCase();
+        } else {
+          re += it;
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  toUpper: function (string) {
+    let re = "";
+    if (this.isString(string)) {
+      this.forEach(string, (it) => {
+        if (/[a-zA-Z]/.test(it)) {
+          re += it.toUpperCase();
+        } else {
+          re += it;
+        }
+      });
+    }
+    return re;
+  },
+
+  /**
+   *
+   * @param {String} string 原始字符串
+   * @param {String} chars 需要移除的字符
+   * @param {Boolean} flagLeft 左侧是否移除
+   * @param {Boolean} flagRight 右侧是否移除
+   * @returns 返回处理后的字符串
+   */
+  trimBase: function (string, chars = " ", flagLeft = true, flagRight = true) {
+    if (flagLeft) {
+      string = this.reduce(
+        string,
+        (pre, current) => {
+          if (flagLeft) {
+            if (this.includes(chars, current)) {
+              pre += "";
+            } else {
+              flagLeft = false;
+              pre += current;
+            }
+          } else {
+            pre += current;
+          }
+          return pre;
+        },
+        ""
+      );
+    }
+    if (flagRight) {
+      string = this.reduceRight(
+        string,
+        (pre, current) => {
+          if (flagRight) {
+            if (this.includes(chars, current)) {
+              pre += "";
+            } else {
+              flagRight = false;
+              pre = current + pre;
+            }
+          } else {
+            pre = current + pre;
+          }
+          return pre;
+        },
+        ""
+      );
+    }
+    return string;
+  },
+
+  /**
+   *
+   * @param {String} string 需要处理的字符串
+   * @param {String} chars 需要移除的知乎
+   * @returns 返回处理后的字符串
+   */
+  trim: function (string, chars = " ") {
+    return this.trimBase(string, chars);
+  },
+
+  /**
+   *
+   * @param {String} string 需要处理的字符串
+   * @param {String} chars 需要移除的知乎
+   * @returns 返回处理后的字符串
+   */
+  trimEnd: function (string, chars = " ") {
+    return this.trimBase(string, chars, false, true);
+  },
+
+  /**
+   *
+   * @param {String} string 需要处理的字符串
+   * @param {String} chars 需要移除的知乎
+   * @returns 返回处理后的字符串
+   */
+  trimStart: function (string, chars = " ") {
+    return this.trimBase(string, chars, true, false);
+  },
+
+  /**
+   *
+   * @param {String} string 需要截断的字符串
+   * @param {Object} options 选项对象
+   * @returns 返回截断后的字符串
+   */
+  truncate: function (string, options = {}) {
+    string = this.toString(string);
+    let len = options.length || 30;
+    let omission = options.omission || "...";
+    let re = "";
+    if (!options.separator) {
+      this.forEach(string, (it, index) => {
+        if (index < len - omission.length) {
+          re += it;
+        } else {
+          return false;
+        }
+      });
+      re += omission;
+      return re;
+    } else {
+      let separator = options.separator;
+      if (this.isRegExp(separator)) {
+        separator = new RegExp(separator, separator.flags + "g");
+        let exec = separator.exec(string);
+        let index = 0;
+        while (exec && exec.index + omission.length <= len) {
+          index = exec.index;
+          exec = separator.exec(string);
+        }
+        if (index + omission.length < len) {
+          this.forEach(string, (it, i) => {
+            if (i < index) {
+              re += it;
+            } else {
+              return false;
+            }
+          });
+          re += omission;
+          return re;
+        } else {
+          return this.truncate(string, { omission: omission, length: len });
+        }
+      } else {
+        let target = this.indexOf(string, separator);
+        let index = 0;
+        while (target != -1 && target + omission.length <= len) {
+          index = target;
+          target = this.indexOf(string, separator, target + 1);
+        }
+        if (index + omission.length < len) {
+          this.forEach(string, (it, i) => {
+            if (i < index) {
+              re += it;
+            } else {
+              return false;
+            }
+          });
+          re += omission;
+          return re;
+        } else {
+          return this.truncate(string, { omission: omission, length: len });
+        }
+      }
+    }
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  upperCase: function (string) {
+    return this.splitString(string, (it) => it.toUpperCase());
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
+  upperFirst: function (string) {
+    let re = "";
+    if (this.isString(string)) {
+      this.forEach(string, (it, index) => {
+        if (index == 0) {
+          re += it.toUpperCase();
+        } else {
+          re += it;
+        }
+      });
+    }
+    return re;
   },
 };

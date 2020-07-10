@@ -1,9 +1,9 @@
-$xs:567px;
-$sm:768px;
-$md:992px;
-$lg:1200px;
+$xs: 567px;
+$sm: 768px;
+$md: 992px;
+$lg: 1200px;
 $column: 10;
-$white-sapce:15px;
+$white-sapce: 15px;
 $line-height: 40px;
 $bgc: #ccc;
 $color: black;
@@ -23,7 +23,6 @@ $color: black;
 
   .container,
   .container-fluid {
-
     [class*="col-sm-"],
     [class*="col-md-"],
     [class*="col-lg-"] {
@@ -39,7 +38,6 @@ $color: black;
 
   .container,
   .container-fluid {
-
     [class*="col-md-"],
     [class*="col-lg-"] {
       width: 100%;
@@ -48,7 +46,6 @@ $color: black;
 }
 
 @media (min-width: $sm) {
-
   .container {
     width: 750px;
   }
@@ -59,15 +56,12 @@ $color: black;
       width: 100%;
     }
   }
-
 }
 
 @media (min-width: $md) {
-
   .container {
     width: 970px;
   }
-
 }
 
 @media (min-width: $lg) {
@@ -102,8 +96,7 @@ $color: black;
   overflow: hidden;
 }
 
-@each $screen,
-$width in (xs: $xs, sm: $sm, md: $md, lg: $lg) {
+@each $screen, $width in (xs: $xs, sm: $sm, md: $md, lg: $lg) {
   [class*="col-#{$screen}"] {
     line-height: $line-height;
     background-color: $bgc;
@@ -132,15 +125,11 @@ $width in (xs: $xs, sm: $sm, md: $md, lg: $lg) {
   }
 }
 
-@each $screen,
-$min-w,
-$max-w in (xs, $xs, $sm),
-(sm, $sm, $md),
-(md, $md, $lg),
-(lg, $lg, 100%) {
+@each $screen, $min-w, $max-w in (xs, $xs, $sm), (sm, $sm, $md), (md, $md, $lg),
+  (lg, $lg, 100%)
+{
   [class*="col-#{$screen}"] {
     @media (min-width: $min-w) and (max-width: $max-w) {
-
       @for $var from 1 to $column {
         &.col-#{$screen}-offset-#{$var} {
           margin-left: calc(100% / #{$column} * #{$var});
