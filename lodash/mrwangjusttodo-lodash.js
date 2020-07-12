@@ -711,15 +711,15 @@ var mrwangjusttodo = {
     if (fromIndex === null) {
       fromIndex = 0;
     }
-    if (this.isNumber(value) || value.length == 1) {
-      for (let i = fromIndex; i < arr.length; i++) {
-        if (this.equalsTwoPara(arr[i], value)) {
+    if (this.isString(value) && value.length > 1) {
+      for (let i = fromIndex; i < arr.length - value.length + 1; i++) {
+        if (this.equalsTwoPara(arr.slice(i, i + value.length), value)) {
           return i;
         }
       }
     } else {
-      for (let i = fromIndex; i < arr.length - value.length + 1; i++) {
-        if (this.equalsTwoPara(arr.slice(i, i + value.length), value)) {
+      for (let i = fromIndex; i < arr.length; i++) {
+        if (this.equalsTwoPara(arr[i], value)) {
           return i;
         }
       }
