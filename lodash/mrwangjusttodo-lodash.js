@@ -711,7 +711,7 @@ var mrwangjusttodo = {
     if (fromIndex === null) {
       fromIndex = 0;
     }
-    if (value.length == 1) {
+    if (this.isNumber(value) || value.length == 1) {
       for (let i = fromIndex; i < arr.length; i++) {
         if (this.equalsTwoPara(arr[i], value)) {
           return i;
@@ -5392,7 +5392,11 @@ var mrwangjusttodo = {
     } else {
       let separator = options.separator;
       if (this.isRegExp(separator)) {
-        separator = new RegExp(separator, separator.flags + "g");
+        let flag = separator.flags;
+        if (!this.includes(flag, "g")) {
+          flag += "g";
+        }
+        separator = new RegExp(separator, flag);
         let exec = separator.exec(string);
         let index = 0;
         while (exec && exec.index + omission.length <= len) {
@@ -5441,8 +5445,24 @@ var mrwangjusttodo = {
    * @param {String} string 需要转换的字符串
    * @returns 返回转换后的字符串
    */
+  unescape: function (string) {
+    let arr = ["&amp;", "&lt;", "&gt;", "&#39;", "&quot;"];
+    let target = ["&", "<", ">", "'", '"'];
+    arr.forEach((it, index) => {
+      while (this.includes(string, it)) {
+        string = string.replace(it, target[index]);
+      }
+    });
+    return string;
+  },
+
+  /**
+   *
+   * @param {String} string 需要转换的字符串
+   * @returns 返回转换后的字符串
+   */
   upperCase: function (string) {
-    return this.splitString(string, (it) => it.toUpperCase());
+    return this.splitString(string, (it) => it.toUpperCase()).join(" ");
   },
 
   /**
@@ -5462,5 +5482,36 @@ var mrwangjusttodo = {
       });
     }
     return re;
+  },
+
+  /**
+   *
+   * @param {String} string 需要拆分的字符串
+   * @param {RegExp|String} pattern 匹配模式
+   * @returns 返回拆分后的数组
+   */
+  words: function (string, pattern) {
+    string = this.toString(string);
+    if (this.isUndefined(pattern)) {
+      string = string.split(/(?:[^a-zA-Z]? +)/);
+      string = string.filter((it) => it.length > 0);
+      return string;
+    } else {
+      if (this.isRegExp(pattern)) {
+        let flag = pattern.flags;
+        if (!this.includes(flag, "g")) {
+          flag += "g";
+        }
+        pattern = new RegExp(pattern, flag);
+        let re = [];
+        let exec;
+        while ((exec = pattern.exec(string))) {
+          re.push(exec[0]);
+        }
+        return re;
+      } else {
+        return string.split(pattern);
+      }
+    }
   },
 };
