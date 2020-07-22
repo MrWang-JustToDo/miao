@@ -2614,7 +2614,11 @@ var mrwangjusttodo = {
    * @param  {...any} args 调用时传给func的参数
    * @returns 返回计时器id
    */
-  defer: function (func, ...args) {},
+  defer: function (func, ...args) {
+    return setTimeout(() => {
+      func(...args);
+    });
+  },
 
   /**
    *
@@ -2624,13 +2628,9 @@ var mrwangjusttodo = {
    * @returns 返回定时器id
    */
   delay: function (func, wait, ...args) {
-    return setTimeout(
-      (...args) => {
-        func(...args);
-      },
-      wait,
-      ...args
-    );
+    return setTimeout(() => {
+      func(...args);
+    }, wait);
   },
 
   /**
@@ -5297,6 +5297,9 @@ var mrwangjusttodo = {
    * @returns 返回处理后的字符串
    */
   trimBase: function (string, chars = " ", flagLeft = true, flagRight = true) {
+    if (chars == "") {
+      chars = " ";
+    }
     if (flagLeft) {
       string = this.reduce(
         string,
@@ -5492,7 +5495,7 @@ var mrwangjusttodo = {
    */
   words: function (string, pattern) {
     string = this.toString(string);
-    if (this.isUndefined(pattern)) {
+    if (arguments.length == 1) {
       string = string.split(/(?:[^a-zA-Z]? +)/);
       string = string.filter((it) => it.length > 0);
       return string;
